@@ -24,24 +24,27 @@ export default function SideBarBox({width, type}:{
     }
 
     return (
-        <div ref={ref} className={`sidebar h-full m-auto flex bg-gray-300 flex-col pt-3 border-r-4 border-gray-950`}>
+        <div className="relative">
 
-            <div className="form flex w-full" style={{height: "min-content"}}>
-                <input type="text" className="w-full  h-12  rounded-full" placeholder="Search..."/>
-            </div>
+            <div ref={ref} className={`sidebar overflow-x-hidden h-full m-auto flex bg-gray-300 flex-col pt-3 border-r-4 border-gray-950`}>
+
+                <div className="form flex w-full" style={{height: "min-content"}}>
+                    <input type="text" className="w-full  h-12  rounded-full" placeholder="Search..."/>
+                </div>
 
 
-            <div className="w-full overflow-y-auto px-3" style={{height: "100%"}}>
-                <div className=" flex justify-start items-center w-full cursor-pointer my-4">
-                    <img className="w-20 h-20" src={defaultGroupImage.src } />
-                    <div className="pl-3">
-                        <h1 className="text-lg font-bold">Group Name</h1>
-                        <p className="text-sm">Group Description</p>
+                <div className="w-full overflow-y-auto px-3" style={{height: "100%"}}>
+                    <div className=" flex justify-start items-center w-full cursor-pointer my-4">
+                        <img className="w-20 h-20" src={defaultGroupImage.src } />
+                        <div className="pl-3">
+                            <h1 className="text-lg font-bold">Group Name</h1>
+                            <p className="text-sm">Group Description</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
+            </div>
             <div className="after" onClick={handleShowSidebar}> {'>>'} </div>
-        </div>
+    </div>
     )
 }

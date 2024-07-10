@@ -21,7 +21,7 @@
 
 }
 
-.sidebar .after{
+.sidebar + .after{
   position: absolute;
   content: '>>';
   width: 50px;

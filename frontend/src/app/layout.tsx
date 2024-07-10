@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/app/_components/Navbar";
 import StoreProvider from "@/lib/storeProvider";
+import {GlobalContextProvider} from "@/hooks/useSocket";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,13 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-      <StoreProvider>
-
-          <html lang="en">
-          <body className={inter.className} style={{height:"100vh",width:"100%",maxHeight:"100vh"}}>
-          <Navbar/>
-          {children}</body>
-            </html>
-      </StoreProvider>
+          <StoreProvider>
+              <html lang="en">
+              <body className={inter.className} style={{height:"100vh",width:"100%",maxHeight:"100vh"}}>
+              <Navbar/>
+              {children}</body>
+                </html>
+          </StoreProvider>
   );
 }

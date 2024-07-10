@@ -37,7 +37,7 @@ export default function ChatBox({width,text,type,messages}: ChatBoxProps) {
 
 
             <div className="form flex w-full" style={{height:"min-content"}}>
-                <input type="text" className="w-full h-12 border border-l-2" placeholder="Type a message..."/>
+                <input type="text" className="px-4 w-full h-12 border border-l-2" placeholder="Type a message..."/>
                 <button className="w-min h-12 bg-blue-500 px-16">Send</button>
             </div>
 

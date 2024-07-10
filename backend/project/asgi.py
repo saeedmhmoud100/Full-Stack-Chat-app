@@ -14,6 +14,8 @@ from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 from django.urls import path
 
+from public_chat.consumers import PublicChatConsumer
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 # Initialize Django ASGI application early to ensure the AppRegistry
 # is populated before importing code that may import ORM models.
@@ -21,13 +23,12 @@ django_asgi_app = get_asgi_application()
 
 application = ProtocolTypeRouter({
     "http": django_asgi_app,
-    # WebSocket chat handler
-    # "websocket": AllowedHostsOriginValidator(
-    #     AuthMiddlewareStack(
-    #         URLRouter([
-    #             path("chat/admin/", AdminChatConsumer.as_asgi()),
-    #             path("chat/", PublicChatConsumer.as_asgi()),
-    #         ])
-    #     )
-    # ),
+    "websocket": AllowedHostsOriginValidator(
+        AuthMiddlewareStack(
+            URLRouter([
+                path("ws/public_chat/", PublicChatConsumer.as_asgi()),
+                # path("chat/", PublicChatConsumer.as_asgi()),
+            ])
+        )
+    ),
 })
