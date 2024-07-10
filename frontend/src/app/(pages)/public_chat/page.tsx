@@ -1,5 +1,5 @@
-import ChatBox from "@/app/(pages)/public_chat/_components/ChatBox";
-import PublicChatNav from "@/app/(pages)/public_chat/_components/publicChatNav";
+import ChatBox from "@/app/_components/public_chat/ChatBox";
+import PublicChatNav from "@/app/_components/public_chat/publicChatNav";
 
 
 export default function PublicChatPage() {

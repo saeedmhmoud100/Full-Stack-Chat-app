@@ -20,8 +20,8 @@ export default function ChatBox() {
 
 
             <div className="form flex w-full" style={{height:"min-content"}}>
-                <input type="text" className="w-8/12 h-12 border border-l-2" placeholder="Type a message..."/>
-                <button className="w-4/12 h-12 bg-blue-500 ">Send</button>
+                <input type="text" className="w-full h-12 border border-l-2" placeholder="Type a message..."/>
+                <button className="w-min h-12 bg-blue-500 px-16">Send</button>
             </div>
 
 
