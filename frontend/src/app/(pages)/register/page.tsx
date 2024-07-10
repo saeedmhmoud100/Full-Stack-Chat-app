@@ -16,7 +16,7 @@ export default function Register(){
                 <input type="text" className="h-12 my-4 border border-l-2 px-3" placeholder="Username"/>
                 <input type="password" className="h-12 my-4  border border-l-2 px-3" placeholder="Password"/>
                 <input type="password" className="h-12 my-4  border border-l-2 px-3" placeholder="Re Password"/>
-                <button className="h-12 bg-blue-500 text-white" onClick={handleClick}>Login</button>
+                <button className="h-12 bg-blue-500 text-white" onClick={handleClick}>Register</button>
             </div>
         </div>
     )

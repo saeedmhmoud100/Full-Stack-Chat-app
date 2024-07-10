@@ -5,7 +5,7 @@ import {useState} from "react";
 
 
 export default function Navbar() {
-    const [isLogged, setIsLogged] = useState<boolean>(false);
+    const [isLogged, setIsLogged] = useState<boolean>(true);
     return (
         <div className="w-full bg-gray-800 h-12 flex justify-between items-center text-white">
             <div className="text-2xl pl-4">Chat</div>
@@ -15,7 +15,7 @@ export default function Navbar() {
                     isLogged ? (
                         <>
                             <Link href={'private_chats'}><div className="px-4">Private Chats</div></Link>
-                            <Link href={'groups'}><div className="px-4">Groups Chats</div></Link>
+                            <Link href={'groups'}><div className="px-4">Groups</div></Link>
                             <Link href={'Profile'}><div className="px-4">Profile</div></Link>
                         </>
                     ) : (<>

@@ -1,12 +1,11 @@
-import ChatBox from "@/app/_components/public_chat/ChatBox";
-import PublicChatNav from "@/app/_components/public_chat/publicChatNav";
+import ChatBox from "@/app/_components/ChatBox";
+import ChatNav from "@/app/_components/ChatNav";
 
 
 export default function PublicChatPage() {
     return (
         <div className=" border-t-4 w-full flex justify-center flex-col w-full " style={{height:"calc(100vh - 50px)"}}>
-            <PublicChatNav/>
-            <ChatBox/>
+            <ChatBox text={"1 online"}/>
         </div>
     )
 }
