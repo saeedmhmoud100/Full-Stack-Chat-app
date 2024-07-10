@@ -4,7 +4,10 @@ import defaultGroupImage from "../../assets/images/group_image.png";
 import {useEffect, useRef} from "react";
 
 
-export default function GroupsBox({width}) {
+export default function SideBarBox({width, type}:{
+    width?:string,
+    type: 'group' | 'chat'
+}) {
     const ref = useRef(null);
 
     useEffect(() => {

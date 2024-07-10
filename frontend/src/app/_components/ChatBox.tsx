@@ -1,11 +1,17 @@
-import GroupsBox from "@/app/_components/GroupsBox";
+import SideBarBox from "@/app/_components/SideBarBox";
 import ChatNav from "@/app/_components/ChatNav";
 
+type ChatBoxProps = {
+    width: string,
+    text: string,
+    type: 'group' | 'chat'| 'public'
+}
 
-export default function ChatBox({width,text}) {
+
+export default function ChatBox({width,text,type}) {
     return (
         <div className={`h-full ${width || "w-full"} m-auto flex bg-gray-300 flex-col pt-3`}>
-            <ChatNav text={text}/>
+            <ChatNav text={type}/>
             <div className="messages overflow-auto" style={{height:"100%"}}>
                 <div className="message flex justify-end  my-2">
                     <span className="px-12 py-4 bg-green-500 rounded-l-full border-e-2">
