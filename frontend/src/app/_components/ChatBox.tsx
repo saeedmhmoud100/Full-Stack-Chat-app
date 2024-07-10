@@ -4,26 +4,34 @@ import ChatNav from "@/app/_components/ChatNav";
 type ChatBoxProps = {
     width: string,
     text: string,
-    type: 'group' | 'chat'| 'public'
+    type: 'group' | 'chat'| 'public',
+    messages: string[]
 }
 
 
-export default function ChatBox({width,text,type}) {
+export default function ChatBox({width,text,type,messages}: ChatBoxProps) {
     return (
         <div className={`h-full ${width || "w-full"} m-auto flex bg-gray-300 flex-col pt-3`}>
             <ChatNav text={type}/>
             <div className="messages overflow-auto" style={{height:"100%"}}>
-                <div className="message flex justify-end  my-2">
-                    <span className="px-12 py-4 bg-green-500 rounded-l-full border-e-2">
-                        Hi
-                    </span>
-                </div>
-                <div className="message flex justify-start my-2">
 
-                    <span className="px-12 py-4 bg-white rounded-r-full border-s-2">
-                        Hi
-                    </span>
-                </div>
+                {
+                    messages?.map((message, index) => <div key={index} className="message flex justify-end  my-2">
+                            <span className="px-12 py-4 bg-green-500 rounded-l-full border-e-2">
+                                Hi
+                            </span>
+                    </div>)
+                }
+
+
+
+
+                {/*<div className="message flex justify-start my-2">*/}
+
+                {/*    <span className="px-12 py-4 bg-white rounded-r-full border-s-2">*/}
+                {/*        Hi*/}
+                {/*    </span>*/}
+                {/*</div>*/}
             </div>
 
 
