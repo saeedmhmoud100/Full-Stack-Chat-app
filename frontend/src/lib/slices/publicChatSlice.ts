@@ -5,12 +5,15 @@ import { io } from 'socket.io-client';
 export interface PublicChatState {
     messages: string[];
     socket: WebSocket | null;
+    online_users_count: number;
 }
 
 // Define the initial state using that type
 const initialState: PublicChatState = {
     messages: [],
-    socket:null
+    socket:null,
+    online_users_count: 0,
+
 };
 
 export const publicChatSlice = createSlice({
@@ -38,10 +41,14 @@ export const publicChatSlice = createSlice({
         },
         closeSocket: (state) => {
             state.socket.close()
-        }
+
+        },
+        setOnlineUsersCount: (state,action: PayloadAction<{count:number}>) =>{
+            state.online_users_count = action.payload;
+        },
     },
 });
 
-export const { setAllMessages, connect, receive, send,setWebSocket, addMessage,closeSocket} = publicChatSlice.actions;
+export const { setAllMessages, connect, receive, send,setWebSocket, addMessage,closeSocket,setOnlineUsersCount} = publicChatSlice.actions;
 
 export default publicChatSlice.reducer;

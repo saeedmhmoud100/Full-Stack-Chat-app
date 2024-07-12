@@ -19,7 +19,6 @@ export default function ChatBox({width,text,type,messages}: ChatBoxProps) {
 
     useEffect(() => {
         messagesBoxRef.current?.scrollTo(0,messagesBoxRef.current.scrollHeight)
-        console.log(messagesBoxRef.current.scrollHeight)
     },[toScroll])
 
 
@@ -30,7 +29,7 @@ export default function ChatBox({width,text,type,messages}: ChatBoxProps) {
         if(msg){
             const data = {'type':'add_message', 'message':msg, 'user_id':localStorage.getItem("user_id")}
             dispatch(send(JSON.stringify(data)))
-            (e.target as HTMLFormElement).reset()
+            e.target.reset()
         }
     }
 
