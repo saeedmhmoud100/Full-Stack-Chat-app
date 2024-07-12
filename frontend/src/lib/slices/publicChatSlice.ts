@@ -9,7 +9,7 @@ export interface PublicChatState {
 
 // Define the initial state using that type
 const initialState: PublicChatState = {
-    messages: ["hi 1", "hi 2", "hi 3"],
+    messages: [],
     socket:null
 };
 
@@ -22,7 +22,7 @@ export const publicChatSlice = createSlice({
             state.socket = new WebSocket(action.payload);
         },
         setAllMessages: (state, action: PayloadAction<{ message: string }[]>) => {
-            state.messages = action.payload.map((msg) => msg.message);
+            state.messages = action.payload;
         },
         connect: (state, action: PayloadAction<() => void>) => {
             state.socket.onopen = action.payload;
@@ -33,9 +33,15 @@ export const publicChatSlice = createSlice({
         send: (state, action: PayloadAction<string>) => {
             state.socket.send(action.payload);
         },
+        addMessage: (state, action: PayloadAction<{}>)=>{
+           state.messages.push(action.payload)
+        },
+        closeSocket: (state) => {
+            state.socket.close()
+        }
     },
 });
 
-export const { setAllMessages, connect, receive, send,setWebSocket} = publicChatSlice.actions;
+export const { setAllMessages, connect, receive, send,setWebSocket, addMessage,closeSocket} = publicChatSlice.actions;
 
 export default publicChatSlice.reducer;

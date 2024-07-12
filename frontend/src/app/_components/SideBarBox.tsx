@@ -10,11 +10,6 @@ export default function SideBarBox({width, type}:{
 }) {
     const ref = useRef(null);
 
-    useEffect(() => {
-        console.log((ref.current as HTMLDivElement)?.after()); // Logs the DOM element
-    }, []); // Empty dependency array ensures this runs after the initial render
-
-
     const handleShowSidebar = () => {
         const inp = ((ref.current as HTMLDivElement).parentElement?.firstElementChild.firstElementChild.firstElementChild.classList)
         inp.toggle('px-4')

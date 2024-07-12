@@ -13,8 +13,9 @@ class PublicChatConsumer(WebsocketConsumer):
         self.room_group_name = f"public_chat"
         async_to_sync(self.channel_layer.group_add)(self.room_group_name, self.channel_name)
         self.accept()
-        data = PublicChatSerializer(PublicChatModel.objects.all(),many=True).data
-        self.send(text_data=json.dumps(json.dumps(data)))
+        data = {'type':'all_messages','data':PublicChatSerializer(PublicChatModel.objects.all(),many=True).data}
+
+        self.send(text_data=json.dumps(data))
 
 
     def disconnect(self, close_code):
@@ -24,15 +25,23 @@ class PublicChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json["message"]
+        Type = text_data_json["type"]
+        user_id = text_data_json["user_id"]
+        if Type == 'add_message':
+            msg = self.create_new_message(message,user_id)
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name, {"type": "add_message", "message": msg}
+            )
 
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name, {"type": "chat.message", "message": message}
-        )
 
-    # Receive message from room group
-    def chat_message(self, event):
+
+    def create_new_message(self, message,user_id):
+        msg = PublicChatModel.objects.create(message=message, user_id=user_id)
+        return msg
+
+    def add_message(self, event):
         message = event["message"]
+        data = {"type": "add_message","message": PublicChatSerializer(message, many=False).data}
+        async_to_sync(self.send(json.dumps(data)))
 
-        # Send message to WebSocket
-        async_to_sync(self.send)(text_data=json.dumps({"message": message}))
+
