@@ -1,0 +1,30 @@
+auth
+  - login
+  - signup
+
+users
+  - send frind request
+  - accept frind request
+  - remove frind
+  - see all frinds
+  - update profile data
+  - admin and users
+  - see all groups which the use in
+
+
+groug 
+  - has admin and users
+  - send join request
+  - update the group (admin)
+  - delete the group (admin)
+  - leave the group
+
+private_chat 
+  - for only frinds
+  
+  
+notifications
+  - get all notifications for
+    - frinds change 
+    - groups change
+    - 
