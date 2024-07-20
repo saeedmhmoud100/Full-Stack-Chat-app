@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "channels",
     'rest_framework',
     "public_chat",
+
+    "accounts",
 ]
 
 MIDDLEWARE = [
