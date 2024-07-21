@@ -3,11 +3,11 @@ from django.db import models
 
 
 def get_profile_image_filepath(self, filename):
-    return f'profile_image/{self.pk}/{"profile_image.png"}'
+    return f'static/accounts/profile_images/{self.pk}/{"profile_image.png"}'
 
 
 def get_default_profile_image():
-    return "profile_image/default_profile_image.png"
+    return "static/accounts/default_profile_image.png"
 
 
 class AccountManager(BaseUserManager):
@@ -52,3 +52,6 @@ class Account(AbstractBaseUser):
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
+
+    def has_module_perms(self, app_label):
+        return True
