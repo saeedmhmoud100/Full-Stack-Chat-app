@@ -7,6 +7,8 @@ User = get_user_model()
 
 class CustomAuthBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
+        if username is None:
+            username = kwargs.get(User.USERNAME_FIELD)
         try:
             user = User.objects.get(Q(email__iexact=username) | Q(username__iexact=username))
             # case_insensitive_username_field = f'{User.USERNAME_FIELD}__iexact'
