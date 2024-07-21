@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import {useState} from "react";
+import NavBarHook from "@/hooks/navbar/NavBar-Hook";
 
 
-export default function Navbar() {
-    const [isLogged, setIsLogged] = useState<boolean>(true);
+export default function Page() {
+
+    const [isLogged] = NavBarHook()
     return (
         <div className="w-full bg-gray-800 h-12 flex justify-between items-center text-white">
             <div className="text-2xl pl-4">Chat</div>
@@ -21,7 +23,7 @@ export default function Navbar() {
                     ) : (<>
                         <Link href={'login'}><div className="px-4">Login</div></Link>
                         <Link href={'register'}><div className="px-4">Register</div></Link>
-                        </>)
+                    </>)
                 }
             </div>
         </div>

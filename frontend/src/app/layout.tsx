@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/app/_components/Navbar";
 import StoreProvider from "@/lib/storeProvider";
-import {GlobalContextProvider} from "@/hooks/useSocket";
+import Navbar from "@/app/@navbar/page";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,15 +13,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+   navbar,
 }: Readonly<{
   children: React.ReactNode;
+    navbar: React.ReactNode;
 }>) {
   return (
           <StoreProvider>
               <html lang="en">
-              <body className={inter.className} style={{height:"100vh",width:"100%",maxHeight:"100vh"}}>
-              <Navbar/>
-              {children}</body>
+              <body className={inter.className + " bg-gray-300"} style={{height:"100vh",width:"100%",maxHeight:"100vh"} }>
+              {navbar}
+              {children}
+              </body>
                 </html>
           </StoreProvider>
   );

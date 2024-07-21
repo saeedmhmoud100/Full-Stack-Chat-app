@@ -1,7 +1,7 @@
 
 
 
-export default async function customFetch(url: string, method: string, data: any) {
+export default async function customFetch(url: string, method: string, token: string, data: any) {
     const headerData= {
         method: method,
         headers: {
@@ -11,8 +11,11 @@ export default async function customFetch(url: string, method: string, data: any
     if(method !== 'GET' && method !== 'HEAD'){
         headerData['body'] = JSON.stringify(data)
     }
+    if(token){
+        headerData.headers['Authorization'] = `Bearer ${token}`
+    }
 
 
     const response = await fetch(url, headerData);
-    return response.json();
+    return response;
 }

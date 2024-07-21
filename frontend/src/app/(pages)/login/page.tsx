@@ -10,8 +10,8 @@ export default function Login(){
     }
 
     return (
-        <div className="w-full flex justify-center items-center h-full">
-            <div className="w-2/4 flex flex-col shadow-2xl rounded-2xl text-center p-8">
+        <div className="w-full pt-28 h-full">
+            <div className="w-2/4 flex flex-col shadow-2xl rounded-2xl text-center p-8 bg-white m-auto">
             <h2 className="text-2xl mb-12">Login</h2>
                 <input type="text" className="h-12 my-4 border border-l-2 px-3" placeholder="Username"/>
                 <input type="password" className="h-12 my-4  border border-l-2 px-3" placeholder="Password"/>
