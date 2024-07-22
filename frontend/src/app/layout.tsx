@@ -4,6 +4,8 @@ import "./globals.css";
 import StoreProvider from "@/lib/storeProvider";
 import Navbar from "@/app/_components/Navbar";
 import {Container} from "@mui/material";
+import {ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +27,8 @@ export default function RootLayout({
               <Container>
                 {children}
               </Container>
+
+              <ToastContainer />
               </body>
                 </html>
           </StoreProvider>

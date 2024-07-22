@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import Post from "@/hooks/serverActions/methods/Post";
-import {setUserToken} from "@/hooks/localStorage";
+import {removeUserToken, setUserToken} from "@/hooks/localStorage";
+import {performLogin} from "@/lib/slices/accountActions/accountActions";
 
 // Define a type for the slice state
 export interface AccountState {
@@ -22,17 +22,6 @@ const initialState: AccountState = {
 };
 
 
-const performLogin = createAsyncThunk('account/performLogin',
-    async (credentials: { email: string, password: string }) => {
-        const response = await Post('/accounts/api/login/', credentials).then((response) => {
-            return response;
-        }).catch((error) => {
-            throw error;
-        });
-
-        return response;
-    });
-
 
 export const AccountSlice = createSlice({
     name: 'account',
@@ -48,7 +37,8 @@ export const AccountSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(performLogin.fulfilled, (state, action) => {
+            .addCase(performLogin.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
+                console.log(action.payload);
                 if(action.payload){
                     setUserToken(action.payload)
                     state.isLogged = true;
@@ -58,20 +48,24 @@ export const AccountSlice = createSlice({
                     state.isErrored = false;
                 }
             })
-            .addCase(performLogin.rejected, (state, action) => {
-                state.isLogged = false;
-                state.loading = false;
-                console.log(action)
-            })
-            .addCase(performLogin.pending, (state, action) => {
+            .addCase(performLogin.pending, (state:AccountState, action) => {
                 state.loading = true;
                 state.isLogged = false;
-                console.log(action)
-            });
+                state.refresh_token = '';
+                state.access_token = '';
+                state.isErrored = false;
+            })
+            .addCase(performLogin.rejected, (state:AccountState, action) => {
+                state.isLogged = false;
+                state.loading = false;
+                state.refresh_token = '';
+                state.access_token = '';
+                state.isErrored = true;
+                state.errors = action.payload;
+                removeUserToken();
+            })
     },
 });
 export const {setRefreshToken, setAccessToken} = AccountSlice.actions;
 
 export default AccountSlice.reducer;
-
-export {performLogin};

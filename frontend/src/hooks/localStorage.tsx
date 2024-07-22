@@ -18,3 +18,8 @@ export function getAccessToken() {
 export function getRefreshToken() {
     return getUserToken()?.refresh;
 }
+
+
+export function removeUserToken() {
+    localStorage.removeItem('token');
+}

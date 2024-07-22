@@ -21,15 +21,7 @@ export default async function customFetch(url: string, method: string, data: any
 
     url = 'http://127.0.0.1:8000/' + url;
 
-    const myResponse = await fetch(url, headerData).then((response) => {
+    return await fetch(url, headerData);
 
-        if (!response.ok) {
-            return response.json().then((data) => {
-                throw (data)
-            })
-        }
-        return response.json()
-    })
 
-    return myResponse;
 }

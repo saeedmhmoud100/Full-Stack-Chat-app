@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import {publicChatSlice} from "./slices/publicChatSlice";
-import {AccountSlice} from "@/lib/slices/accountSlice";
+import {AccountSlice} from "@/lib/slices/accountActions/accountSlice";
 
 export const makeStore = () => {
     return configureStore({
