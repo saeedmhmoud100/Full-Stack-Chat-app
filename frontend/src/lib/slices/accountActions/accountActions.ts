@@ -13,3 +13,13 @@ export const performLogin = createAsyncThunk('account/performLogin',
         }
 
 });
+export const performUpdateToken = createAsyncThunk('account/performUpdateToken',
+    async (credentials: { email: string, password: string }, { rejectWithValue }) => {
+        const response = await Post('/accounts/api/token/refresh/', credentials)
+
+        if(response.ok){
+            return await response.json();
+        }else {
+            return rejectWithValue(await response.json());
+        }
+});

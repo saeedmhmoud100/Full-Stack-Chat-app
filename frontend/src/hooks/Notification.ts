@@ -8,3 +8,4 @@ export const ErrorNotifications = (data) => {
 
 export const SuccessNotification = (e) => toast.success(e,{closeOnClick: true,closeButton:true});
 
+export const InfoNotification = (e) => toast.info(e,{closeOnClick: true,closeButton:true});

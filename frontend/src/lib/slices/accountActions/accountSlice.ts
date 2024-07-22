@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {removeUserToken, setUserToken} from "@/hooks/localStorage";
-import {performLogin} from "@/lib/slices/accountActions/accountActions";
+import {removeUserToken, setAccessToken, setUserToken} from "@/hooks/localStorage";
+import {performLogin, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
 import {isErrored} from "stream";
 import {jwtDecode} from "jwt-decode";
 
@@ -25,6 +25,11 @@ const initialState: AccountState = {
     isLogged: false,
     loading: false,
     isErrored: false,
+    userData: {},
+};
+// Define the initial state using that type
+const resetState: AccountState = {
+    ...initialState,
 };
 
 
@@ -41,11 +46,7 @@ export const AccountSlice = createSlice({
             state.userData = jwtDecode(action.payload.access);
         },
         performLogout: (state) => {
-            state.refresh_token = '';
-            state.access_token = '';
-            state.isLogged = false;
-            state.isErrored = false;
-            state.userData = {};
+            state = resetState;
             removeUserToken();
         }
     },
@@ -78,6 +79,30 @@ export const AccountSlice = createSlice({
                 state.errors = action.payload;
                 removeUserToken();
             })
+
+
+        /*********************************/
+
+        // Add the performUpdateToken extraReducers here
+
+            .addCase(performUpdateToken.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
+
+                if(action.payload){
+                    state.access_token = action.payload.access;
+                    setAccessToken(action.payload.access);
+                }
+            })
+            .addCase(performUpdateToken.rejected, (state:AccountState, action) => {
+                state.isLogged = false;
+                state.loading = false;
+                state.refresh_token = '';
+                state.access_token = '';
+                state.isErrored = true;
+                state.errors = action.payload;
+                removeUserToken();
+            })
+
+
     },
 });
 export const {setLoggedInState, performLogout} = AccountSlice.actions;
