@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {removeUserToken, setUserToken} from "@/hooks/localStorage";
 import {performLogin} from "@/lib/slices/accountActions/accountActions";
 import {isErrored} from "stream";
+import {jwtDecode} from "jwt-decode";
 
 // Define a type for the slice state
 export interface AccountState {
@@ -11,6 +12,10 @@ export interface AccountState {
     loading: boolean;
     isErrored: boolean;
     errors?: any;
+    userData?: {
+        username?: string;
+        email?: string;
+    };
 }
 
 // Define the initial state using that type
@@ -33,19 +38,20 @@ export const AccountSlice = createSlice({
             state.refresh_token = action.payload.refresh;
             state.access_token = action.payload.access;
             state.isLogged = true;
+            state.userData = jwtDecode(action.payload.access);
         },
         performLogout: (state) => {
             state.refresh_token = '';
             state.access_token = '';
             state.isLogged = false;
             state.isErrored = false;
+            state.userData = {};
             removeUserToken();
         }
     },
     extraReducers: (builder) => {
         builder
             .addCase(performLogin.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
-                console.log(action.payload);
                 if(action.payload){
                     setUserToken(action.payload)
                     state.isLogged = true;
@@ -53,6 +59,7 @@ export const AccountSlice = createSlice({
                     state.refresh_token = action.payload.refresh;
                     state.access_token = action.payload.access;
                     state.isErrored = false;
+                    state.userData = jwtDecode(action.payload.access);
                 }
             })
             .addCase(performLogin.pending, (state:AccountState, action) => {

@@ -5,7 +5,7 @@ import {setLoggedInState} from "@/lib/slices/accountActions/accountSlice";
 
 
 export default function NavBarHook () {
-    const {isLogged} = useSelector((state) => state.account);
+    const {isLogged,userData} = useSelector((state) => state.account);
     const dispatch = useDispatch();
     useEffect(() => {
         const token = getUserToken();
@@ -19,5 +19,5 @@ export default function NavBarHook () {
 
 
 
-    return [isLogged];
+    return {isLogged,userData};
 }
