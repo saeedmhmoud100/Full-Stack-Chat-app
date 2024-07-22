@@ -1,21 +1,35 @@
+import {getAccessToken} from "@/hooks/localStorage";
 
 
-
-export default async function customFetch(url: string, method: string, token: string, data: any) {
-    const headerData= {
+export default async function customFetch(url: string, method: string, data: any) {
+    const headerData = {
         method: method,
         headers: {
             'Content-Type': 'application/json',
         },
     }
-    if(method !== 'GET' && method !== 'HEAD'){
+    if (method !== 'GET' && method !== 'HEAD') {
         headerData['body'] = JSON.stringify(data)
     }
-    if(token){
+    const token = getAccessToken();
+    if (token) {
         headerData.headers['Authorization'] = `Bearer ${token}`
     }
+    if (url[0] == '/') {
+        url = url.slice(1)
+    }
 
+    url = 'http://127.0.0.1:8000/' + url;
 
-    const response = await fetch(url, headerData);
-    return response;
+    const myResponse = await fetch(url, headerData).then((response) => {
+
+        if (!response.ok) {
+            return response.json().then((data) => {
+                throw (data)
+            })
+        }
+        return response.json()
+    })
+
+    return myResponse;
 }

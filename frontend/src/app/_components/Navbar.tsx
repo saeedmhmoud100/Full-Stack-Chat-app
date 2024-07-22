@@ -1,11 +1,9 @@
 "use client"
 
 import Link from "next/link";
-import {useState} from "react";
 import NavBarHook from "@/hooks/navbar/NavBar-Hook";
 
-
-export default function Page() {
+export default function Navbar() {
 
     const [isLogged] = NavBarHook()
     return (
