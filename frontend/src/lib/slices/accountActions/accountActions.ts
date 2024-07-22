@@ -12,4 +12,4 @@ export const performLogin = createAsyncThunk('account/performLogin',
             return rejectWithValue(await response.json());
         }
 
-    });
+});

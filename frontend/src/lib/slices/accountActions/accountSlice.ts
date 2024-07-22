@@ -1,6 +1,7 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {removeUserToken, setUserToken} from "@/hooks/localStorage";
 import {performLogin} from "@/lib/slices/accountActions/accountActions";
+import {isErrored} from "stream";
 
 // Define a type for the slice state
 export interface AccountState {
@@ -28,12 +29,18 @@ export const AccountSlice = createSlice({
 
     initialState,
     reducers: {
-        setRefreshToken: (state, action: PayloadAction<string>) => {
-            state.refresh_token = action.payload;
+        setLoggedInState: (state, action: PayloadAction<{refresh:string,access:string}>) => {
+            state.refresh_token = action.payload.refresh;
+            state.access_token = action.payload.access;
+            state.isLogged = true;
         },
-        setAccessToken: (state, action: PayloadAction<string>) => {
-            state.access_token = action.payload;
-        },
+        performLogout: (state) => {
+            state.refresh_token = '';
+            state.access_token = '';
+            state.isLogged = false;
+            state.isErrored = false;
+            removeUserToken();
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -66,6 +73,6 @@ export const AccountSlice = createSlice({
             })
     },
 });
-export const {setRefreshToken, setAccessToken} = AccountSlice.actions;
+export const {setLoggedInState, performLogout} = AccountSlice.actions;
 
 export default AccountSlice.reducer;

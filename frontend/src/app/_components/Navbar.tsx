@@ -8,7 +8,7 @@ export default function Navbar() {
     const [isLogged] = NavBarHook()
     return (
         <div className="w-full bg-gray-800 h-12 flex justify-between items-center text-white">
-            <div className="text-2xl pl-4">Chat</div>
+            <Link href="/" ><div className="text-2xl pl-4">Chat</div></Link>
             <div className="flex justify-between">
                 <Link href={'public_chat'}><div className="px-4">public Chat</div></Link>
                 {
