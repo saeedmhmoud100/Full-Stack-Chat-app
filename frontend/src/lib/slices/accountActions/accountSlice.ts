@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {removeUserToken, setAccessToken, setUserToken} from "@/hooks/localStorage";
-import {performLogin, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
+import {performLogin, performRegister, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
 import {isErrored} from "stream";
 import {jwtDecode} from "jwt-decode";
 
@@ -16,20 +16,28 @@ export interface AccountState {
         username?: string;
         email?: string;
     };
+    isRegisterErrored?: boolean;
+    registerErrors?: any;
+    registerSuccess?: boolean;
+    registerLoading?: boolean;
 }
 
 // Define the initial state using that type
 const initialState: AccountState = {
+
+    // login
     refresh_token: '',
     access_token: '',
     isLogged: false,
     loading: false,
     isErrored: false,
     userData: {},
-};
-// Define the initial state using that type
-const resetState: AccountState = {
-    ...initialState,
+
+    // register
+    isRegisterErrored: false,
+    registerErrors: {},
+    registerSuccess: false,
+    registerLoading: false,
 };
 
 
@@ -46,7 +54,14 @@ export const AccountSlice = createSlice({
             state.userData = jwtDecode(action.payload.access);
         },
         performLogout: (state) => {
-            state = resetState;
+            state.refresh_token = '';
+            state.access_token = '';
+            state.isLogged = false;
+            state.isLoading = false;
+            state.isErrored = false;
+            state.errors = {};
+            state.userData = {};
+
             removeUserToken();
         }
     },
@@ -103,7 +118,30 @@ export const AccountSlice = createSlice({
             })
 
 
-    },
+            /*********************************/
+
+            // Add the performRegister extraReducers here
+            .addCase(performRegister.pending, (state:AccountState, action) => {
+                state.registerSuccess = false;
+                state.isRegisterErrored = false;
+                state.registerErrors = {};
+                state.registerLoading = true;
+            })
+            .addCase(performRegister.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
+                state.registerSuccess = true;
+                state.isRegisterErrored = false;
+                state.registerErrors = {};
+                state.registerLoading = false;
+            })
+            .addCase(performRegister.rejected, (state:AccountState, action) => {
+                state.registerSuccess = false;
+                state.isRegisterErrored = true;
+                state.registerErrors = action.payload;
+                state.registerLoading = false;
+            })
+    }
+
+
 });
 export const {setLoggedInState, performLogout} = AccountSlice.actions;
 
