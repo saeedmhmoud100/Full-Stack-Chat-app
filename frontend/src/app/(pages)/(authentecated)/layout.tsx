@@ -18,10 +18,10 @@ export default function Layout({children}) {
 
 
     useEffect(() => {
-        if (!isLogged) {
+        if (!isLogged && hasHydrated) {
             setRedirect(true)
         }
-    }, [isLogged]);
+    }, [isLogged,router,hasHydrated]);
 
     useEffect(() => {
         if (redirect) {
@@ -36,9 +36,6 @@ export default function Layout({children}) {
         return null;
     }
 
-    if (!isLogged) {
-        return null;
-    }
 
     return (
         <div className="w-full h-full">

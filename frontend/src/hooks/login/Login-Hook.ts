@@ -24,11 +24,11 @@ export default function LoginHook() {
         });
     }, [dispatch]);
 
-    useEffect(() => {
-        if(isLogged){
-            router.push('/profile');
-        }
-    }, [isLogged]);
+    // useEffect(() => {
+    //     if(isLogged){
+    //         router.push('/profile');
+    //     }
+    // }, [isLogged]);
 
     useEffect(() => {
         if(isErrored){

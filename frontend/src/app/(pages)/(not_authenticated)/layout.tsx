@@ -16,10 +16,10 @@ export default function Layout({children}) {
     }, []);
 
     useEffect(() => {
-        if (isLogged) {
+        if (isLogged && hasHydrated) {
             setRedirect(true);
         }
-    }, [isLogged, router]);
+    }, [isLogged, router,hasHydrated]);
 
     useEffect(() => {
         if (redirect) {
@@ -30,9 +30,6 @@ export default function Layout({children}) {
     }, [redirect])
 
     if (!hasHydrated) {
-        return null;
-    }
-    if (isLogged) {
         return null;
     }
 
