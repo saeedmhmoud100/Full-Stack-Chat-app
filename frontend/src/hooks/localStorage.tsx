@@ -2,7 +2,7 @@
 
 
 
-export function setUserToken(token: string) {
+export function setUserToken(token: {access: string, refresh: string }) {
 
     localStorage.setItem('token', JSON.stringify(token));
 }

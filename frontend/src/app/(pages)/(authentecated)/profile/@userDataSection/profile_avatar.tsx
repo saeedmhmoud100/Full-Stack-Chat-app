@@ -1,28 +1,18 @@
 import Modal from "@/app/_components/modal";
 import {useEffect, useState} from "react";
 import {backendUrl} from "@/hooks/serverActions/methods/customFeatch";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Button} from "@mui/material";
 import Avatar from "react-avatar-edit";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {performChangeImage, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
+import {resetChangeImageState} from "@/lib/slices/accountActions/accountSlice";
+import {SuccessNotification} from "@/hooks/Notification";
+import ProfileAvatarHook from "@/hooks/profile/ProfileAvatar-Hook";
 
 
 export default function ProfileAvatar() {
-    const {userData: {image}} = useSelector(state => state.account)
-    const [changeImageModal, setChangeImageModal] = useState(false)
-    const [croppedImage, setCroppedImage] = useState(null)
-
-    useEffect(() => {
-        setCroppedImage(backendUrl + image)
-    }, [])
-
-    const handleImageModalClose = () => {
-        setChangeImageModal(false)
-    }
-
-
-    const handleOnCrop = (image) => {
-        setCroppedImage(image)
-    }
+    const {image, changeImageLoading,changeImageModal,croppedImage,setChangeImageModal, setCroppedImage,handleOnCrop, handleImageModalClose, handleSaveImage} = ProfileAvatarHook()
 
 
     return (
@@ -34,12 +24,12 @@ export default function ProfileAvatar() {
                 </Button>
             </div>
             <Modal open={changeImageModal} onClose={handleImageModalClose} title="Change Image">
-                <div className="w-full h-full flex">
-                    <div className="w-2/4 h-full mt-4 flex items-center flex-col items-center">
+                <div className="w-full h-full flex sm:flex-col md:flex-row sm:items-center sm:px-8">
+                    <div className="md:w-2/4 sm:w-full  h-full mt-4 flex items-center flex-col items-center">
                         <img src={croppedImage} alt="profile image" style={{width: "300px"}}/>
                         <p>preview</p>
                     </div>
-                    <div className="w-2/4 h-full mt-4 flex items-center ms-4">
+                    <div className="md:w-2/4 sm:w-full h-full mt-4 flex items-center ms-4 sm:my-4">
                         <Avatar
                                 width={300}
                                 height={300}
@@ -52,9 +42,9 @@ export default function ProfileAvatar() {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <Button variant="contained" color='primary' size="large" onClick={_ => setChangeImageModal(false)}>
+                    <LoadingButton variant="contained" color='primary' size="large" onClick={handleSaveImage} loading={changeImageLoading}>
                         <span className='px-6 py-1 text-lg'>Save</span>
-                    </Button>
+                    </LoadingButton>
                 </div>
             </Modal>
         </>

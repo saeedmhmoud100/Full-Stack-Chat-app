@@ -1,6 +1,11 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {removeUserToken, setAccessToken, setUserToken} from "@/hooks/localStorage";
-import {performLogin, performRegister, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
+import {
+    performChangeImage,
+    performLogin,
+    performRegister,
+    performUpdateToken
+} from "@/lib/slices/accountActions/accountActions";
 import {isErrored} from "stream";
 import {jwtDecode} from "jwt-decode";
 
@@ -21,6 +26,10 @@ export interface AccountState {
     registerErrors?: any;
     registerSuccess?: boolean;
     registerLoading?: boolean;
+
+
+    changeImageLoading: boolean,
+    changeImageSuccess: boolean,
 }
 
 // Define the initial state using that type
@@ -40,6 +49,10 @@ const initialState: AccountState = {
     registerErrors: {},
     registerSuccess: false,
     registerLoading: false,
+
+    // change image
+    changeImageLoading: false,
+    changeImageSuccess: false,
 };
 
 
@@ -72,6 +85,10 @@ export const AccountSlice = createSlice({
             state.registerErrors = {};
             state.registerSuccess = false;
             state.registerLoading = false;
+        },
+        resetChangeImageState: (state) => {
+            state.changeImageLoading = false;
+            state.changeImageSuccess = false;
         }
     },
     extraReducers: (builder) => {
@@ -113,13 +130,12 @@ export const AccountSlice = createSlice({
         // Add the performUpdateToken extraReducers here
 
             .addCase(performUpdateToken.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
-
-                if(action.payload){
                     state.access_token = action.payload.access;
                     setAccessToken(action.payload.access);
-                }
+                    state.userData = jwtDecode(action.payload.access);
             })
             .addCase(performUpdateToken.rejected, (state:AccountState, action) => {
+                console.log(action)
                 state.isLogged = false;
                 state.loading = false;
                 state.refresh_token = '';
@@ -151,10 +167,33 @@ export const AccountSlice = createSlice({
                 state.registerErrors = action.payload;
                 state.registerLoading = false;
             })
+
+        ///////////////////////////// updateProfileImage /////////////////////
+
+        // Add the performChangeImage extraReducers here
+            .addCase(performChangeImage.pending, (state:AccountState, action) => {
+                state.changeImageLoading = true;
+                state.changeImageSuccess = false;
+            })
+            .addCase(performChangeImage.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
+                state.changeImageLoading = false;
+                state.changeImageSuccess = true;
+                state.userData.image = action.payload.profile_image.slice(21);
+                // setAccessToken(action.payload.access)
+            })
+            .addCase(performChangeImage.rejected, (state:AccountState, action) => {
+                if(action.payload.code == "token_not_valid") {
+                    state.isLogged = false;
+                    state.errors = action.payload.messages
+                }
+                state.changeImageLoading = false;
+                state.changeImageSuccess = false;
+            })
+
     }
 
 
 });
-export const {setLoggedInState, performLogout, resetRegisterState} = AccountSlice.actions;
+export const {setLoggedInState, performLogout, resetRegisterState,resetChangeImageState} = AccountSlice.actions;
 
 export default AccountSlice.reducer;

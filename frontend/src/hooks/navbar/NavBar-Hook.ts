@@ -7,7 +7,7 @@ import {InfoNotification} from "@/hooks/Notification";
 
 
 export default function NavBarHook () {
-    const {isLogged,userData, refresh_token, isErrored} = useSelector((state) => state.account);
+    const {isLogged,userData, refresh_token, isErrored, access_token} = useSelector((state) => state.account);
     const dispatch = useDispatch();
 
 
@@ -29,7 +29,7 @@ export default function NavBarHook () {
             }, timeToRefresh)
             return () => clearInterval(interval);
         }
-    }, [isLogged,refresh_token]);
+    }, [isLogged,access_token]);
 
     useEffect(() => {
         if(isErrored){
