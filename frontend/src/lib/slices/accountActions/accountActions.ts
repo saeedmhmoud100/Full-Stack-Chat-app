@@ -1,6 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import Post from "@/hooks/serverActions/methods/Post";
 import Put from "@/hooks/serverActions/methods/Put";
+import Get from "@/hooks/serverActions/methods/Get";
 
 
 export const performLogin = createAsyncThunk('account/performLogin',
@@ -41,6 +42,16 @@ export const performUpdateToken = createAsyncThunk('account/performUpdateToken',
 export const performChangeImage = createAsyncThunk('account/performChangeImage',
 async (credentials: { image: string }, { rejectWithValue }) => {
         const response = await Put('/api/accounts/update_image/', credentials,true)
+        if(response?.ok){
+            return await response.json();
+        }else {
+            return rejectWithValue(await response.json());
+        }
+});
+
+export const getLoggedUserData = createAsyncThunk('account/getLoggedUserData',
+async (credentials: { }, { rejectWithValue }) => {
+        const response = await Get('/api/accounts/me/', credentials)
         if(response?.ok){
             return await response.json();
         }else {

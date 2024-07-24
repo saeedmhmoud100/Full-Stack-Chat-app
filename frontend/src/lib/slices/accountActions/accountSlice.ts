@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {removeUserToken, setAccessToken, setUserToken} from "@/hooks/localStorage";
 import {
+    getLoggedUserData,
     performChangeImage,
     performLogin,
     performRegister,
@@ -66,7 +67,7 @@ export const AccountSlice = createSlice({
             state.refresh_token = action.payload.refresh;
             state.access_token = action.payload.access;
             state.isLogged = true;
-            state.userData = jwtDecode(action.payload.access);
+            state.userData!.username = jwtDecode(action.payload.access)['name']
         },
         performLogout: (state) => {
             state.refresh_token = '';
@@ -101,7 +102,7 @@ export const AccountSlice = createSlice({
                     state.refresh_token = action.payload.refresh;
                     state.access_token = action.payload.access;
                     state.isErrored = false;
-                    state.userData = jwtDecode(action.payload.access);
+                    state.userData!.username = jwtDecode(action.payload.access)['name']
                     state.performAuth = true;
                 }
             })
@@ -132,7 +133,7 @@ export const AccountSlice = createSlice({
             .addCase(performUpdateToken.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
                     state.access_token = action.payload.access;
                     setAccessToken(action.payload.access);
-                    state.userData = jwtDecode(action.payload.access);
+                    state.userData!.username = jwtDecode(action.payload.access)['name']
             })
             .addCase(performUpdateToken.rejected, (state:AccountState, action) => {
                 console.log(action)
@@ -178,8 +179,7 @@ export const AccountSlice = createSlice({
             .addCase(performChangeImage.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
                 state.changeImageLoading = false;
                 state.changeImageSuccess = true;
-                state.userData.image = action.payload.profile_image.slice(21);
-                // setAccessToken(action.payload.access)
+                state.userData.profile_image = action.payload.profile_image;
             })
             .addCase(performChangeImage.rejected, (state:AccountState, action) => {
                 if(action.payload.code == "token_not_valid") {
@@ -190,6 +190,15 @@ export const AccountSlice = createSlice({
                 state.changeImageSuccess = false;
             })
 
+        ///////////////////////////////////////////////////////////
+
+            .addCase(getLoggedUserData.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
+                state.userData = action.payload;
+            })
+            .addCase(getLoggedUserData.rejected, (state:AccountState, action) => {
+                state.isLogged = false;
+                state.errors = action.payload;
+            })
     }
 
 

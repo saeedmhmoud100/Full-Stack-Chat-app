@@ -1,15 +1,19 @@
 "use client";
 
 import {Button} from "@mui/material";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import "./style.css"
 import ProfileAvatar from "@/app/(pages)/(authentecated)/profile/@userDataSection/profile_avatar";
+import {useEffect} from "react";
+import {getLoggedUserData} from "@/lib/slices/accountActions/accountActions";
 
 
 export default function UserDataSection(){
-    const {userData:{name,image,email}, isLogged} = useSelector(state => state.account)
-
-
+    const {userData:{username,email}} = useSelector(state => state.account)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getLoggedUserData())
+    }, [])
 
 
     return (
@@ -20,7 +24,7 @@ export default function UserDataSection(){
                 </div>
             </div>
             <div className="profile_data ms-4 md:pt-20 text-6xl sm:text-center md:text-start">
-                <p className="text-lg my-6 text-3xl">Username:  {name} </p>
+                <p className="text-lg my-6 text-3xl">Username:  {username} </p>
                 <p className="text-lg my-6 text-3xl">Email:  {email} </p>
                 <p className="text-lg my-6 text-3xl">phone:  user_id </p>
                 <p className="text-lg my-6 text-3xl">location:  user_id </p>

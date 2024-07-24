@@ -12,12 +12,12 @@ import ProfileAvatarHook from "@/hooks/profile/ProfileAvatar-Hook";
 
 
 export default function ProfileAvatar() {
-    const {image, changeImageLoading,changeImageModal,croppedImage,setChangeImageModal, setCroppedImage,handleOnCrop, handleImageModalClose, handleSaveImage} = ProfileAvatarHook()
+    const {profile_image, changeImageLoading,changeImageModal,croppedImage,setChangeImageModal, setCroppedImage,handleOnCrop, handleImageModalClose, handleSaveImage} = ProfileAvatarHook()
 
 
     return (
         <>
-            <img src={backendUrl + image} alt="profile image" style={{width: "300px"}}/>
+            <img src={profile_image} alt="profile image" style={{width: "300px"}}/>
             <div className="layout absolute w-full h-full top-0 left-0 rounded-full flex items-center justify-center">
                 <Button variant="contained" color='primary' size="large" onClick={_ => setChangeImageModal(true)}>
                     edit
@@ -34,7 +34,7 @@ export default function ProfileAvatar() {
                                 width={300}
                                 height={300}
                                 onCrop={handleOnCrop}
-                                onClose={_ => setCroppedImage(backendUrl + image)}
+                                onClose={_ => setCroppedImage(profile_image)}
                                 minCropRadius={2}
                                 maxCropRadius={4}
 
