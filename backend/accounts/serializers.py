@@ -11,6 +11,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['name'] = user.username
         token['email'] = user.email
+        token['image'] = user.profile_image.url
 
         return token
 
@@ -46,4 +47,3 @@ class CreateAccountSerializer(serializers.ModelSerializer):
         )
         user.save()
         return user
-
