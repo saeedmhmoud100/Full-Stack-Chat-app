@@ -1,6 +1,8 @@
 import {getAccessToken} from "@/hooks/localStorage";
 
 
+export const backendUrl = 'http://127.0.0.1:8000'
+
 export default async function customFetch(url: string, method: string, data: any) {
     const headerData = {
         method: method,
@@ -15,11 +17,11 @@ export default async function customFetch(url: string, method: string, data: any
     if (token) {
         headerData.headers['Authorization'] = `Bearer ${token}`
     }
-    if (url[0] == '/') {
-        url = url.slice(1)
+    if (url[0] != '/') {
+        url = '/' + url;
     }
 
-    url = 'http://127.0.0.1:8000/' + url;
+    url = backendUrl + url;
 
     return await fetch(url, headerData);
 
