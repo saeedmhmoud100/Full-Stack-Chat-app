@@ -35,3 +35,4 @@ export const performUpdateToken = createAsyncThunk('account/performUpdateToken',
             return rejectWithValue(await response.json());
         }
 });
+

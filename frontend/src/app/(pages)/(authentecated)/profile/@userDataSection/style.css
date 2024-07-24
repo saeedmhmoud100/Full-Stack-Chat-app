@@ -1,9 +1,9 @@
 
-.image > div{
+.image > .layout{
     background-color: rgba(0, 0, 0, 0.5);
     transform: scale(0);
     transition: transform 0.5s;
 }
-.image:hover > div{
+.image:hover > .layout{
     transform: scale(1);
 }
