@@ -3,12 +3,13 @@ import {useEffect, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ErrorNotification, ErrorNotifications, SuccessNotification} from "@/hooks/Notification";
 import { performRegister} from "@/lib/slices/accountActions/accountActions";
+import {resetRegisterState} from "@/lib/slices/accountActions/accountSlice";
 
 
 export default function RegisterHook() {
     const RegisterFormRef = useRef(null);
     const dispatch = useDispatch();
-    const {registerLoading,registerErrors, isRegisterErrored,registerSuccess} = useSelector((state) => state.account);
+    const {registerLoading,registerErrors, isRegisterErrored,registerSuccess, isLogged} = useSelector((state) => state.account);
     const router = useRouter();
     useEffect(() => {
         const handleSubmit = async (e) => {
@@ -54,8 +55,15 @@ export default function RegisterHook() {
         if(registerSuccess){
             SuccessNotification('Registration successful');
             router.push('/login');
+            dispatch(resetRegisterState())
         }
     },[registerSuccess])
+
+    useEffect(() => {
+        if(isLogged){
+            router.push('/profile');
+        }
+    }, [isLogged]);
 
     return {registerLoading,RegisterFormRef}
 }

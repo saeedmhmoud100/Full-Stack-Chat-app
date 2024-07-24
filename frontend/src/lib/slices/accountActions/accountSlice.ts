@@ -63,6 +63,12 @@ export const AccountSlice = createSlice({
             state.userData = {};
 
             removeUserToken();
+        },
+        resetRegisterState: (state) => {
+            state.isRegisterErrored = false;
+            state.registerErrors = {};
+            state.registerSuccess = false;
+            state.registerLoading = false;
         }
     },
     extraReducers: (builder) => {
@@ -143,6 +149,6 @@ export const AccountSlice = createSlice({
 
 
 });
-export const {setLoggedInState, performLogout} = AccountSlice.actions;
+export const {setLoggedInState, performLogout, resetRegisterState} = AccountSlice.actions;
 
 export default AccountSlice.reducer;

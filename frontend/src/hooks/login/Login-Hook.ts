@@ -26,9 +26,10 @@ export default function LoginHook() {
 
     useEffect(() => {
         if(isLogged){
-            router.push('/');
+            router.push('/profile');
         }
     }, [isLogged]);
+
     useEffect(() => {
         if(isErrored){
             ErrorNotifications(errors);

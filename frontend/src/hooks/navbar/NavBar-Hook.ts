@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useLayoutEffect} from "react";
 import {getUserToken} from "@/hooks/localStorage";
 import {setLoggedInState} from "@/lib/slices/accountActions/accountSlice";
 import {performUpdateToken} from "@/lib/slices/accountActions/accountActions";
@@ -13,7 +13,7 @@ export default function NavBarHook () {
 
 
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const token = getUserToken();
         if(token && !isLogged){
             dispatch(setLoggedInState(token))
