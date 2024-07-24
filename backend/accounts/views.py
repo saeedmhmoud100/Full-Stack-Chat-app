@@ -1,11 +1,11 @@
 from django.shortcuts import render
-from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from accounts.models import Account
-from accounts.serializers import CreateAccountSerializer, UpdateAccountImageSerializer
+from accounts.serializers import CreateAccountSerializer, UpdateAccountImageSerializer, AccountMeSerializer
 
 
 # Create your views here.
@@ -33,3 +33,9 @@ class UpdateAccountImageView(UpdateAPIView):
         access_token = str(refresh.access_token)
         response.data.access = access_token
         return Response(response.data)
+
+
+class AccountMeView(RetrieveAPIView):
+    serializer_class = AccountMeSerializer
+    def get_object(self):
+        return self.request.user

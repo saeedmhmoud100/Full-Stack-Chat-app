@@ -99,3 +99,15 @@ class UpdateAccountImageSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'profile_image': {'required': False}
         }
+
+
+class AccountMeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = ['id', 'email', 'username', 'profile_image']
+        extra_kwargs = {
+            'id': {'read_only': True},
+            'email': {'read_only': True},
+            'username': {'read_only': True},
+            'profile_image': {'read_only': True}
+        }
