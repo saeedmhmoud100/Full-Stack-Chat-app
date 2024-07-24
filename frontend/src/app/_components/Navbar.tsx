@@ -17,7 +17,7 @@ export default function Navbar() {
                         <>
                             <Link href={'private_chats'}><div className="px-4">Private Chats</div></Link>
                             <Link href={'groups'}><div className="px-4">Groups</div></Link>
-                            <Link href={'Profile'}><div className="px-4">Profile</div></Link>
+                            <Link href={'profile'}><div className="px-4">Profile</div></Link>
                             <Link href={'logout'}><div className="px-4">logout</div></Link>
                         </>
                     ) : (<>

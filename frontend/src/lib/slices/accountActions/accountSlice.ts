@@ -9,6 +9,7 @@ export interface AccountState {
     refresh_token: string;
     access_token: string;
     isLogged: boolean;
+    performAuth: boolean;
     loading: boolean;
     isErrored: boolean;
     errors?: any;
@@ -29,6 +30,7 @@ const initialState: AccountState = {
     refresh_token: '',
     access_token: '',
     isLogged: false,
+    performAuth: false,
     loading: false,
     isErrored: false,
     userData: {},
@@ -61,6 +63,7 @@ export const AccountSlice = createSlice({
             state.isErrored = false;
             state.errors = {};
             state.userData = {};
+            state.performAuth =true;
 
             removeUserToken();
         },
@@ -82,6 +85,7 @@ export const AccountSlice = createSlice({
                     state.access_token = action.payload.access;
                     state.isErrored = false;
                     state.userData = jwtDecode(action.payload.access);
+                    state.performAuth = true;
                 }
             })
             .addCase(performLogin.pending, (state:AccountState, action) => {
@@ -90,6 +94,7 @@ export const AccountSlice = createSlice({
                 state.refresh_token = '';
                 state.access_token = '';
                 state.isErrored = false;
+                state.performAuth = false;
             })
             .addCase(performLogin.rejected, (state:AccountState, action) => {
                 state.isLogged = false;
@@ -98,6 +103,7 @@ export const AccountSlice = createSlice({
                 state.access_token = '';
                 state.isErrored = true;
                 state.errors = action.payload;
+                state.performAuth = false;
                 removeUserToken();
             })
 

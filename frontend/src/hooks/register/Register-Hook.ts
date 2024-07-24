@@ -59,11 +59,6 @@ export default function RegisterHook() {
         }
     },[registerSuccess])
 
-    useEffect(() => {
-        if(isLogged){
-            router.push('/profile');
-        }
-    }, [isLogged]);
 
     return {registerLoading,RegisterFormRef}
 }
