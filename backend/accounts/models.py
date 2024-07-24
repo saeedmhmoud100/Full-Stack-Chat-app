@@ -3,7 +3,7 @@ from django.db import models
 
 
 def get_profile_image_filepath(self, filename):
-    return f'static/accounts/profile_images/{self.pk}/{"profile_image.png"}'
+    return f'static/accounts/profile_images/{self.pk}/profile_image.png'
 
 
 def get_default_profile_image():
