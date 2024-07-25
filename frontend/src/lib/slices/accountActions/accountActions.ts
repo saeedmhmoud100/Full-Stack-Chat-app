@@ -58,3 +58,14 @@ async (credentials: { }, { rejectWithValue }) => {
             return rejectWithValue(await response.json());
         }
 });
+
+
+export const performChangePassword = createAsyncThunk('account/changePassword',
+async (credentials: { old_password: string, new_password: string }, { rejectWithValue }) => {
+        const response = await Put('/api/accounts/change_password/', credentials,true)
+        if(response?.ok){
+            return await response.json();
+        }else {
+            return rejectWithValue(await response.json());
+        }
+})

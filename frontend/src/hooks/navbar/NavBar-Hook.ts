@@ -3,11 +3,11 @@ import {useEffect, useLayoutEffect} from "react";
 import {getUserToken} from "@/hooks/localStorage";
 import {setLoggedInState} from "@/lib/slices/accountActions/accountSlice";
 import {performUpdateToken} from "@/lib/slices/accountActions/accountActions";
-import {InfoNotification} from "@/hooks/Notification";
+import {ErrorNotifications, InfoNotification} from "@/hooks/Notification";
 
 
 export default function NavBarHook () {
-    const {isLogged,userData, refresh_token, isErrored, access_token} = useSelector((state) => state.account);
+    const {isLogged,userData, refresh_token, isErrored, access_token, errors} = useSelector((state) => state.account);
     const dispatch = useDispatch();
 
 
@@ -37,6 +37,12 @@ export default function NavBarHook () {
         }
     }, [isErrored]);
 
+
+    useEffect(() => {
+        if(errors){
+            ErrorNotifications(errors)
+        }
+    }, [errors]);
 
 
     return {isLogged,userData};

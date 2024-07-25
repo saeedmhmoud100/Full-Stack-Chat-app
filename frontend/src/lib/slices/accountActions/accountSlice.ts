@@ -2,14 +2,12 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {removeUserToken, setAccessToken, setUserToken} from "@/hooks/localStorage";
 import {
     getLoggedUserData,
-    performChangeImage,
+    performChangeImage, performChangePassword,
     performLogin,
     performRegister,
     performUpdateToken
 } from "@/lib/slices/accountActions/accountActions";
-import {isErrored} from "stream";
 import {jwtDecode} from "jwt-decode";
-
 // Define a type for the slice state
 export interface AccountState {
     refresh_token: string;
@@ -22,6 +20,7 @@ export interface AccountState {
     userData?: {
         username?: string;
         email?: string;
+        profile_image?: string;
     };
     isRegisterErrored?: boolean;
     registerErrors?: any;
@@ -31,6 +30,10 @@ export interface AccountState {
 
     changeImageLoading: boolean,
     changeImageSuccess: boolean,
+
+    changePasswordLoading: boolean,
+    changePasswordSuccess: boolean,
+    changePasswordErrored: boolean,
 }
 
 // Define the initial state using that type
@@ -54,6 +57,11 @@ const initialState: AccountState = {
     // change image
     changeImageLoading: false,
     changeImageSuccess: false,
+
+    // change password
+    changePasswordLoading: false,
+    changePasswordSuccess: false,
+    changePasswordErrored: false,
 };
 
 
@@ -198,6 +206,24 @@ export const AccountSlice = createSlice({
             .addCase(getLoggedUserData.rejected, (state:AccountState, action) => {
                 state.isLogged = false;
                 state.errors = action.payload;
+            })
+
+        //////////////////////////////////////////////////////////////
+
+            .addCase(performChangePassword.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
+                state.changePasswordErrored = false;
+                state.changePasswordLoading = false;
+                state.changePasswordSuccess = true;
+            })
+            .addCase(performChangePassword.rejected, (state:AccountState, action) => {
+                state.changePasswordErrored = true;
+                state.errors = action.payload;
+                state.changePasswordLoading = false;
+            })
+            .addCase(performChangePassword.pending, (state:AccountState, action) => {
+                state.changePasswordErrored = false;
+                state.changePasswordLoading = true;
+                state.changePasswordSuccess = false;
             })
     }
 
