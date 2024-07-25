@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/lib/storeProvider";
-import Navbar from "@/app/_components/Navbar";
+import Navbar from "@/app/_components/Navbar/Navbar";
 import {Container} from "@mui/material";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

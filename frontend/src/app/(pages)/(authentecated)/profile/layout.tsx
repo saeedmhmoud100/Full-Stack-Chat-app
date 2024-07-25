@@ -7,7 +7,7 @@ export default function Profile({children,userDataSection,changePasswordSection}
             <div className="user-data w-full bg-white p-4 my-4 rounded-xl shadow">
                 {userDataSection}
             </div>
-            <div className="change-password pe-4 md:w-2/4 w-full">
+            <div className="change-password md:pe-4 pe-0 md:w-2/4 w-full">
                 {changePasswordSection}
             </div>
         </div>

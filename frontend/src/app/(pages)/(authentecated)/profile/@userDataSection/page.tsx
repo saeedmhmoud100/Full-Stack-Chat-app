@@ -10,10 +10,6 @@ import {getLoggedUserData} from "@/lib/slices/accountActions/accountActions";
 
 export default function UserDataSection(){
     const {userData:{username,email}} = useSelector(state => state.account)
-    const dispatch = useDispatch()
-    useEffect(() => {
-        dispatch(getLoggedUserData())
-    }, [])
 
 
     return (
