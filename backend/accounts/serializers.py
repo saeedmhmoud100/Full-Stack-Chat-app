@@ -3,10 +3,11 @@ import re
 import uuid
 
 import six
+from django.conf import settings
 from django.core.files.base import ContentFile
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from accounts.models import Account
+from accounts.models import Account, get_default_profile_image
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -16,7 +17,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['name'] = user.username
         token['email'] = user.email
-        token['image'] = user.profile_image.url
 
         return token
 
@@ -54,9 +54,6 @@ class CreateAccountSerializer(serializers.ModelSerializer):
         return user
 
 
-
-
-
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
         # Check if this is a base64 string
@@ -90,9 +87,9 @@ class Base64ImageField(serializers.ImageField):
         return extension
 
 
-
 class UpdateAccountImageSerializer(serializers.ModelSerializer):
     profile_image = Base64ImageField(max_length=None, use_url=True)
+
     class Meta:
         model = Account
         fields = ['profile_image']
@@ -110,4 +107,45 @@ class AccountMeSerializer(serializers.ModelSerializer):
             'email': {'read_only': True},
             'username': {'read_only': True},
             'profile_image': {'read_only': True}
+        }
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if not data['profile_image']:
+            data['profile_image'] =settings.HOST_URL+ get_default_profile_image()
+        return data
+
+
+class AccountChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Old password is not correct.")
+        return value
+
+    def validate_new_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError("Password must be at least 8 characters long.")
+        if not re.findall('[A-Z]', value):
+            raise serializers.ValidationError("Password must contain at least one uppercase letter.")
+        if not re.findall('[a-z]', value):
+            raise serializers.ValidationError("Password must contain at least one lowercase letter.")
+        if not re.findall('[0-9]', value):
+            raise serializers.ValidationError("Password must contain at least one digit.")
+        if not re.findall('[^a-zA-Z0-9]', value):
+            raise serializers.ValidationError("Password must contain at least one special character.")
+        return value
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+        return instance
+
+    def to_representation(self, instance):
+        return {
+            'name': instance.username,
+            'email': instance.email
         }

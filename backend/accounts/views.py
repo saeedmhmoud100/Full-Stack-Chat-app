@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from accounts.models import Account
-from accounts.serializers import CreateAccountSerializer, UpdateAccountImageSerializer, AccountMeSerializer
+from accounts.serializers import CreateAccountSerializer, UpdateAccountImageSerializer, AccountMeSerializer, \
+    AccountChangePasswordSerializer
 
 
 # Create your views here.
@@ -23,6 +24,7 @@ class UpdateAccountImageView(UpdateAPIView):
     serializer_class = UpdateAccountImageSerializer
     queryset = Account.objects.all()
     permission_classes = [IsAuthenticated, ]
+
     def get_object(self):
         return self.request.user
 
@@ -37,5 +39,14 @@ class UpdateAccountImageView(UpdateAPIView):
 
 class AccountMeView(RetrieveAPIView):
     serializer_class = AccountMeSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
+class AccountChangePasswordView(UpdateAPIView):
+    serializer_class = AccountChangePasswordSerializer
+    permission_classes = [IsAuthenticated, ]
+
     def get_object(self):
         return self.request.user
