@@ -9,7 +9,6 @@ export default function ChangePasswordSection() {
     const {formRef, handleSubmit, changePasswordLoading} = ChangePasswordHook()
 
     return (
-        <div className="change-password pe-4 w-2/4">
             <div className="bg-white p-4 rounded-xl">
                 <h2 className="text-4xl text-center font-bold border-b-gray-500"> Change Password </h2>
                 <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
@@ -21,7 +20,6 @@ export default function ChangePasswordSection() {
                     </LoadingButton>
                 </form>
             </div>
-        </div>
     )
 
 }
