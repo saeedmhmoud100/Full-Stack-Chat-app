@@ -30,10 +30,10 @@ export default function Navbar() {
                                 <div className="nav_icon_container relative" style={{width:'40px'}}>
                                     <img onClick={handleIconClick} className='object-cover nav_icon cursor-pointer' src={userData.profile_image} style={{width:'40px'}} />
                                     <div  className='nav_links absolute text-gray-950 hidden'>
-                                        <Link href={'profile'}><div className="px-4">Profile</div></Link>
-                                        <Link href={'private_chats'}><div className="px-4">Private Chats</div></Link>
-                                        <Link href={'groups'}><div className="px-4">Groups</div></Link>
-                                        <Link href={'logout'}><div className="px-4">logout</div></Link>
+                                        <Link href={'/profile'}><div className="px-4">Profile</div></Link>
+                                        <Link href={'/private_chats'}><div className="px-4">Private Chats</div></Link>
+                                        <Link href={'/groups'}><div className="px-4">Groups</div></Link>
+                                        <Link href={'/logout'}><div className="px-4">logout</div></Link>
                                     </div>
                                 </div>
 
@@ -42,9 +42,9 @@ export default function Navbar() {
 
                         </div>
                     ) : (<div className="flex justify-between">
-                        <Link href={'public_chat'}><div className="px-4">public Chat</div></Link>
-                        <Link href={'login'}><div className="px-4">Login</div></Link>
-                        <Link href={'register'}><div className="px-4">Register</div></Link>
+                        <Link href={'/public_chat'}><div className="px-4">public Chat</div></Link>
+                        <Link href={'/login'}><div className="px-4">Login</div></Link>
+                        <Link href={'/register'}><div className="px-4">Register</div></Link>
                     </div>)
                 }
         </div>
