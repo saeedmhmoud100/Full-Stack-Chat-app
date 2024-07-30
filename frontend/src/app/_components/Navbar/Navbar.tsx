@@ -28,7 +28,7 @@ export default function Navbar() {
 
                             <div className=' w-max flex items-center'>
                                 <div className="nav_icon_container relative" style={{width:'40px'}}>
-                                    <img onClick={handleIconClick} className='object-cover nav_icon cursor-pointer' src={userData.profile_image} style={{width:'40px'}} />
+                                    <img onClick={handleIconClick} className='object-cover nav_icon cursor-pointer rounded-full' src={userData.profile_image} style={{width:'40px'}} />
                                     <div  className='nav_links absolute text-gray-950 hidden'>
                                         <Link href={'/profile'}><div className="px-4">Profile</div></Link>
                                         <Link href={'/private_chats'}><div className="px-4">Private Chats</div></Link>
