@@ -3,7 +3,7 @@ import {getAccessToken} from "@/hooks/localStorage";
 
 export const backendUrl = 'http://127.0.0.1:8000'
 
-export default async function customFetch(url: string, method: string, data: any,withImage=false) {
+export default async function customFetch(url: string, method: string, data: any={},withImage=false) {
     const headerData = {
         method: method,
         headers: {

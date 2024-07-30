@@ -6,7 +6,7 @@ import {useRouter} from "next/navigation";
 import {InfoNotification} from "@/hooks/Notification";
 
 
-export default function Layout({children}) {
+export default function Layout({children}:{ children: React.ReactNode }) {
     const { isLogged, performAuth} = useSelector(state => state.account)
     const [hasHydrated, setHasHydrated] = useState(false);
     const [redirect, setRedirect] = useState(false)

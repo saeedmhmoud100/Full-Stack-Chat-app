@@ -27,7 +27,7 @@ export default function NavBarHook () {
             }, timeToRefresh)
             return () => clearInterval(interval);
         }
-    }, [isLogged,access_token,refresh_token]);
+    }, [isLogged,access_token]);
 
     useEffect(() => {
         if(isErrored){

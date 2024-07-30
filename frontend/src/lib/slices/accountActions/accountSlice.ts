@@ -75,7 +75,8 @@ export const AccountSlice = createSlice({
             state.refresh_token = action.payload.refresh;
             state.access_token = action.payload.access;
             state.isLogged = true;
-            state.userData!.username = jwtDecode(action.payload.access)['name']
+            if(action.payload.access)
+                state.userData!.username = jwtDecode(action.payload.access)['name']
         },
         performLogout: (state) => {
             state.refresh_token = '';

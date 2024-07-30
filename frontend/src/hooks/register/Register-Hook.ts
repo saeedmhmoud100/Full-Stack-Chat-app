@@ -41,14 +41,14 @@ export default function RegisterHook() {
         return () => {
             form.removeEventListener('submit', handleSubmit);
         };
-    },[dispatch])
+    },[dispatch,registerLoading])
 
 
     useEffect(() => {
         if(isRegisterErrored){
             ErrorNotifications(registerErrors);
         }
-    },[isRegisterErrored])
+    },[isRegisterErrored,registerErrors])
 
 
     useEffect(() => {
@@ -57,7 +57,7 @@ export default function RegisterHook() {
             router.push('/login');
             dispatch(resetRegisterState())
         }
-    },[registerSuccess])
+    },[registerSuccess,dispatch])
 
 
     return {registerLoading,RegisterFormRef}

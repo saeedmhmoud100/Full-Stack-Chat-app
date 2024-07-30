@@ -8,7 +8,7 @@ type ChatBoxProps = {
     width: string,
     text: string,
     type: 'group' | 'chat'| 'public',
-    messages: string[]
+    messages?: string[]
 }
 
 

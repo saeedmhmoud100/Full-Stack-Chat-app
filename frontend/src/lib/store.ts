@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import {publicChatSlice} from "./slices/publicChatSlice";
 import {AccountSlice} from "@/lib/slices/accountActions/accountSlice";
+import {UserSlice} from "@/lib/slices/usersStore/userSlice";
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             'public_chat': publicChatSlice.reducer,
             'account': AccountSlice.reducer,
+            'user': UserSlice.reducer,
         },
         devTools: true
 })}
