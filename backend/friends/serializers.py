@@ -39,3 +39,4 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_request_to_you(self, obj):
         return FriendRequest.objects.filter(from_user=obj, to_user=self.context['request'].user).exists()
+

@@ -98,16 +98,33 @@ class UpdateAccountImageSerializer(serializers.ModelSerializer):
         }
 
 
-class AccountMeSerializer(serializers.ModelSerializer):
+class FriendsSerializer(serializers.ModelSerializer):
+    profile_image = serializers.SerializerMethodField()
     class Meta:
         model = Account
         fields = ['id', 'email', 'username', 'profile_image']
+        read_only_fields = ['email', 'username']
+
+    def get_profile_image(self, obj):
+        if obj.profile_image:
+            return settings.HOST_URL + obj.profile_image.url
+        return settings.HOST_URL + get_default_profile_image()
+
+class AccountMeSerializer(serializers.ModelSerializer):
+    friends = serializers.SerializerMethodField()
+    class Meta:
+        model = Account
+        fields = ['id', 'email', 'username', 'profile_image','friends']
         extra_kwargs = {
             'id': {'read_only': True},
             'email': {'read_only': True},
             'username': {'read_only': True},
             'profile_image': {'read_only': True}
         }
+
+    def get_friends(self, obj):
+        friends = obj.friend_list.friends.all()
+        return FriendsSerializer(friends, many=True).data
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
