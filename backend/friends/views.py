@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from accounts.serializers import FriendsSerializer
 from friends.models import FriendRequest
-from friends.serializers import UserSerializer
+from friends.serializers import UserSerializer, FriendRequestSerializer
 
 
 # Create your views here.
@@ -96,4 +96,11 @@ def unfriend(request, id):
     from_user = request.user
     from_user.friend_list.unfriend(to_user)
     return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
+                    status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_friends_requests(request):
+    friend_requests = FriendRequest.objects.filter(to_user=request.user, is_active=True)
+    return Response(data={"friend_requests": FriendRequestSerializer(friend_requests, many=True).data},
                     status=status.HTTP_200_OK)

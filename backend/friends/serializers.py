@@ -29,18 +29,31 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.username
 
     def get_is_friend(self, obj):
-        return obj.friend_list.is_mutual_friend(self.context['request'].user)
+        if 'request' in self.context:
+            return obj.friend_list.is_mutual_friend(self.context['request'].user)
+        return False
 
     def get_is_you(self, obj):
-        return self.context['request'].user == obj
+        if 'request' in self.context:
+            return self.context['request'].user == obj
+        return False
 
     def get_request_from_you(self, obj):
         if (self.get_is_friend(obj)):
             return False
-        return FriendRequest.objects.filter(from_user=self.context['request'].user, to_user=obj,is_active=True).exists()
-
+        if 'request' in self.context:
+            return FriendRequest.objects.filter(from_user=self.context['request'].user, to_user=obj,is_active=True).exists()
+        return False
     def get_request_to_you(self, obj):
         if (self.get_is_friend(obj)):
             return False
-        return FriendRequest.objects.filter(from_user=obj, to_user=self.context['request'].user,is_active=True).exists()
+        if 'request' in self.context:
+            return FriendRequest.objects.filter(from_user=obj, to_user=self.context['request'].user,is_active=True).exists()
+        return False
 
+
+class FriendRequestSerializer(serializers.ModelSerializer):
+    from_user = UserSerializer()
+    class Meta:
+        model = FriendRequest
+        fields = ['id', 'from_user', 'to_user', 'timestamp', 'is_active']
