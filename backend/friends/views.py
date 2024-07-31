@@ -69,3 +69,13 @@ def cancel_friend_request(request, id):
 
     return Response( data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
                     status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def accept_friend_request(request, id):
+    to_user = request.user
+    friend_request = FriendRequest.objects.get(to_user=to_user, from_user_id=id,is_active=True)
+    if friend_request:
+        friend_request.accept()
+    return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
+                    status=status.HTTP_200_OK)
