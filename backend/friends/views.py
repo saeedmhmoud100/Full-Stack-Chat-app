@@ -89,3 +89,11 @@ def decline_friend_request(request, id):
         friend_request.decline()
     return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
                     status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+def unfriend(request, id):
+    to_user = get_user_model().objects.get(id=id)
+    from_user = request.user
+    from_user.friend_list.unfriend(to_user)
+    return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
+                    status=status.HTTP_200_OK)
