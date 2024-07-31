@@ -13,7 +13,7 @@ import {
     cancelFriendRequest, declineFriendRequest,
     performGetUserData,
     performUserSearch,
-    sendFriendRequest
+    sendFriendRequest, unFriend
 } from "@/lib/slices/usersStore/userActions";
 // Define a type for the slice state
 export interface UserState {
@@ -67,6 +67,9 @@ export const UserSlice = createSlice({
                 state.userData = action.payload?.user_data;
             })
             .addCase(declineFriendRequest.fulfilled, (state:UserState, action:PayloadAction<any>) => {
+                state.userData = action.payload?.user_data;
+            })
+            .addCase(unFriend.fulfilled, (state:UserState, action:PayloadAction<any>) => {
                 state.userData = action.payload?.user_data;
             })
     }

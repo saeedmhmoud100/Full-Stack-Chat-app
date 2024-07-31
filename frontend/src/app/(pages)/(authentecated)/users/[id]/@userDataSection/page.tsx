@@ -10,7 +10,7 @@ import {
     acceptFriendRequest,
     cancelFriendRequest, declineFriendRequest,
     performGetUserData,
-    sendFriendRequest
+    sendFriendRequest, unFriend
 } from "@/lib/slices/usersStore/userActions";
 import {useParams, useRouter} from "next/navigation";
 
@@ -44,12 +44,17 @@ export default function UserDataSection(){
         dispatch(cancelFriendRequest({id:id}))
     }
 
-    const handleAcceptFriendRequest = () => {
-        dispatch(acceptFriendRequest({id:id}))
+    const handleAcceptFriendRequest =async () => {
+        await dispatch(acceptFriendRequest({id:id}))
+        await dispatch(getLoggedUserData())
     }
 
     const handleDeclineFriendRequest = () => {
         dispatch(declineFriendRequest({id:id}))
+    }
+
+    const handleUnfriend = () => {
+        dispatch(unFriend({id:id}))
     }
 
     return (
@@ -70,7 +75,7 @@ export default function UserDataSection(){
                                     <Button variant="contained" color='primary' size="large"  href="#">
                                     <span className='px-6 py-1 text-lg'>Message</span>
                                     </Button>
-                                    <Button variant="contained" color='error' size="large"  href="#">
+                                    <Button onClick={handleUnfriend} variant="contained" color='error' size="large">
                                     <span className='px-6 py-1 text-lg'>Unfriend</span>
                                     </Button>
                                 </div>
