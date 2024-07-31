@@ -1,4 +1,4 @@
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useParams, useRouter} from "next/navigation";
 import {
     acceptFriendRequest,
@@ -6,7 +6,6 @@ import {
     declineFriendRequest, performGetUserData,
     sendFriendRequest, unFriend
 } from "@/lib/slices/usersStore/userActions";
-import {getLoggedUserData} from "@/lib/slices/accountActions/accountActions";
 import {useEffect} from "react";
 
 
@@ -14,29 +13,28 @@ const useUserDataSectionHook = (props) => {
     const dispatch = useDispatch()
     const {id} = useParams()
     const router = useRouter()
+    const {friend_requests_change} = useSelector((state) => state.user)
     useEffect(() => {
         dispatch(performGetUserData({userId:id}))
-    },[])
+    },[friend_requests_change])
+
     const handleFriendRequest = () => {
         dispatch(sendFriendRequest({id:id}))
     }
-
     const handleCancelFriendRequest = () => {
         dispatch(cancelFriendRequest({id:id}))
     }
 
-    const handleAcceptFriendRequest =async () => {
-        await dispatch(acceptFriendRequest({id:id}))
-        await dispatch(getLoggedUserData())
+    const handleAcceptFriendRequest =() => {
+        dispatch(acceptFriendRequest({id:id}))
     }
 
     const handleDeclineFriendRequest = () => {
         dispatch(declineFriendRequest({id:id}))
     }
 
-    const handleUnfriend =async () => {
-        await dispatch(unFriend({id:id}))
-        await dispatch(getLoggedUserData())
+    const handleUnfriend =() => {
+        dispatch(unFriend({id:id}))
     }
 
     return {handleFriendRequest, handleCancelFriendRequest, handleAcceptFriendRequest, handleDeclineFriendRequest, handleUnfriend,router}

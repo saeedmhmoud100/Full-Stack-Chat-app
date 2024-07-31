@@ -1,6 +1,5 @@
 'use client'
 
-import image from '../../../../../assets/images/default-profile-image.png'
 import {useDispatch, useSelector} from "react-redux";
 import Link from "next/link";
 import {useEffect} from "react";
@@ -9,13 +8,13 @@ import {getFriendsRequests} from "@/lib/slices/usersStore/userActions";
 
 
 export default function FriendRequestsSection(){
-    const {friend_requests} = useSelector(state => state.user)
+    const {friend_requests,friend_requests_change} = useSelector(state => state.user)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getFriendsRequests())
-    },[dispatch])
+    },[dispatch,friend_requests_change])
 
 
 

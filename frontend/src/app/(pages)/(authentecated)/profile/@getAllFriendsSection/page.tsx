@@ -1,13 +1,18 @@
 'use client'
 
-import image from '../../../../../assets/images/default-profile-image.png'
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Link from "next/link";
+import {useEffect} from "react";
+import {getUserFriends} from "@/lib/slices/usersStore/userActions";
 
 
 
-export default function getAllFriendsSection(){
-    const {userData:{friends}} = useSelector(state => state.account)
+export default function GetAllFriendsSection(){
+    const {friends,friends_change} = useSelector(state => state.user)
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getUserFriends())
+    },[dispatch,friends_change])
 
     return (
         <div className='friends-list bg-white p-4  h-[355px] overflow-y-auto'>
