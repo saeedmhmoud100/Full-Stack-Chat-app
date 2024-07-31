@@ -17,7 +17,6 @@ class GetUserDataView(RetrieveAPIView):
     lookup_field = 'id'
     queryset = get_user_model().objects.all()
 
-
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({"request": self.request})
@@ -26,7 +25,6 @@ class GetUserDataView(RetrieveAPIView):
 
 class SearchUserView(ListAPIView):
     serializer_class = UserSerializer
-
 
     def get_queryset(self):
         query = self.request.query_params.get('q')
@@ -53,9 +51,7 @@ def send_friend_request(request, id):
     if not created:
         friend_request.is_active = True
         friend_request.save()
-    return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
-                    status=status.HTTP_200_OK)
-
+    return Response(data={},  status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -65,37 +61,33 @@ def cancel_friend_request(request, id):
     if friend_request:
         friend_request.cancel()
 
-
-    return Response( data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
-                    status=status.HTTP_200_OK)
+    return Response(data={},  status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
 def accept_friend_request(request, id):
     to_user = request.user
-    friend_request = FriendRequest.objects.get(to_user=to_user, from_user_id=id,is_active=True)
+    friend_request = FriendRequest.objects.get(to_user=to_user, from_user_id=id, is_active=True)
     if friend_request:
         friend_request.accept()
-    return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
-                    status=status.HTTP_200_OK)
+    return Response(data={},  status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
 def decline_friend_request(request, id):
     to_user = request.user
-    friend_request = FriendRequest.objects.get(to_user=to_user, from_user_id=id,is_active=True)
+    friend_request = FriendRequest.objects.get(to_user=to_user, from_user_id=id, is_active=True)
     if friend_request:
         friend_request.decline()
-    return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
-                    status=status.HTTP_200_OK)
+    return Response(data={},  status=status.HTTP_200_OK)
+
 
 @api_view(["POST"])
 def unfriend(request, id):
     to_user = get_user_model().objects.get(id=id)
     from_user = request.user
     from_user.friend_list.unfriend(to_user)
-    return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
-                    status=status.HTTP_200_OK)
+    return Response(data={},  status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
