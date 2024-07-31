@@ -13,17 +13,15 @@ import {
     sendFriendRequest, unFriend
 } from "@/lib/slices/usersStore/userActions";
 import {useParams, useRouter} from "next/navigation";
+import useUserDataSectionHook from "@/hooks/users/UserDataSection-Hook";
 
 
 export default function UserDataSection(){
     const {userData:{username,email,profile_image,is_friend,is_you,request_from_you,request_to_you}} = useSelector(state => state.user)
     const [hydrated,setHydrated] = useState(false)
-    const dispatch = useDispatch()
-    const {id} = useParams()
-    const router = useRouter()
+    const {handleFriendRequest, handleCancelFriendRequest, handleAcceptFriendRequest, handleDeclineFriendRequest, handleUnfriend,router} = useUserDataSectionHook()
 
     useEffect(() => {
-        dispatch(performGetUserData({userId:id}))
         setHydrated(true)
     },[])
 
@@ -36,26 +34,7 @@ export default function UserDataSection(){
         router.push('/profile')
     }
 
-    const handleFriendRequest = () => {
-        dispatch(sendFriendRequest({id:id}))
-    }
 
-    const handleCancelFriendRequest = () => {
-        dispatch(cancelFriendRequest({id:id}))
-    }
-
-    const handleAcceptFriendRequest =async () => {
-        await dispatch(acceptFriendRequest({id:id}))
-        await dispatch(getLoggedUserData())
-    }
-
-    const handleDeclineFriendRequest = () => {
-        dispatch(declineFriendRequest({id:id}))
-    }
-
-    const handleUnfriend = () => {
-        dispatch(unFriend({id:id}))
-    }
 
     return (
             <div className="flex flex-col md:flex-row items-center md:items-start">
