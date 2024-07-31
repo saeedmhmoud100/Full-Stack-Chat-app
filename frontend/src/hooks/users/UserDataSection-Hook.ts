@@ -14,8 +14,11 @@ const useUserDataSectionHook = (props) => {
     const {id} = useParams()
     const router = useRouter()
     const {friend_requests_change} = useSelector((state) => state.user)
+
+
     useEffect(() => {
-        dispatch(performGetUserData({userId:id}))
+        if(id)
+            dispatch(performGetUserData({userId:id}))
     },[friend_requests_change])
 
     const handleFriendRequest = () => {

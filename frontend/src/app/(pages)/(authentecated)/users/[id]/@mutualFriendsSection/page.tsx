@@ -12,7 +12,6 @@ export default function MutualFriendsSection(){
     const {mutual_friends} = useSelector((state) => state.user);
     const {id} = useParams();
     useEffect(() => {
-        console.log(id)
         dispatch(getMutualFriends({id}))
     }, [])
 

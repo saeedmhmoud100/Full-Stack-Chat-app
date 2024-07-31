@@ -2,12 +2,6 @@ users
   - profile
      - user info
      - update user data
-     - change password
-  - send frind request
-  - accept frind request
-  - remove frind
-  - see all frinds
-  - update profile data
   - admin and users
   - see all groups which the use in
 
