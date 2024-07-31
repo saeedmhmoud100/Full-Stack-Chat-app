@@ -15,7 +15,7 @@ export default function ChangePasswordSection() {
                     <TextField type='password' name='old_password' id="filled-basic1" label="Current password" variant="outlined" />
                     <TextField type='password' name='new_password' id="filled-basic2" label="New password" variant="outlined" />
                     <TextField type='password' name='confirm_new_password' id="filled-basic3" label="Confirm new password" variant="outlined" />
-                    <LoadingButton loading={changePasswordLoading} variant="contained" color='primary' size="large" type='submit'>
+                    <LoadingButton loading={changePasswordLoading} variant="contained" color='secondary' size="large" type='submit'>
                         <span className='px-6 py-1 text-lg'>Change Password</span>
                     </LoadingButton>
                 </form>

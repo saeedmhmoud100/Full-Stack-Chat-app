@@ -71,6 +71,7 @@ export const UserSlice = createSlice({
 
             .addCase(cancelFriendRequest.fulfilled, (state:UserState, action:PayloadAction<any>) => {
                 state.friend_requests_change = !state.friend_requests_change;
+                state.friend_requests_you_sent_change = !state.friend_requests_you_sent_change;
             })
             .addCase(acceptFriendRequest.fulfilled, (state:UserState, action:PayloadAction<any>) => {
                 state.friend_requests_change = !state.friend_requests_change;

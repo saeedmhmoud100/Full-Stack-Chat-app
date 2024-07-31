@@ -21,15 +21,15 @@ const useUserDataSectionHook = (props) => {
     const handleFriendRequest = () => {
         dispatch(sendFriendRequest({id:id}))
     }
-    const handleCancelFriendRequest = () => {
-        dispatch(cancelFriendRequest({id:id}))
+    const handleCancelFriendRequest = (id=id) => {
+        dispatch(cancelFriendRequest({id:id.toString()}))
     }
 
-    const handleAcceptFriendRequest =() => {
+    const handleAcceptFriendRequest =(id=id) => {
         dispatch(acceptFriendRequest({id:id}))
     }
 
-    const handleDeclineFriendRequest = () => {
+    const handleDeclineFriendRequest = (id=id) => {
         dispatch(declineFriendRequest({id:id}))
     }
 

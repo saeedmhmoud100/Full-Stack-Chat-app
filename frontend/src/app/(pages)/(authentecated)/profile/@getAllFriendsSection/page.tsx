@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Link from "next/link";
 import {useEffect} from "react";
 import {getUserFriends} from "@/lib/slices/usersStore/userActions";
+import {Button} from "@mui/material";
 
 
 
@@ -21,10 +22,19 @@ export default function GetAllFriendsSection(){
             {
                 friends?.length ?
                     friends.map(friend =>
-                        <Link href={`/users/${friend.id}/`} key={friend.id} className="w-full h-24 px-4 flex gap-3 my-3 items-center hover:bg-gray-300 cursor-pointer transition delay-100 rounded-md">
-                            <img src={friend.profile_image} style={{height:"60px",width:"60px"}}  className='rounded-3xl'/>
-                            <h4>{friend.username}</h4>
-                        </Link>
+                        <div key={friend.id} className='w-full  px-4 flex items-center hover:bg-gray-300 cursor-pointer transition delay-100 rounded-md'>
+                            <Link href={`/users/${friend.id}/`} className="w-full h-20 flex gap-3 my-3 items-center rounded-e-none px-3">
+                                <img src={friend.profile_image} style={{height:"60px",width:"60px"}}  className='rounded-3xl'/>
+                                <h4>{friend.username}</h4>
+                            </Link>
+                            <Button variant='contained' color='primary' sx={{
+                                borderTopLeftRadius: 0,
+                                borderBottomLeftRadius: 0,
+                            }}
+                            >
+                                <span className='p-5'>Message</span>
+                            </Button>
+                        </div>
                     )
                     :
                     <h4 style={{margin:"70px auto",textAlign:'center'}}>No friends</h4>
