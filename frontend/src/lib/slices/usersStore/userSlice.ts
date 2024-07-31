@@ -8,7 +8,7 @@ import {
     performUpdateToken
 } from "@/lib/slices/accountActions/accountActions";
 import {jwtDecode} from "jwt-decode";
-import {performGetUserData, performUserSearch} from "@/lib/slices/usersStore/userActions";
+import {performGetUserData, performUserSearch, sendFriendRequest} from "@/lib/slices/usersStore/userActions";
 // Define a type for the slice state
 export interface UserState {
     userData?: {};
@@ -46,8 +46,12 @@ export const UserSlice = createSlice({
 
         ///////////////////////////////////////////
             .addCase(performUserSearch.fulfilled, (state:UserState, action:PayloadAction<any>) => {
-                console.log(action.payload)
                 state.usersSearch = action.payload;
+            })
+
+        ///////////////////////////////////////////
+            .addCase(sendFriendRequest.fulfilled, (state:UserState, action:PayloadAction<any>) => {
+                state.userData = action.payload?.user_data;
             })
     }
 

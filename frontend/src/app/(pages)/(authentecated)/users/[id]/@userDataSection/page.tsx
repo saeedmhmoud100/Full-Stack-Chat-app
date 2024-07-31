@@ -6,7 +6,7 @@ import "./style.css"
 import ProfileAvatar from "@/app/(pages)/(authentecated)/profile/@userDataSection/profile_avatar";
 import {useEffect, useState} from "react";
 import {getLoggedUserData} from "@/lib/slices/accountActions/accountActions";
-import {performGetUserData} from "@/lib/slices/usersStore/userActions";
+import {performGetUserData, sendFriendRequest} from "@/lib/slices/usersStore/userActions";
 import {useParams, useRouter} from "next/navigation";
 
 
@@ -29,6 +29,10 @@ export default function UserDataSection(){
 
     if(is_you){
         router.push('/profile')
+    }
+
+    const handleFriendRequest = () => {
+        dispatch(sendFriendRequest({id:id}))
     }
 
 
@@ -72,7 +76,7 @@ export default function UserDataSection(){
                                                                 <span className='px-6 py-1 text-lg'>accept request</span>
                                                             </Button>
                                                         ) :(
-                                                            <Button variant="contained" color='primary' size="large"  href="#">
+                                                            <Button onClick={handleFriendRequest} variant="contained" color='primary' size="large"  href="#">
                                                                 <span className='px-6 py-1 text-lg'>send friend request</span>
                                                             </Button>
                                                         )

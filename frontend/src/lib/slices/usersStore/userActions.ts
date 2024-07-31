@@ -7,7 +7,6 @@ import Get from "@/hooks/serverActions/methods/Get";
 export const performGetUserData = createAsyncThunk('user/getUserData',
     async (credentials: { userId: string}, { rejectWithValue }) => {
         const response = await Get(`/api/friends/${credentials.userId}/`)
-        console.log(response)
         if(response.ok){
             return await response.json();
         }else {
@@ -17,6 +16,16 @@ export const performGetUserData = createAsyncThunk('user/getUserData',
 export const performUserSearch = createAsyncThunk('user/performUserSearch',
     async (credentials: { q: string}, { rejectWithValue }) => {
         const response = await Get(`/api/friends/search?q=${credentials.q}`)
+        if(response.ok){
+            return await response.json();
+        }else {
+            return rejectWithValue(await response.json());
+        }
+});
+
+export const sendFriendRequest = createAsyncThunk('user/sendFriendRequest',
+    async (credentials: { id: string}, { rejectWithValue }) => {
+        const response = await Post(`/api/friends/send_friend_request/${credentials.id}/`)
         if(response.ok){
             return await response.json();
         }else {
