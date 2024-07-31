@@ -8,7 +8,7 @@ import {useEffect, useState} from "react";
 import {getLoggedUserData} from "@/lib/slices/accountActions/accountActions";
 import {
     acceptFriendRequest,
-    cancelFriendRequest,
+    cancelFriendRequest, declineFriendRequest,
     performGetUserData,
     sendFriendRequest
 } from "@/lib/slices/usersStore/userActions";
@@ -46,6 +46,10 @@ export default function UserDataSection(){
 
     const handleAcceptFriendRequest = () => {
         dispatch(acceptFriendRequest({id:id}))
+    }
+
+    const handleDeclineFriendRequest = () => {
+        dispatch(declineFriendRequest({id:id}))
     }
 
     return (
@@ -88,7 +92,7 @@ export default function UserDataSection(){
                                                                 <Button onClick={handleAcceptFriendRequest} variant="contained" color='success' size="large">
                                                                     <span className='px-6 py-1 text-lg'>accept request</span>
                                                                 </Button>
-                                                                <Button variant="contained" color='error' size="large">
+                                                                <Button onClick={handleDeclineFriendRequest} variant="contained" color='error' size="large">
                                                                     <span className='px-6 py-1 text-lg'>Cancel request</span>
                                                                 </Button>
                                                             </div>
