@@ -112,3 +112,11 @@ def get_friend_requests_you_sent(request):
     friend_requests = FriendRequest.objects.filter(from_user=request.user, is_active=True)
     return Response(data={"friend_requests_you_sent": FriendRequestYouSentSerializer(friend_requests, many=True).data},
                     status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_mutual_friends(request, id):
+    user = get_user_model().objects.get(id=id)
+    mutual_friends = request.user.friend_list.friends.all().intersection(user.friend_list.friends.all())
+    return Response(data={"mutual_friends": FriendsSerializer(mutual_friends, many=True).data},
+                    status=status.HTTP_200_OK)
