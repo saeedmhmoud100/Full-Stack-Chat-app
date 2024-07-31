@@ -26,7 +26,7 @@ export default function FriendRequestsSection(){
 
     return (
         <div className='friends-list bg-white p-4  h-[355px] overflow-y-auto'>
-            <h2 className="text-4xl text-center font-bold border-b-gray-500"> Your Friend Requests </h2>
+            <h2 className="text-4xl text-center font-bold border-b-gray-500"> Your Friend Requests({friend_requests.length || 0}) </h2>
 
             {
                 friend_requests?.length ?

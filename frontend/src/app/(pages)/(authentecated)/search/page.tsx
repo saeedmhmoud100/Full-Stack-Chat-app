@@ -31,7 +31,7 @@ export default function SearchPage() {
                                     display: "flex",
                                     alignItems: "center",
                                 }}>
-                                    <span className='mt-[3px]'>Friend</span>
+                                    <span className='mt-[3px]'>Friends</span>
                                     <CheckIcon color='success' fontSize='medium' className='mx-2' style={{border:"3px solid #2e7d32",borderRadius:"50%"}}/>
                                 </Button> :
 
@@ -43,7 +43,7 @@ export default function SearchPage() {
                                         alignItems: "center",
                                         width:"max-content",
                                     }}>
-                                        <span className='mt-[3px]'>Not Friend</span>
+                                        <span className='mt-[3px]'>Not Friends</span>
                                         <ClearIcon color='error' fontSize='medium' className='mx-2' style={{border:"3px solid #d32f2f",borderRadius:"50%"}}/>
                                     </Button>
                                 }

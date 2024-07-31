@@ -17,7 +17,7 @@ export default function GetAllFriendsSection(){
 
     return (
         <div className='friends-list bg-white p-4  h-[355px] overflow-y-auto'>
-            <h2 className="text-4xl text-center font-bold border-b-gray-500"> Your Friends </h2>
+            <h2 className="text-4xl text-center font-bold border-b-gray-500"> Your Friends({friends.length || 0}) </h2>
 
             {
                 friends?.length ?

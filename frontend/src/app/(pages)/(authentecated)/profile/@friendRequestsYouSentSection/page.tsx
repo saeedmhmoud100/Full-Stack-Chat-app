@@ -22,7 +22,7 @@ export default function FriendRequestsYouSentSection(){
 
     return (
         <div className='friends-list bg-white p-4  h-[355px] overflow-y-auto'>
-            <h2 className="text-4xl text-center font-bold border-b-gray-500 mb-3"> Friend Requests You Sent</h2>
+            <h2 className="text-4xl text-center font-bold border-b-gray-500 mb-3"> Friend Requests You Sent({friend_requests_you_sent.length || 0})</h2>
 
             {
                 friend_requests_you_sent?.length ?

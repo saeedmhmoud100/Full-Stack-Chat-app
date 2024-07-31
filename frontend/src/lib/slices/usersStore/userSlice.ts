@@ -1,19 +1,17 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {removeUserToken, setAccessToken, setUserToken} from "@/hooks/localStorage";
-import {
-    getLoggedUserData,
-    performChangeImage, performChangePassword,
-    performLogin,
-    performRegister,
-    performUpdateToken
-} from "@/lib/slices/accountActions/accountActions";
-import {jwtDecode} from "jwt-decode";
+
 import {
     acceptFriendRequest,
-    cancelFriendRequest, declineFriendRequest, getFriendsRequests, getFriendsRequestsYouSent, getUserFriends,
+    cancelFriendRequest,
+    declineFriendRequest,
+    getFriendsRequests,
+    getFriendsRequestsYouSent,
+    getMutualFriends,
+    getUserFriends,
     performGetUserData,
     performUserSearch,
-    sendFriendRequest, unFriend
+    sendFriendRequest,
+    unFriend
 } from "@/lib/slices/usersStore/userActions";
 // Define a type for the slice state
 export interface UserState {
@@ -25,6 +23,7 @@ export interface UserState {
     friend_requests_change: boolean;
     friend_requests_you_sent?: [];
     friend_requests_you_sent_change: boolean;
+    mutual_friends?: [];
 }
 
 // Define the initial state using that type
@@ -36,7 +35,8 @@ const initialState: UserState = {
     friend_requests: [],
     friend_requests_change: false,
     friend_requests_you_sent: [],
-    friend_requests_you_sent_change: false
+    friend_requests_you_sent_change: false,
+    mutual_friends: [],
 };
 
 
@@ -95,6 +95,13 @@ export const UserSlice = createSlice({
 
             .addCase(getFriendsRequestsYouSent.fulfilled, (state:UserState, action:PayloadAction<any>) => {
                 state.friend_requests_you_sent = action.payload?.friend_requests_you_sent;
+            })
+
+
+        /////////////////////////////////////////////////
+
+            .addCase(getMutualFriends.fulfilled, (state:UserState, action:PayloadAction<any>) => {
+                state.mutual_friends = action.payload?.mutual_friends;
             })
     }
 
