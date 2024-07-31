@@ -29,14 +29,18 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.username
 
     def get_is_friend(self, obj):
-        return self.context['request'].user in obj.friend_list.friends.all()
+        return obj.friend_list.is_mutual_friend(self.context['request'].user)
 
     def get_is_you(self, obj):
         return self.context['request'].user == obj
 
     def get_request_from_you(self, obj):
+        if (self.get_is_friend(obj)):
+            return False
         return FriendRequest.objects.filter(from_user=self.context['request'].user, to_user=obj).exists()
 
     def get_request_to_you(self, obj):
+        if (self.get_is_friend(obj)):
+            return False
         return FriendRequest.objects.filter(from_user=obj, to_user=self.context['request'].user).exists()
 
