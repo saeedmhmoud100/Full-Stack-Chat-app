@@ -57,3 +57,16 @@ class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendRequest
         fields = ['id', 'from_user', 'to_user', 'timestamp', 'is_active']
+
+
+class FriendsSerializer(serializers.ModelSerializer):
+    profile_image = serializers.SerializerMethodField()
+    class Meta:
+        model = Account
+        fields = ['id', 'email', 'username', 'profile_image']
+        read_only_fields = ['email', 'username']
+
+    def get_profile_image(self, obj):
+        if obj.profile_image:
+            return settings.HOST_URL + obj.profile_image.url
+        return settings.HOST_URL + get_default_profile_image()

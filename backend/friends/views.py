@@ -5,9 +5,8 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
 
-from accounts.serializers import FriendsSerializer
 from friends.models import FriendRequest
-from friends.serializers import UserSerializer, FriendRequestSerializer
+from friends.serializers import UserSerializer, FriendRequestSerializer, FriendsSerializer
 
 
 # Create your views here.
@@ -103,4 +102,14 @@ def unfriend(request, id):
 def get_friends_requests(request):
     friend_requests = FriendRequest.objects.filter(to_user=request.user, is_active=True)
     return Response(data={"friend_requests": FriendRequestSerializer(friend_requests, many=True).data},
+                    status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+def get_user_friends(request):
+    if not request.user.is_authenticated:
+        return Response(data={"friends": "[]"},
+                        status=status.HTTP_400_BAD_REQUEST)
+    friends = request.user.friend_list.friends.all()
+    return Response(data={"friends": FriendsSerializer(friends, many=True).data},
                     status=status.HTTP_200_OK)
