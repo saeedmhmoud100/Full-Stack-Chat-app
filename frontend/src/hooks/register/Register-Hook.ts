@@ -48,7 +48,7 @@ export default function RegisterHook() {
         if(isRegisterErrored){
             ErrorNotifications(registerErrors);
         }
-    },[isRegisterErrored,registerErrors])
+    },[isRegisterErrored])
 
 
     useEffect(() => {
@@ -57,7 +57,7 @@ export default function RegisterHook() {
             router.push('/login');
             dispatch(resetRegisterState())
         }
-    },[registerSuccess,dispatch])
+    },[registerSuccess])
 
 
     return {registerLoading,RegisterFormRef}

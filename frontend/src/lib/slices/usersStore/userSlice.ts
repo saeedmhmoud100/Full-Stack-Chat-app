@@ -8,15 +8,17 @@ import {
     performUpdateToken
 } from "@/lib/slices/accountActions/accountActions";
 import {jwtDecode} from "jwt-decode";
-import {performGetUserData} from "@/lib/slices/usersStore/userActions";
+import {performGetUserData, performUserSearch} from "@/lib/slices/usersStore/userActions";
 // Define a type for the slice state
 export interface UserState {
     userData?: {};
+    usersSearch?: [];
 }
 
 // Define the initial state using that type
 const initialState: UserState = {
-    userData: {}
+    userData: {},
+    usersSearch: []
 };
 
 
@@ -33,18 +35,20 @@ export const UserSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(performGetUserData.fulfilled, (state:UserState, action:PayloadAction<any>) => {
-                console.log(action)
                 state.userData = action.payload;
             })
             .addCase(performGetUserData.rejected, (state:UserState, action:PayloadAction<any>) => {
-                console.log(action)
                 state.userData = {};
             })
             .addCase(performUpdateToken.pending, (state:UserState, action:PayloadAction<any>) => {
-                console.log(action)
                 state.userData = action.payload;
             })
 
+        ///////////////////////////////////////////
+            .addCase(performUserSearch.fulfilled, (state:UserState, action:PayloadAction<any>) => {
+                console.log(action.payload)
+                state.usersSearch = action.payload;
+            })
     }
 
 

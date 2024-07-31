@@ -21,7 +21,7 @@ export default function Navbar() {
                     isLogged ? (
                         <div className='px-4 flex justify-between w-full'>
                             <div className="nav_search w-full flex justify-center  mx-4 ">
-                                <div className="bg-white md:w-2/4 w-full rounded-xl">
+                                <div className="bg-white md:w-2/4 w-full rounded-xl overflow-hidden">
                                     <NavbarSearch />
                                 </div>
                             </div>

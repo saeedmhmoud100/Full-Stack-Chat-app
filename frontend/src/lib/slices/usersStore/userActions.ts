@@ -14,3 +14,12 @@ export const performGetUserData = createAsyncThunk('user/getUserData',
             return rejectWithValue(await response.json());
         }
 });
+export const performUserSearch = createAsyncThunk('user/performUserSearch',
+    async (credentials: { q: string}, { rejectWithValue }) => {
+        const response = await Get(`/api/friends/search?q=${credentials.q}`)
+        if(response.ok){
+            return await response.json();
+        }else {
+            return rejectWithValue(await response.json());
+        }
+});
