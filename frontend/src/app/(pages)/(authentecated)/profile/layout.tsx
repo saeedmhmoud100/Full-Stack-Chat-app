@@ -1,6 +1,6 @@
 'use client'
 
-export default function Profile({children,userDataSection,changePasswordSection,getAllFriendsSection}){
+export default function Profile({children,userDataSection,changePasswordSection,getAllFriendsSection,friendRequestsSection}){
 
     return (
         <div className="w-full h-full mt-4 flex flex-wrap gap-3">
@@ -13,6 +13,12 @@ export default function Profile({children,userDataSection,changePasswordSection,
             </div>
             <div className="all-friends md:w-[49%] w-full my-3 md:my-0  rounded-xl overflow-y-hidden">
                 {getAllFriendsSection}
+            </div>
+            <div className="change-password md:w-[49%] w-full  rounded-xl overflow-hidden">
+            {friendRequestsSection}
+            </div>
+            <div className="change-password md:w-[49%] w-full rounded-xl">
+            {/*    friend requests you sent*/}
             </div>
         </div>
 

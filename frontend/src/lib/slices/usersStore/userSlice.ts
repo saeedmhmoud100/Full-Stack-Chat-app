@@ -10,7 +10,7 @@ import {
 import {jwtDecode} from "jwt-decode";
 import {
     acceptFriendRequest,
-    cancelFriendRequest, declineFriendRequest,
+    cancelFriendRequest, declineFriendRequest, getFriendsRequests,
     performGetUserData,
     performUserSearch,
     sendFriendRequest, unFriend
@@ -19,12 +19,14 @@ import {
 export interface UserState {
     userData?: {};
     usersSearch?: [];
+    friend_requests?: [];
 }
 
 // Define the initial state using that type
 const initialState: UserState = {
     userData: {},
-    usersSearch: []
+    usersSearch: [],
+    friend_requests: [],
 };
 
 
@@ -71,6 +73,10 @@ export const UserSlice = createSlice({
             })
             .addCase(unFriend.fulfilled, (state:UserState, action:PayloadAction<any>) => {
                 state.userData = action.payload?.user_data;
+            })
+
+            .addCase(getFriendsRequests.fulfilled, (state:UserState, action:PayloadAction<any>) => {
+                state.friend_requests = action.payload?.friend_requests;
             })
     }
 

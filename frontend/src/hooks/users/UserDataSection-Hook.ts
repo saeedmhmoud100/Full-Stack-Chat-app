@@ -34,8 +34,9 @@ const useUserDataSectionHook = (props) => {
         dispatch(declineFriendRequest({id:id}))
     }
 
-    const handleUnfriend = () => {
-        dispatch(unFriend({id:id}))
+    const handleUnfriend =async () => {
+        await dispatch(unFriend({id:id}))
+        await dispatch(getLoggedUserData())
     }
 
     return {handleFriendRequest, handleCancelFriendRequest, handleAcceptFriendRequest, handleDeclineFriendRequest, handleUnfriend,router}

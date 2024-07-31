@@ -68,3 +68,12 @@ export const unFriend = createAsyncThunk('user/unFriend',
             return rejectWithValue(await response.json());
         }
 });
+export const getFriendsRequests = createAsyncThunk('user/getFriendsRequests',
+    async (credentials: { id: string}, { rejectWithValue }) => {
+        const response = await Get(`/api/friends/get_friends_requests/`)
+        if(response.ok){
+            return await response.json();
+        }else {
+            return rejectWithValue(await response.json());
+        }
+});
