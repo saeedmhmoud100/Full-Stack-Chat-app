@@ -6,7 +6,7 @@ import "./style.css"
 import ProfileAvatar from "@/app/(pages)/(authentecated)/profile/@userDataSection/profile_avatar";
 import {useEffect, useState} from "react";
 import {getLoggedUserData} from "@/lib/slices/accountActions/accountActions";
-import {performGetUserData, sendFriendRequest} from "@/lib/slices/usersStore/userActions";
+import {cancelFriendRequest, performGetUserData, sendFriendRequest} from "@/lib/slices/usersStore/userActions";
 import {useParams, useRouter} from "next/navigation";
 
 
@@ -35,6 +35,9 @@ export default function UserDataSection(){
         dispatch(sendFriendRequest({id:id}))
     }
 
+    const handleCancelFriendRequest = () => {
+        dispatch(cancelFriendRequest({id:id}))
+    }
 
     return (
             <div className="flex flex-col md:flex-row items-center md:items-start">
@@ -63,7 +66,7 @@ export default function UserDataSection(){
                                     {
                                         request_from_you ? (
                                             <>
-                                                <Button variant="contained" color='error' size="large"  href="#">
+                                                <Button onClick={handleCancelFriendRequest} variant="contained" color='error' size="large"  href="#">
                                                     <span className='px-6 py-1 text-lg'>cancel friend request</span>
                                                 </Button>
                                             </>
@@ -72,9 +75,14 @@ export default function UserDataSection(){
                                                 <>
                                                     {
                                                         request_to_you ?(
-                                                            <Button variant="contained" color='success' size="large"  href="#">
-                                                                <span className='px-6 py-1 text-lg'>accept request</span>
-                                                            </Button>
+                                                            <div className='flex flex-col gap-3'>
+                                                                <Button variant="contained" color='success' size="large"  href="#">
+                                                                    <span className='px-6 py-1 text-lg'>accept request</span>
+                                                                </Button>
+                                                                <Button variant="contained" color='error' size="large">
+                                                                    <span className='px-6 py-1 text-lg'>Cancel request</span>
+                                                                </Button>
+                                                            </div>
                                                         ) :(
                                                             <Button onClick={handleFriendRequest} variant="contained" color='primary' size="large"  href="#">
                                                                 <span className='px-6 py-1 text-lg'>send friend request</span>
