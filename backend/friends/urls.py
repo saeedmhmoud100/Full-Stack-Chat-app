@@ -1,6 +1,7 @@
 from django.urls import path
 from friends.views import GetUserDataView, SearchUserView, send_friend_request, cancel_friend_request, \
-    accept_friend_request, decline_friend_request, unfriend, get_friends_requests, get_user_friends
+    accept_friend_request, decline_friend_request, unfriend, get_friends_requests, get_user_friends, \
+    get_friend_requests_you_sent
 
 urlpatterns = [
     path('<int:id>/', GetUserDataView.as_view(), name='get_user_data'),
@@ -15,5 +16,6 @@ urlpatterns = [
     path('unfriend/<int:id>/', unfriend, name='unfriend'),
 
     path('get_friends_requests/', get_friends_requests, name='get_friends_requests'),
-    path('get_user_friends/', get_user_friends, name='get_user_friends')
+    path('get_user_friends/', get_user_friends, name='get_user_friends'),
+    path('get_friend_requests_you_sent/', get_friend_requests_you_sent, name='get_friend_requests_you_sent')
 ]

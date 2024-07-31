@@ -6,7 +6,8 @@ from rest_framework.generics import RetrieveAPIView, ListAPIView
 from rest_framework.response import Response
 
 from friends.models import FriendRequest
-from friends.serializers import UserSerializer, FriendRequestSerializer, FriendsSerializer
+from friends.serializers import UserSerializer, FriendRequestSerializer, FriendsSerializer, \
+    FriendRequestYouSentSerializer
 
 
 # Create your views here.
@@ -104,4 +105,10 @@ def get_user_friends(request):
                         status=status.HTTP_400_BAD_REQUEST)
     friends = request.user.friend_list.friends.all()
     return Response(data={"friends": FriendsSerializer(friends, many=True).data},
+                    status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+def get_friend_requests_you_sent(request):
+    friend_requests = FriendRequest.objects.filter(from_user=request.user, is_active=True)
+    return Response(data={"friend_requests_you_sent": FriendRequestYouSentSerializer(friend_requests, many=True).data},
                     status=status.HTTP_200_OK)
