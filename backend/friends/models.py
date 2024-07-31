@@ -53,5 +53,6 @@ class FriendRequest(models.Model):
         self.save()
 
     def cancel(self):
-        self.delete()
+        self.is_active = False
+        self.save()
 

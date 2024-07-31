@@ -37,10 +37,10 @@ class UserSerializer(serializers.ModelSerializer):
     def get_request_from_you(self, obj):
         if (self.get_is_friend(obj)):
             return False
-        return FriendRequest.objects.filter(from_user=self.context['request'].user, to_user=obj).exists()
+        return FriendRequest.objects.filter(from_user=self.context['request'].user, to_user=obj,is_active=True).exists()
 
     def get_request_to_you(self, obj):
         if (self.get_is_friend(obj)):
             return False
-        return FriendRequest.objects.filter(from_user=obj, to_user=self.context['request'].user).exists()
+        return FriendRequest.objects.filter(from_user=obj, to_user=self.context['request'].user,is_active=True).exists()
 
