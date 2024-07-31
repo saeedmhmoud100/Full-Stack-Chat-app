@@ -1,6 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.db.models import Q
+from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.generics import RetrieveAPIView, ListAPIView
+from rest_framework.response import Response
+
+from accounts.serializers import FriendsSerializer
+from friends.models import FriendRequest
 from friends.serializers import UserSerializer
 
 
@@ -35,3 +41,18 @@ class SearchUserView(ListAPIView):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
+
+
+@api_view(['POST'])
+def send_friend_request(request, id):
+    from_user = request.user
+    to_user = get_user_model().objects.get(id=id)
+    friend_request, created = FriendRequest.objects.get_or_create(
+        from_user=from_user,
+        to_user=to_user
+    )
+    if not created:
+        friend_request.is_active = True
+        friend_request.save()
+    return Response(data={"user_data": UserSerializer(to_user, many=False, context={'request': request}).data},
+                    status=status.HTTP_200_OK)
