@@ -27,7 +27,7 @@ export default function GetAllFriendsSection(){
                         </Link>
                     )
                     :
-                    <h4>No friends</h4>
+                    <h4 style={{margin:"70px auto",textAlign:'center'}}>No friends</h4>
             }
 
         </div>

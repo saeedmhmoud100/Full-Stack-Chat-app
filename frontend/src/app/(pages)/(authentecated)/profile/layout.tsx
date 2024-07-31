@@ -1,6 +1,12 @@
 'use client'
 
-export default function Profile({children,userDataSection,changePasswordSection,getAllFriendsSection,friendRequestsSection}){
+import FriendRequestsYouSentSection from "@/app/(pages)/(authentecated)/profile/@friendRequestsYouSentSection/page";
+
+export default function Profile({children,userDataSection,
+                                    changePasswordSection,
+                                    getAllFriendsSection,
+                                    friendRequestsSection,
+                                    friendRequestsYouSentSection}){
 
     return (
         <div className="w-full h-full mt-4 flex flex-wrap gap-3">
@@ -17,8 +23,8 @@ export default function Profile({children,userDataSection,changePasswordSection,
             <div className="change-password md:w-[49%] w-full  rounded-xl overflow-hidden">
             {friendRequestsSection}
             </div>
-            <div className="change-password md:w-[49%] w-full rounded-xl">
-            {/*    friend requests you sent*/}
+            <div className="change-password md:w-[49%] w-full rounded-xl overflow-hidden">
+            {friendRequestsYouSentSection}
             </div>
         </div>
 

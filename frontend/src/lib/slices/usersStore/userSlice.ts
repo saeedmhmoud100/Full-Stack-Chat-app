@@ -10,7 +10,7 @@ import {
 import {jwtDecode} from "jwt-decode";
 import {
     acceptFriendRequest,
-    cancelFriendRequest, declineFriendRequest, getFriendsRequests, getUserFriends,
+    cancelFriendRequest, declineFriendRequest, getFriendsRequests, getFriendsRequestsYouSent, getUserFriends,
     performGetUserData,
     performUserSearch,
     sendFriendRequest, unFriend
@@ -23,6 +23,8 @@ export interface UserState {
     friends_change: boolean;
     friend_requests?: [];
     friend_requests_change: boolean;
+    friend_requests_you_sent?: [];
+    friend_requests_you_sent_change: boolean;
 }
 
 // Define the initial state using that type
@@ -32,7 +34,9 @@ const initialState: UserState = {
     friends: [],
     friends_change: false,
     friend_requests: [],
-    friend_requests_change: false
+    friend_requests_change: false,
+    friend_requests_you_sent: [],
+    friend_requests_you_sent_change: false
 };
 
 
@@ -54,9 +58,6 @@ export const UserSlice = createSlice({
             .addCase(performGetUserData.rejected, (state:UserState, action:PayloadAction<any>) => {
                 state.userData = {};
             })
-            .addCase(performUpdateToken.pending, (state:UserState, action:PayloadAction<any>) => {
-                state.userData = action.payload;
-            })
 
         ///////////////////////////////////////////
             .addCase(performUserSearch.fulfilled, (state:UserState, action:PayloadAction<any>) => {
@@ -72,8 +73,8 @@ export const UserSlice = createSlice({
                 state.friend_requests_change = !state.friend_requests_change;
             })
             .addCase(acceptFriendRequest.fulfilled, (state:UserState, action:PayloadAction<any>) => {
-                state.friends_change = !state.friends_change;
                 state.friend_requests_change = !state.friend_requests_change;
+                state.friends_change = !state.friends_change;
             })
             .addCase(declineFriendRequest.fulfilled, (state:UserState, action:PayloadAction<any>) => {
                 state.friend_requests_change = !state.friend_requests_change;
@@ -89,6 +90,10 @@ export const UserSlice = createSlice({
 
             .addCase(getUserFriends.fulfilled, (state:UserState, action:PayloadAction<any>) => {
                 state.friends = action.payload?.friends;
+            })
+
+            .addCase(getFriendsRequestsYouSent.fulfilled, (state:UserState, action:PayloadAction<any>) => {
+                state.friend_requests_you_sent = action.payload?.friend_requests_you_sent;
             })
     }
 

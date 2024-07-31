@@ -33,7 +33,7 @@ export default function FriendRequestsSection(){
                         </Link>
                     )
                     :
-                    <h4>No requests</h4>
+                    <h4 style={{margin:"70px auto",textAlign:'center'}}>No requests</h4>
             }
 
         </div>
