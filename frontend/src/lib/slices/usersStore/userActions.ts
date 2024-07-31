@@ -41,3 +41,12 @@ export const cancelFriendRequest = createAsyncThunk('user/cancelFriendRequest',
             return rejectWithValue(await response.json());
         }
 });
+export const acceptFriendRequest = createAsyncThunk('user/acceptFriendRequest',
+    async (credentials: { id: string}, { rejectWithValue }) => {
+        const response = await Post(`/api/friends/accept_friend_request/${credentials.id}/`)
+        if(response.ok){
+            return await response.json();
+        }else {
+            return rejectWithValue(await response.json());
+        }
+});

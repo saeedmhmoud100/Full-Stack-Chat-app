@@ -9,6 +9,7 @@ import {
 } from "@/lib/slices/accountActions/accountActions";
 import {jwtDecode} from "jwt-decode";
 import {
+    acceptFriendRequest,
     cancelFriendRequest,
     performGetUserData,
     performUserSearch,
@@ -60,6 +61,9 @@ export const UserSlice = createSlice({
             })
 
             .addCase(cancelFriendRequest.fulfilled, (state:UserState, action:PayloadAction<any>) => {
+                state.userData = action.payload?.user_data;
+            })
+            .addCase(acceptFriendRequest.fulfilled, (state:UserState, action:PayloadAction<any>) => {
                 state.userData = action.payload?.user_data;
             })
     }
