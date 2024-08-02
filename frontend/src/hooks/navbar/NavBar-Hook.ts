@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useLayoutEffect} from "react";
 import {getUserToken} from "@/hooks/localStorage";
-import {setLoggedInState} from "@/lib/slices/accountActions/accountSlice";
+import {performLogout, setLoggedInState} from "@/lib/slices/accountActions/accountSlice";
 import {getLoggedUserData, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
 import {ErrorNotifications, InfoNotification} from "@/hooks/Notification";
 
@@ -38,7 +38,13 @@ export default function NavBarHook () {
 
     useEffect(() => {
         if(errors){
-            ErrorNotifications(errors)
+            if(errors.code === 'token_not_valid') {
+                InfoNotification('please login again')
+                dispatch(performLogout())
+
+            }else{
+                ErrorNotifications(errors)
+            }
         }
     }, [errors]);
 

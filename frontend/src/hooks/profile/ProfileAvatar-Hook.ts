@@ -24,8 +24,6 @@ export default function ProfileAvatarHook() {
     const handleSaveImage = async () => {
         await dispatch(performChangeImage({profile_image: croppedImage}))
         setChangeImageModal(false)
-
-
     }
 
 

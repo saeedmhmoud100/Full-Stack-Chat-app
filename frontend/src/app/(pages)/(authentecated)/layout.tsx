@@ -4,6 +4,7 @@ import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {InfoNotification} from "@/hooks/Notification";
+import {getUserToken} from "@/hooks/localStorage";
 
 
 export default function Layout({children}:{ children: React.ReactNode }) {
@@ -18,10 +19,11 @@ export default function Layout({children}:{ children: React.ReactNode }) {
 
 
     useEffect(() => {
-        if (!isLogged && hasHydrated) {
+        if (!getUserToken() && hasHydrated && !isLogged) {
             setRedirect(true)
         }
     }, [isLogged,router,hasHydrated]);
+
 
     useEffect(() => {
         if (redirect) {
