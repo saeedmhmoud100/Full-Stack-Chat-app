@@ -34,7 +34,7 @@ export default function Layout({children}:{ children: React.ReactNode }) {
     }, [redirect]);
 
 
-    if (!hasHydrated) {
+    if (!hasHydrated || redirect) {
         return null;
     }
 

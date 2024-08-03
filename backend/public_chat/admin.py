@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from public_chat.models import PublicChatMessagesModel, PublicChatModel
+from public_chat.models import PublicChatRoomMessage, PublicChatRoom
 
-admin.site.register(PublicChatMessagesModel)
-admin.site.register(PublicChatModel)
+admin.site.register(PublicChatRoomMessage)
+admin.site.register(PublicChatRoom)
