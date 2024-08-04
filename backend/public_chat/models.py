@@ -5,11 +5,25 @@ from django.db import models
 # Create your models here.
 
 
+class PublicChatRoomManager(models.Manager):
+    def selected(self):
+        return self.get_queryset().filter(active=True).first()
+
 class PublicChatRoom(models.Model):
     title = models.CharField(max_length=100, unique=True)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="public_chat_rooms")
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    active = models.BooleanField(default=False)
+
+    objects = PublicChatRoomManager()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not PublicChatRoom.objects.filter(active=True).exists():
+            self.active = True
+            self.save()
 
     def __str__(self):
         return self.title
@@ -32,6 +46,10 @@ class PublicChatRoom(models.Model):
     @property
     def group_name(self):
         return f"public_chat_{self.id}"
+
+
+    def get_connected_users_count(self):
+        return self.users.count()
 
 
 class PublicChatRoomMessage(models.Model):

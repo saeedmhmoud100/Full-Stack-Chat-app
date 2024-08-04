@@ -4,6 +4,9 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
 from rest_framework.renderers import JSONRenderer
 
+from public_chat.models import PublicChatRoom
+
+
 # from public_chat.models import PublicChatMessagesModel, PublicChatModel
 # from public_chat.serializers import PublicChatSerializer
 
@@ -11,14 +14,19 @@ from rest_framework.renderers import JSONRenderer
 class PublicChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_group_name = f"public_chat"
-        async_to_sync(self.channel_layer.group_add)(self.room_group_name, self.channel_name)
-        self.accept()
 
-        # users_count = PublicChatModel.objects.first().increase_users_count()
-        # async_to_sync(self.channel_layer.group_send)(
-        #     self.room_group_name, {"type": "online_users_count", 'count': users_count}
-        # )
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
+        self.user = self.scope['user']
+        if self.user.is_anonymous:
+            self.close()
+        else:
+            self.accept()
 
+        self.room = PublicChatRoom.objects.selected()
+        self.room.connect_user(self.user)
 
         # data = {'type':'all_messages','data':PublicChatSerializer(PublicChatModel.objects.first().messages.all(), many=True).data}
         # self.send(text_data=json.dumps(data))
@@ -29,7 +37,7 @@ class PublicChatConsumer(WebsocketConsumer):
         # async_to_sync(self.channel_layer.group_send)(
         #     self.room_group_name, {"type": "online_users_count",'count':users_count}
         # )
-        # async_to_sync(self.channel_layer.group_discard)(self.room_group_name, self.channel_name)
+        async_to_sync(self.channel_layer.group_discard)(self.room_group_name, self.channel_name)
         pass
 
     # Receive message from WebSocket
@@ -45,18 +53,3 @@ class PublicChatConsumer(WebsocketConsumer):
         #     )
 
         pass
-
-
-
-    def create_new_message(self, message,user_id):
-        # msg = PublicChatModel.objects.first().messages.create(message=message, user_id=user_id)
-        # return msg
-        pass
-    def add_message(self, event):
-        message = event["message"]
-        data = {"type": "add_message","message": PublicChatSerializer(message, many=False).data}
-        async_to_sync(self.send(json.dumps(data)))
-
-
-    def online_users_count(self,data):
-        self.send(text_data=json.dumps(data))
