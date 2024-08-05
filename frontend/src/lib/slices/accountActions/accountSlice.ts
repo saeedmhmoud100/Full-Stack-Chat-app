@@ -2,12 +2,14 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {removeUserToken, setAccessToken, setUserToken} from "@/hooks/localStorage";
 import {
     getLoggedUserData,
-    performChangeImage, performChangePassword,
+    performChangeImage,
+    performChangePassword,
     performLogin,
     performRegister,
     performUpdateToken
 } from "@/lib/slices/accountActions/accountActions";
 import {jwtDecode} from "jwt-decode";
+
 // Define a type for the slice state
 export interface AccountState {
     refresh_token: string;
@@ -104,6 +106,7 @@ export const AccountSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(performLogin.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
+                console.log(action)
                 if(action.payload){
                     setUserToken(action.payload)
                     state.isLogged = true;

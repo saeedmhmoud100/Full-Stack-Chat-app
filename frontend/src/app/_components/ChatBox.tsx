@@ -1,8 +1,8 @@
 "use client";
 import ChatNav from "@/app/_components/ChatNav";
 import {useDispatch, useSelector} from "react-redux";
-import {receive, send, setAllMessages} from "@/lib/slices/publicChatSlice";
 import {FormEvent, useEffect, useRef} from "react";
+import {websocketSend} from "@/lib/websocketActions";
 
 type ChatBoxProps = {
     width: string,
@@ -28,7 +28,9 @@ export default function ChatBox({width,text,type,messages}: ChatBoxProps) {
         const msg = formData.get('message')
         if(msg){
             const data = {'type':'add_message', 'message':msg, 'user_id':localStorage.getItem("user_id")}
-            dispatch(send(JSON.stringify(data)))
+            dispatch(
+                websocketSend({ message: JSON.stringify(data) }, { onSend: 'public_chat/send' })
+            );
             e.target.reset()
         }
     }

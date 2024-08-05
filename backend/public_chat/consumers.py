@@ -4,7 +4,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
 from rest_framework.renderers import JSONRenderer
 
-from public_chat.models import PublicChatRoom
+from public_chat.models import PublicChatModel
+from public_chat.serializers import PublicChatMessagesSerializer
 
 
 # from public_chat.models import PublicChatMessagesModel, PublicChatModel
@@ -25,11 +26,13 @@ class PublicChatConsumer(WebsocketConsumer):
         else:
             self.accept()
 
-        self.room = PublicChatRoom.objects.selected()
+        self.room = PublicChatModel.objects.selected()
         self.room.connect_user(self.user)
 
-        # data = {'type':'all_messages','data':PublicChatSerializer(PublicChatModel.objects.first().messages.all(), many=True).data}
-        # self.send(text_data=json.dumps(data))
+        data = {'type':'all_messages','data':PublicChatMessagesSerializer(PublicChatModel.objects.selected().messages.all(), many=True).data}
+        self.send(text_data=json.dumps({'type':'online_users_count','data':self.room.get_connected_users_count()}))
+        print(self.room.get_connected_users_count())
+        self.send(text_data=json.dumps(data))
 
     def disconnect(self, close_code):
         # users_count = PublicChatModel.objects.first().decrease_users_count()

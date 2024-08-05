@@ -21,10 +21,9 @@ def get_user(token):
 class JWTAuthMiddleware(BaseMiddleware):
     async def __call__(self, scope, receive, send):
         query_string = parse_qs(scope['query_string'].decode())
-        token = json.loads(query_string.get('token')[0])
-        if token:
-            token = token['access']
-            scope['user'] = await get_user(token)
+        access_token = query_string.get('token')[0]
+        if access_token:
+            scope['user'] = await get_user(access_token)
         else:
             scope['user'] = AnonymousUser()
 

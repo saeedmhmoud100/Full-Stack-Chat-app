@@ -1,18 +1,9 @@
 "use client";
 
 import {useEffect} from "react";
-import Post from "@/hooks/serverActions/methods/Post";
 import {useDispatch, useSelector} from "react-redux";
-import {
-  addMessage,
-  closeSocket,
-  receive,
-  setAllMessages,
-  setOnlineUsersCount,
-  setWebSocket
-} from "@/lib/slices/publicChatSlice";
-import {getUserToken} from "@/hooks/localStorage";
 import ChatBox from "@/app/_components/ChatBox";
+import {websocketConnect, websocketDisconnect} from "@/lib/websocketActions";
 
 export default function Home() {
 
@@ -26,28 +17,18 @@ export default function Home() {
     if(!localStorage.getItem("user_id")){
       localStorage.setItem("user_id", Math.random().toString(36).substring(7));
     }
-    dispatch(setWebSocket(`ws://localhost:8000/ws/public_chat?token=${JSON.stringify(getUserToken())} `))
-    return () =>{
-      dispatch(closeSocket())
-    }
+    dispatch(websocketConnect(`ws://localhost:8000/ws/public_chat`,{
+      websocket: true,
+      onOpen: 'public_chat/open',
+      onMessage: 'public_chat/message',
+      onClose: 'public_chat/close',
+      onError: 'public_chat/error',
+    }))
+    return () => {
+      dispatch(websocketDisconnect({ onClose: 'public_chat/close' }));
+    };
 
   }, []);
-
-  useEffect(()=>{
-    if(socketStatus){
-      const handleReceive = (data) => {
-        data = JSON.parse(data.data)
-        if(data.type === "all_messages"){
-          dispatch(setAllMessages(data.data))
-        }else if(data.type == "add_message"){
-          dispatch(addMessage(data.message))
-        }else if(data.type == "online_users_count"){
-          dispatch(setOnlineUsersCount(data.count))
-        }
-      }
-      dispatch(receive(data=>handleReceive(data)))
-    }
-  },[socketStatus])
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">

@@ -1,4 +1,3 @@
-import {useRouter} from "next/navigation";
 import {useEffect, useRef} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ErrorNotifications} from "@/hooks/Notification";
@@ -6,7 +5,6 @@ import {performLogin} from "@/lib/slices/accountActions/accountActions";
 
 
 export default function LoginHook() {
-    const router = useRouter();
     const LoginFormRef = useRef(null);
     const dispatch = useDispatch();
     const {loading , isLogged,isErrored,errors} = useSelector((state) => state.account);

@@ -5,11 +5,11 @@ from django.db import models
 # Create your models here.
 
 
-class PublicChatRoomManager(models.Manager):
+class PublicChatModelManager(models.Manager):
     def selected(self):
         return self.get_queryset().filter(active=True).first()
 
-class PublicChatRoom(models.Model):
+class PublicChatModel(models.Model):
     title = models.CharField(max_length=100, unique=True)
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="public_chat_rooms")
     created = models.DateTimeField(auto_now_add=True)
@@ -17,11 +17,11 @@ class PublicChatRoom(models.Model):
 
     active = models.BooleanField(default=False)
 
-    objects = PublicChatRoomManager()
+    objects = PublicChatModelManager()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        if not PublicChatRoom.objects.filter(active=True).exists():
+        if not PublicChatModel.objects.filter(active=True).exists():
             self.active = True
             self.save()
 
@@ -53,7 +53,7 @@ class PublicChatRoom(models.Model):
 
 
 class PublicChatRoomMessage(models.Model):
-    room = models.ForeignKey(PublicChatRoom, on_delete=models.CASCADE, related_name="messages")
+    room = models.ForeignKey(PublicChatModel, on_delete=models.CASCADE, related_name="messages")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)

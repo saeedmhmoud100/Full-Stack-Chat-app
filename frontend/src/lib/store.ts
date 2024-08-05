@@ -1,7 +1,8 @@
-import { configureStore } from '@reduxjs/toolkit'
-import {publicChatSlice} from "./slices/publicChatSlice";
+import {configureStore} from '@reduxjs/toolkit'
 import {AccountSlice} from "@/lib/slices/accountActions/accountSlice";
 import {UserSlice} from "@/lib/slices/usersStore/userSlice";
+import websocketMiddleware from "@/lib/webSockeMiddleware";
+import {publicChatSlice} from "@/lib/slices/publicChatStore/publicChatSlice";
 
 export const makeStore = () => {
     return configureStore({
@@ -10,7 +11,8 @@ export const makeStore = () => {
             'account': AccountSlice.reducer,
             'user': UserSlice.reducer,
         },
-        devTools: true
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(websocketMiddleware),
+        devTools: true,
 })}
 
 // Infer the type of makeStore

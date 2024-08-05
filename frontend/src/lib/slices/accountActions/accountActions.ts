@@ -7,7 +7,6 @@ import Get from "@/hooks/serverActions/methods/Get";
 export const performLogin = createAsyncThunk('account/performLogin',
     async (credentials: { email: string, password: string }, { rejectWithValue }) => {
         const response = await Post('/api/accounts/login/', credentials)
-
         if(response.ok){
             return await response.json();
         }else {
