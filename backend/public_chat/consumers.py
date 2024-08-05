@@ -29,9 +29,10 @@ class PublicChatConsumer(WebsocketConsumer):
         self.room = PublicChatModel.objects.selected()
         self.room.connect_user(self.user)
 
-        data = {'type':'all_messages','data':PublicChatMessagesSerializer(PublicChatModel.objects.selected().messages.all(), many=True).data}
-        self.send(text_data=json.dumps({'type':'online_users_count','data':self.room.get_connected_users_count()}))
-        print(self.room.get_connected_users_count())
+        async_to_sync(self.channel_layer.group_send)(self.room_group_name, {'type': 'send_users_count'})
+
+        data = {'type': 'all_messages',
+                'data': PublicChatMessagesSerializer(PublicChatModel.objects.selected().messages.all(), many=True).data}
         self.send(text_data=json.dumps(data))
 
     def disconnect(self, close_code):
@@ -56,3 +57,6 @@ class PublicChatConsumer(WebsocketConsumer):
         #     )
 
         pass
+
+    def send_users_count(self, event):
+        self.send(text_data=json.dumps({'type': 'online_users_count', 'data': self.room.get_connected_users_count()}))
