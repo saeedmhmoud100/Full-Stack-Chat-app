@@ -23,13 +23,12 @@
 
 .sidebar + .after{
   position: absolute;
-  content: '>>';
   width: 50px;
   height: 40px;
   background-color: black;
   top: 50%;
-  left: 0;
-  transform: translateY(-50%);
+  right: 0;
+  transform: translate(100%,-50%);
   border-radius:0 50% 50% 0 ;
   cursor: pointer;
   color: white;
@@ -38,6 +37,15 @@
   align-items: center;
   font-size: 1.2rem;
 }
+.sidebar + .after::after{
+  content: '>>';
+  display: block;
+  color: white;
+}
+.sidebar.show + .after::after{
+  content: "<<";
+}
+
 
 @media screen and (max-width: 747px) {
     .sidebar{

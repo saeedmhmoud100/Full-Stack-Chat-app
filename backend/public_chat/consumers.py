@@ -49,7 +49,6 @@ class PublicChatConsumer(WebsocketConsumer):
             )
 
     def send_users_count(self, event):
-        print(self.room.get_connected_users_count())
         self.send(text_data=json.dumps({'type': 'online_users_count', 'data': self.room.get_connected_users_count()}))
 
     @database_sync_to_async

@@ -39,7 +39,7 @@ export default function SideBarBox({width, type}:{
                 </div>
 
             </div>
-            <div className="after" onClick={handleShowSidebar}> {'>>'} </div>
+            <div className="after" onClick={handleShowSidebar}> {''} </div>
     </div>
     )
 }

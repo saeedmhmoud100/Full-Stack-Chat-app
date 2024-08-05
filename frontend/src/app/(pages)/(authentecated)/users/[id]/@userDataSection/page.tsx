@@ -3,16 +3,7 @@
 import {Button} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import "./style.css"
-import ProfileAvatar from "@/app/(pages)/(authentecated)/profile/@userDataSection/profile_avatar";
 import {useEffect, useState} from "react";
-import {getLoggedUserData} from "@/lib/slices/accountActions/accountActions";
-import {
-    acceptFriendRequest,
-    cancelFriendRequest, declineFriendRequest,
-    performGetUserData,
-    sendFriendRequest, unFriend
-} from "@/lib/slices/usersStore/userActions";
-import {useParams, useRouter} from "next/navigation";
 import useUserDataSectionHook from "@/hooks/users/UserDataSection-Hook";
 
 
@@ -54,7 +45,7 @@ export default function UserDataSection(){
                                     <Button variant="contained" color='primary' size="large"  href="#">
                                     <span className='px-6 py-1 text-lg'>Message</span>
                                     </Button>
-                                    <Button onClick={handleUnfriend} variant="contained" color='error' size="large">
+                                    <Button onClick={_=>handleUnfriend()} variant="contained" color='error' size="large">
                                     <span className='px-6 py-1 text-lg'>Unfriend</span>
                                     </Button>
                                 </div>
@@ -63,7 +54,7 @@ export default function UserDataSection(){
                                     {
                                         request_from_you ? (
                                             <>
-                                                <Button onClick={handleCancelFriendRequest} variant="contained" color='error' size="large"  href="#">
+                                                <Button onClick={_=>handleCancelFriendRequest()} variant="contained" color='error' size="large"  href="#">
                                                     <span className='px-6 py-1 text-lg'>cancel friend request</span>
                                                 </Button>
                                             </>
@@ -73,15 +64,15 @@ export default function UserDataSection(){
                                                     {
                                                         request_to_you ?(
                                                             <div className='flex flex-col gap-3'>
-                                                                <Button onClick={handleAcceptFriendRequest} variant="contained" color='success' size="large">
+                                                                <Button onClick={_=>handleAcceptFriendRequest()} variant="contained" color='success' size="large">
                                                                     <span className='px-6 py-1 text-lg'>accept request</span>
                                                                 </Button>
-                                                                <Button onClick={handleDeclineFriendRequest} variant="contained" color='error' size="large">
+                                                                <Button onClick={_=>handleDeclineFriendRequest()} variant="contained" color='error' size="large">
                                                                     <span className='px-6 py-1 text-lg'>Cancel request</span>
                                                                 </Button>
                                                             </div>
                                                         ) :(
-                                                            <Button onClick={handleFriendRequest} variant="contained" color='primary' size="large">
+                                                            <Button onClick={_=>handleFriendRequest()} variant="contained" color='primary' size="large">
                                                                 <span className='px-6 py-1 text-lg'>send friend request</span>
                                                             </Button>
                                                         )

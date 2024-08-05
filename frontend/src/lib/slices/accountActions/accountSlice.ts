@@ -106,7 +106,6 @@ export const AccountSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(performLogin.fulfilled, (state:AccountState, action:PayloadAction<{}>) => {
-                console.log(action)
                 if(action.payload){
                     setUserToken(action.payload)
                     state.isLogged = true;

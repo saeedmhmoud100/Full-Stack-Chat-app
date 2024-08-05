@@ -24,16 +24,22 @@ const useUserDataSectionHook = (props) => {
     const handleFriendRequest = () => {
         dispatch(sendFriendRequest({id:id}))
     }
-    const handleCancelFriendRequest = (id=id) => {
-        dispatch(cancelFriendRequest({id:id.toString()}))
+    const handleCancelFriendRequest = (user_id) => {
+        if(!user_id)
+            user_id = id
+        dispatch(cancelFriendRequest({id:user_id}))
     }
 
-    const handleAcceptFriendRequest =(id=id) => {
-        dispatch(acceptFriendRequest({id:id}))
+    const handleAcceptFriendRequest =(user_id) => {
+        if(!user_id)
+            user_id = id
+        dispatch(acceptFriendRequest({id:user_id}))
     }
 
-    const handleDeclineFriendRequest = (id=id) => {
-        dispatch(declineFriendRequest({id:id}))
+    const handleDeclineFriendRequest = (user_id) => {
+        if(!user_id)
+            user_id = id
+        dispatch(declineFriendRequest({id:user_id}))
     }
 
     const handleUnfriend =() => {
