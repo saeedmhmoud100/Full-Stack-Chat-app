@@ -33,6 +33,9 @@ export const publicChatSlice = createSlice({
                 case 'all_messages':
                     state.messages = data;
                     break;
+                case 'new_message':
+                    state.messages.push(data);
+                    break;
             }
         },
         error: (state, action: PayloadAction<string>) => {

@@ -52,7 +52,7 @@ class PublicChatModel(models.Model):
         return self.users.count()
 
 
-class PublicChatRoomMessage(models.Model):
+class PublicChatMessageModel(models.Model):
     room = models.ForeignKey(PublicChatModel, on_delete=models.CASCADE, related_name="messages")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()

@@ -1,15 +1,11 @@
 import json
 
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import AsyncWebsocketConsumer, WebsocketConsumer
-from rest_framework.renderers import JSONRenderer
+from channels.db import database_sync_to_async
+from channels.generic.websocket import WebsocketConsumer
 
-from public_chat.models import PublicChatModel
+from public_chat.models import PublicChatModel, PublicChatMessageModel
 from public_chat.serializers import PublicChatMessagesSerializer
-
-
-# from public_chat.models import PublicChatMessagesModel, PublicChatModel
-# from public_chat.serializers import PublicChatSerializer
 
 
 class PublicChatConsumer(WebsocketConsumer):
@@ -36,28 +32,34 @@ class PublicChatConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps(data))
 
     def disconnect(self, close_code):
-        # users_count = PublicChatModel.objects.first().decrease_users_count()
-        #
-        # async_to_sync(self.channel_layer.group_send)(
-        #     self.room_group_name, {"type": "online_users_count",'count':users_count}
-        # )
-        async_to_sync(self.channel_layer.group_discard)(self.room_group_name, self.channel_name)
-        pass
+
+        self.room.disconnect_user(self.user)
+        async_to_sync(self.channel_layer.group_send)(self.room_group_name, {"type": "online_users_count"})
+        self.close()
 
     # Receive message from WebSocket
     def receive(self, text_data):
-        # text_data_json = json.loads(text_data)
-        # message = text_data_json["message"]
-        # Type = text_data_json["type"]
-        # user_id = text_data_json["user_id"]
-        # if Type == 'add_message':
-        #     msg = self.create_new_message(message,user_id)
-        #     async_to_sync(self.channel_layer.group_send)(
-        #         self.room_group_name, {"type": "add_message", "message": msg}
-        #     )
+        text_data_json = json.loads(text_data)
+        Type = text_data_json["type"]
+        if Type == 'new_message':
+            data = text_data_json["data"]
+            msg = async_to_sync(self.create_new_message)(data)
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name, {"type": "broadcast_new_message", "message_id": msg.id}
+            )
 
-        pass
+    @database_sync_to_async
+    def create_new_message(self, data):
+        msg = PublicChatMessageModel.objects.create(user=self.user, room=self.room, message=data)
+        return msg
+
+
 
     def send_users_count(self, event):
         self.send(text_data=json.dumps({'type': 'online_users_count', 'data': self.room.get_connected_users_count()}))
+
+
+    def broadcast_new_message(self, event):
+        message_id = event['message_id']
+        self.send(text_data=json.dumps({'type': 'new_message', 'data': PublicChatMessagesSerializer(PublicChatMessageModel.objects.get(id=message_id),many=False).data}))
 #
