@@ -34,7 +34,7 @@ class PublicChatConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
 
         self.room.disconnect_user(self.user)
-        async_to_sync(self.channel_layer.group_send)(self.room_group_name, {"type": "online_users_count"})
+        async_to_sync(self.channel_layer.group_send)(self.room_group_name, {"type": "send_users_count"})
         self.close()
 
     # Receive message from WebSocket
@@ -48,6 +48,10 @@ class PublicChatConsumer(WebsocketConsumer):
                 self.room_group_name, {"type": "broadcast_new_message", "message_id": msg.id}
             )
 
+    def send_users_count(self, event):
+        print(self.room.get_connected_users_count())
+        self.send(text_data=json.dumps({'type': 'online_users_count', 'data': self.room.get_connected_users_count()}))
+
     @database_sync_to_async
     def create_new_message(self, data):
         msg = PublicChatMessageModel.objects.create(user=self.user, room=self.room, message=data)
@@ -55,8 +59,6 @@ class PublicChatConsumer(WebsocketConsumer):
 
 
 
-    def send_users_count(self, event):
-        self.send(text_data=json.dumps({'type': 'online_users_count', 'data': self.room.get_connected_users_count()}))
 
 
     def broadcast_new_message(self, event):
