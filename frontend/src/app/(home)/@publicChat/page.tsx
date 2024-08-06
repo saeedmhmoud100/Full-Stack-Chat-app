@@ -25,11 +25,16 @@ export default function PublicChat() {
                     <div className="messages overflow-auto mt-1" style={{height:"100%"}} ref={messagesBoxRef}>
 
                         {
-                            messages?.map((message, index) => <div key={index} className={`message flex  ${message.user.id !== id ? "justify-start":"justify-end" }  my-2`}>
-                            <span className={`px-12 py-4 ${message.user.id !== id ? "py-4 bg-white rounded-r-full border-s-2" :" bg-green-500 rounded-l-full border-e-2"} `}>
-                                {message.message}
-                            </span>
-                            </div>)
+                            messages?.map((message, index) =>
+                                <div key={index} className={`flex ${message.user.id !== id ? "items-start" : "items-end" } flex-col  mt-3 mb-2`}>
+                                    <span className='text-xs'>{message.timestamp}</span>
+                                    <div className={`message flex  ${message.user.id !== id ? "justify-start" : "flex-row-reverse" }`}>
+                                        <img src={message.user.profile_image} style={{width:'60px',height:'60px'}} />
+                                        <span className={`px-12 py-4 ${message.user.id !== id ? "py-4 bg-white rounded-r-full border-s-2" :" bg-green-500 rounded-l-full border-e-2"} `}>
+                                        {message.message}
+                                    </span>
+                                    </div>
+                                </div>)
                         }
                     </div>
 
