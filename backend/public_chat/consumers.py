@@ -11,18 +11,21 @@ from public_chat.serializers import PublicChatMessagesSerializer
 class PublicChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_group_name = f"public_chat"
-
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
         )
         self.user = self.scope['user']
+        self.room = PublicChatModel.objects.selected()
+        if self.scope['user'].is_anonymous:
+            self.close()
+            return None
+
         if self.user.is_anonymous:
             self.close()
         else:
             self.accept()
 
-        self.room = PublicChatModel.objects.selected()
         self.room.connect_user(self.user)
 
         async_to_sync(self.channel_layer.group_send)(self.room_group_name, {'type': 'send_users_count'})
