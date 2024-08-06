@@ -50,8 +50,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
 
     "public_chat",
+    "private_chat",
     "friends",
-
     "accounts",
 ]
 
