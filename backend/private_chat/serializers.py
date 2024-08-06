@@ -9,7 +9,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from accounts.models import Account, get_default_profile_image
 from accounts.serializers import SimpleUserDataSerializer
-from private_chat.models import PrivateChatModel
+from private_chat.models import PrivateChatModel, PrivateChatMessageModel
 
 
 class PrivateChatSerializer(serializers.ModelSerializer):
@@ -24,3 +24,16 @@ class PrivateChatSerializer(serializers.ModelSerializer):
         if obj.user1 == request_user:
             return SimpleUserDataSerializer(obj.user2).data
         return SimpleUserDataSerializer(obj.user1).data
+
+
+class PrivateChatMessageSerializer(serializers.Serializer):
+    user_id = serializers.SerializerMethodField()
+    message = serializers.CharField()
+    timestamp = serializers.DateTimeField()
+    class Meta:
+        fields = ['message', 'user_id', 'timestamp']
+        model = PrivateChatMessageModel
+
+    def get_user_id(self, obj):
+        if obj:
+            return obj.user.id

@@ -14,6 +14,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 from django.core.asgi import get_asgi_application
 from django.urls import path, re_path
 
+from private_chat.consumers import PrivateChatConsumer
 from project.middleware import JWTAuthMiddleware
 from public_chat.consumers import PublicChatConsumer
 
@@ -29,6 +30,7 @@ application = ProtocolTypeRouter({
             AuthMiddlewareStack(
                 URLRouter([
                     path("ws/public_chat", PublicChatConsumer.as_asgi()),
+                    re_path(r'^ws/private_chat/(?P<room_id>\w+)$', PrivateChatConsumer.as_asgi())
                 ])
             )
         )
