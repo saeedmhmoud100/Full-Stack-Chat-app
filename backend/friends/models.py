@@ -1,5 +1,9 @@
 from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+
+from private_chat.models import PrivateChatModel
+
 
 # Create your models here.
 
@@ -10,7 +14,6 @@ class FriendList(models.Model):
 
     def __str__(self):
         return self.user.username
-
 
     def add_friend(self, account):
         if not account in self.friends.all():
@@ -25,6 +28,8 @@ class FriendList(models.Model):
         remover_friend_list.remove_friend(removee)
         friends_list = FriendList.objects.get(user=removee)
         friends_list.remove_friend(self.user)
+        post_save.send(sender=FriendList, instance=self, removee=removee)
+
 
     def is_mutual_friend(self, friend):
         if friend in self.friends.all():
@@ -37,6 +42,7 @@ class FriendRequest(models.Model):
     from_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="from_user")
     timestamp = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(blank=True, null=False, default=True)
+
     def __str__(self):
         return self.from_user.username
 
@@ -48,7 +54,6 @@ class FriendRequest(models.Model):
         self.is_active = False
         self.save()
 
-
     # when you cancel incoming friend request
     def decline(self):
         self.is_active = False
@@ -58,4 +63,3 @@ class FriendRequest(models.Model):
     def cancel(self):
         self.is_active = False
         self.save()
-
