@@ -3,6 +3,7 @@ import {AccountSlice} from "@/lib/slices/accountActions/accountSlice";
 import {UserSlice} from "@/lib/slices/usersStore/userSlice";
 import websocketMiddleware from "@/lib/webSockeMiddleware";
 import {publicChatSlice} from "@/lib/slices/publicChatStore/publicChatSlice";
+import {PrivateChatsSlice} from "@/lib/slices/privateChatsStore/privateChatsSlice";
 
 export const makeStore = () => {
     return configureStore({
@@ -10,6 +11,7 @@ export const makeStore = () => {
             'public_chat': publicChatSlice.reducer,
             'account': AccountSlice.reducer,
             'user': UserSlice.reducer,
+            'private_chats': PrivateChatsSlice.reducer,
         },
         middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(websocketMiddleware),
         devTools: true,

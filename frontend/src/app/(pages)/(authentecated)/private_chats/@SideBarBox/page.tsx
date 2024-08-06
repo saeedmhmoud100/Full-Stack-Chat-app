@@ -1,11 +1,19 @@
 "use client";
 import {useEffect, useRef, useState} from "react";
 import defaultGroupImage from "@/assets/images/group_image.png";
+import {useDispatch, useSelector} from "react-redux";
+import {getAllPrivateChats} from "@/lib/slices/privateChatsStore/userActions";
 
 
 export default function PrivateChatBox(){
-
+    const dispatch = useDispatch()
     const ref = useRef(null);
+    const {all_chats} = useSelector(state => state.private_chats)
+    useEffect(()=>{
+        dispatch(getAllPrivateChats())
+    },[])
+
+
 
     const handleShowSidebar = () => {
         const inp = ((ref.current as HTMLDivElement).parentElement?.firstElementChild.firstElementChild.firstElementChild.classList)
@@ -14,6 +22,8 @@ export default function PrivateChatBox(){
         inp.toggle('border-l-2')
         ref.current?.classList.toggle("show");
     }
+
+
 
     return(
         <div className="relative">
@@ -26,12 +36,15 @@ export default function PrivateChatBox(){
 
 
                 <div className="w-full overflow-y-auto px-3" style={{height: "100%"}}>
-                    <div className=" flex justify-start items-center w-full cursor-pointer my-4">
-                        <img className="w-20 h-20" src={defaultGroupImage.src } />
-                        <div className="pl-3">
-                            <h1 className="text-lg font-bold">Mohamed Ali</h1>
+                    {all_chats.map(item =>
+                        <div key={item.id} className=" flex justify-start items-center w-full cursor-pointer my-4">
+                            <img className="w-20 h-20 rounded-full" src={item.user.profile_image } />
+                            <div className="pl-3">
+                                <h1 className="text-lg font-bold">{item.user.username}</h1>
+                            </div>
                         </div>
-                    </div>
+                    )}
+
                 </div>
 
             </div>
