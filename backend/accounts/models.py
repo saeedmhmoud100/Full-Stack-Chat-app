@@ -1,5 +1,8 @@
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
+from django.db.models import Q
+
+from private_chat.models import PrivateChatModel
 
 
 def get_profile_image_filepath(self, filename):
@@ -55,3 +58,6 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+
+    def private_chats(self):
+        return PrivateChatModel.objects.filter(Q(user1=self) | Q(user2=self))
