@@ -21,7 +21,7 @@ class PrivateChatConsumer(WebsocketConsumer):
             self.user2 = self.room.user1
 
         self.room_group_name = f'private_chat_{room_id}'
-        if not (self.room.user1 == self.user or self.room.user2 == self.user) or not (self.user in self.user2.friend_list.friends.all()):
+        if self.user.is_anonymous or not (self.room.user1 == self.user or self.room.user2 == self.user) or not (self.user in self.user2.friend_list.friends.all()):
             self.close()
             return None
 
@@ -30,6 +30,7 @@ class PrivateChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
+
         self.send(text_data=json.dumps({
             'type':'connected',
             "data":{
@@ -40,21 +41,36 @@ class PrivateChatConsumer(WebsocketConsumer):
 
 
     def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name
+        )
         self.close()
 
-    # def receive(self, text_data):
-    #     text_data_json = json.loads(text_data)
-    #     message = text_data_json['message']
-    #     room_id = text_data_json['room_id']
-    #
-    #     async_to_sync(self.channel_layer.group_send)(
-    #         room_id,
-    #         {
-    #             'type': 'chat_message',
-    #             'message': message,
-    #             'username': self.user.username
-    #         }
-    #     )
+    def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        Type = text_data_json['type']
 
+        if Type == 'new_message':
+            message = text_data_json['message']
+            self.create_new_message(message)
 
+    def create_new_message(self, message):
+        new_message = self.room.messages.create(user=self.user, message=message)
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'broadcast_new_message',
+                'message': PrivateChatMessageSerializer(new_message).data
+            }
+        )
+
+    def broadcast_new_message(self, event):
+        message = event['message']
+        self.send(text_data=json.dumps({
+            'type': 'new_message',
+            'data':{
+                'message': message
+            }
+        }))
 

@@ -173,4 +173,9 @@ class SimpleUserDataSerializer(serializers.ModelSerializer):
 
     def get_private_chat_id(self, obj):
         if self.context and self.context['request']:
-            return PrivateChatModel.objects.filter(Q(user1=self.context['request'].user, user2=obj) | Q(user1=obj, user2=self.context['request'].user)).first().id
+            chat = PrivateChatModel.objects.filter(
+                Q(user1=self.context['request'].user, user2=obj) |
+                Q(user1=obj, user2=self.context['request'].user)
+            ).first()
+            return chat.id if chat else None
+        return None
