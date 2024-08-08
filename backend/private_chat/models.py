@@ -13,6 +13,7 @@ class PrivateChatModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
+    last_message_timestamp = models.DateTimeField(null=True, blank=True)
     class Meta:
         unique_together = ("user1", "user2")
 
@@ -28,3 +29,8 @@ class PrivateChatMessageModel(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.chat}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.chat.last_message_timestamp = self.timestamp
+        self.chat.save()
