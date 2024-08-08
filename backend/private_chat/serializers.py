@@ -22,8 +22,8 @@ class PrivateChatSerializer(serializers.ModelSerializer):
     def get_user(self, obj):
         request_user = self.context['request'].user
         if obj.user1 == request_user:
-            return SimpleUserDataSerializer(obj.user2).data
-        return SimpleUserDataSerializer(obj.user1).data
+            return SimpleUserDataSerializer(obj.user2,context={'request':self.context['request']}).data
+        return SimpleUserDataSerializer(obj.user1,context={'request':self.context['request']}).data
 
 
 class PrivateChatMessageSerializer(serializers.Serializer):

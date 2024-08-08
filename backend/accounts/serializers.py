@@ -5,9 +5,11 @@ import uuid
 import six
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.db.models import Q
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from accounts.models import Account, get_default_profile_image
+from private_chat.models import PrivateChatModel
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -154,12 +156,22 @@ class AccountChangePasswordSerializer(serializers.Serializer):
 
 class SimpleUserDataSerializer(serializers.ModelSerializer):
     profile_image = serializers.SerializerMethodField()
+    private_chat_id = serializers.SerializerMethodField()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.context['request'] = kwargs.get('context', {}).get('request', None)
+
     class Meta:
         model = Account
-        fields = ['id', 'email', 'username', 'profile_image']
+        fields = ['id', 'email', 'username', 'profile_image', 'private_chat_id']
         read_only_fields = ['email', 'username']
 
     def get_profile_image(self, obj):
         if obj.profile_image:
             return settings.HOST_URL + obj.profile_image.url
         return settings.HOST_URL + get_default_profile_image()
+
+    def get_private_chat_id(self, obj):
+        print(self.context)
+        if self.context and self.context['request']:
+            return PrivateChatModel.objects.filter(Q(user1=self.context['request'].user, user2=obj) | Q(user1=obj, user2=self.context['request'].user)).first().id
