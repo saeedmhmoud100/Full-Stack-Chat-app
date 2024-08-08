@@ -1,40 +1,11 @@
 "use client";
-import {useEffect, useRef, useState} from "react";
-import defaultGroupImage from "@/assets/images/group_image.png";
 import {useDispatch, useSelector} from "react-redux";
-import {getAllPrivateChats} from "@/lib/slices/privateChatsStore/userActions";
-import {websocketConnect} from "@/lib/websocketActions";
+import SidebarHook from "@/hooks/privateChat/Sidebar-Hook";
 
 
-export default function PrivateChatBox(){
-    const dispatch = useDispatch()
-    const ref = useRef(null);
+export default function PrivateChatSidebar(){
     const {all_chats} = useSelector(state => state.private_chats)
-    useEffect(()=>{
-        dispatch(getAllPrivateChats())
-    },[])
-
-
-
-    const handleShowSidebar = () => {
-        const inp = ((ref.current as HTMLDivElement).parentElement?.firstElementChild.firstElementChild.firstElementChild.classList)
-        inp.toggle('px-4')
-        inp.toggle('border')
-        inp.toggle('border-l-2')
-        ref.current?.classList.toggle("show");
-    }
-
-
-    const handleClick = (room_id) => {
-        dispatch({type: 'private_chats/WEBSOCKET_DISCONNECT'})
-        dispatch(websocketConnect(`ws://localhost:8000/ws/private_chat/${room_id}`,{
-            websocket: true,
-            onOpen: 'private_chats/open',
-            onMessage: 'private_chats/message',
-            onClose: 'private_chats/close',
-            onError: 'private_chats/error',
-        }))
-    }
+    const {handleClick,handleShowSidebar,ref} = SidebarHook();
 
 
     return(
