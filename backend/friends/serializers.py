@@ -1,8 +1,10 @@
+from django.db.models import Q
 from rest_framework import serializers
 from accounts.models import Account, get_default_profile_image
 from django.conf import settings
 
 from friends.models import FriendRequest
+from private_chat.models import PrivateChatModel
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,11 +14,11 @@ class UserSerializer(serializers.ModelSerializer):
     is_you = serializers.SerializerMethodField()
     request_from_you = serializers.SerializerMethodField()
     request_to_you = serializers.SerializerMethodField()
-
+    private_chat_id = serializers.SerializerMethodField()
     class Meta:
         model = Account
         fields = ['id', 'email', 'username', 'full_name', 'profile_image',
-                  'is_friend', 'is_you', 'request_from_you', 'request_to_you']
+                  'is_friend', 'is_you', 'request_from_you', 'request_to_you', 'private_chat_id']
         read_only_fields = ['email', 'username']
 
     def get_profile_image(self, obj):
@@ -50,6 +52,11 @@ class UserSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             return FriendRequest.objects.filter(from_user=obj, to_user=self.context['request'].user,is_active=True).exists()
         return False
+
+    def get_private_chat_id(self, obj):
+        if 'request' in self.context:
+            return PrivateChatModel.objects.filter(Q(user1=self.context['request'].user, user2=obj) | Q(user1=obj, user2=self.context['request'].user)).first().id
+        return None
 
 
 class FriendRequestSerializer(serializers.ModelSerializer):

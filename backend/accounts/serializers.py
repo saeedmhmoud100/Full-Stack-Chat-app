@@ -172,6 +172,5 @@ class SimpleUserDataSerializer(serializers.ModelSerializer):
         return settings.HOST_URL + get_default_profile_image()
 
     def get_private_chat_id(self, obj):
-        print(self.context)
         if self.context and self.context['request']:
             return PrivateChatModel.objects.filter(Q(user1=self.context['request'].user, user2=obj) | Q(user1=obj, user2=self.context['request'].user)).first().id
