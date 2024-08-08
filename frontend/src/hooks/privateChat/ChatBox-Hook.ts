@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useParams} from "next/navigation";
 import {useEffect, useRef} from "react";
-import {websocketConnect} from "@/lib/websocketActions";
+import {websocketConnect, websocketSend} from "@/lib/websocketActions";
 
 
 export default function ChatBoxHook() {
@@ -29,5 +29,17 @@ export default function ChatBoxHook() {
         }))
     }
 
-    return {messagesBoxRef }
+    const handleSendMessage = (e) => {
+e.preventDefault()
+        const message = e.target.elements.message.value
+        const data = {
+            message,
+            type:'new_message',
+        }
+        dispatch(websocketSend(data,{websocket:true, onSend: 'private_chats/send'}))
+        e.target.elements.message.value = ''
+
+    }
+
+    return {messagesBoxRef,handleSendMessage}
 }

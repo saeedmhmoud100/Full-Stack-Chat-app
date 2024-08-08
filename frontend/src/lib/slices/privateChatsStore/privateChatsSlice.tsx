@@ -38,7 +38,11 @@ export const PrivateChatsSlice = createSlice({
                 case 'connected':
                     state.private_chat.messages = data.all_messages
                     state.private_chat.user = data.user_data
-                default:
+                    break;
+                case 'new_message':
+                    state.private_chat.messages.push(data.message)
+                    break;
+
             }
         },
         close: (state, action: PayloadAction<any>) => {
