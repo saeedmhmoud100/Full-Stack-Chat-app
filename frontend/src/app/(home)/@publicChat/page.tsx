@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {FormEvent, useEffect, useRef} from "react";
 import {websocketConnect, websocketDisconnect, websocketSend} from "@/lib/websocketActions";
 import PublicChatHook from "@/hooks/home/publicChat-Hook";
+import Link from "next/link";
 
 
 export default function PublicChat() {
@@ -29,7 +30,7 @@ export default function PublicChat() {
                                 <div key={index} className={`flex ${message.user.id !== id ? "items-start" : "items-end" } flex-col  mt-3 mb-2`}>
                                     <span className='text-xs'>{message.timestamp}</span>
                                     <div className={`message flex  ${message.user.id !== id ? "justify-start" : "flex-row-reverse" }`}>
-                                        <img src={message.user.profile_image} style={{width:'60px',height:'60px'}} />
+                                        <Link href={`/users/${message.user.id}`}><img src={message.user.profile_image} style={{width:'60px',height:'60px'}} /></Link>
                                         <span className={`px-12 py-4 ${message.user.id !== id ? "py-4 bg-white rounded-r-full border-s-2" :" bg-green-500 rounded-l-full border-e-2"} `}>
                                         {message.message}
                                     </span>
