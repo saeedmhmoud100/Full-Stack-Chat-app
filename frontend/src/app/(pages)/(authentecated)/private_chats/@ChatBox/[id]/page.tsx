@@ -7,13 +7,13 @@ import ChatBoxHook from "@/hooks/privateChat/ChatBox-Hook";
 
 
 export default function PrivateChatBox(){
-    const {private_chat:{in_chat}} = useSelector(state => state.private_chats)
+    const {private_chat:{in_chat,user:{username}}} = useSelector(state => state.private_chats)
     const [messages] = useState([])
     const {messagesBoxRef } = ChatBoxHook()
     return in_chat ? (
         <div className={`h-full w-full m-auto flex bg-gray-300 flex-col pt-3`}>
             <div className="rounded-full w-full m-auto py-4 flex bg-gray-800 flex-col pt-3 text-white border-b border-gray-800 text-center">
-                <span className="text-green-500">{"Mohamed"}</span>
+                <span className="text-green-500">{username}</span>
             </div>
             <div className="messages overflow-auto mt-1" style={{height:"100%"}} ref={messagesBoxRef}>
 

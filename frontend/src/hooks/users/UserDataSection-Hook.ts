@@ -13,7 +13,7 @@ const useUserDataSectionHook = (props) => {
     const dispatch = useDispatch()
     const {id} = useParams()
     const router = useRouter()
-    const {friend_requests_change} = useSelector((state) => state.user)
+    const {friend_requests_change,userData:{private_chat_id}} = useSelector((state) => state.user)
 
 
     useEffect(() => {
@@ -46,7 +46,12 @@ const useUserDataSectionHook = (props) => {
         dispatch(unFriend({id:id}))
     }
 
-    return {handleFriendRequest, handleCancelFriendRequest, handleAcceptFriendRequest, handleDeclineFriendRequest, handleUnfriend,router}
+    const handleMessage = () => {
+        router.push(`/private_chats/${private_chat_id}/`)
+
+    }
+
+    return {handleFriendRequest, handleCancelFriendRequest, handleAcceptFriendRequest, handleDeclineFriendRequest, handleUnfriend,router,handleMessage}
 }
 
 export default useUserDataSectionHook;

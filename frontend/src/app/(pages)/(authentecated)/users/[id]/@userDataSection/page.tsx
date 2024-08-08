@@ -8,9 +8,9 @@ import useUserDataSectionHook from "@/hooks/users/UserDataSection-Hook";
 
 
 export default function UserDataSection(){
-    const {userData:{username,email,profile_image,is_friend,is_you,request_from_you,request_to_you}} = useSelector(state => state.user)
+    const {userData:{username,email,profile_image,is_friend,is_you,request_from_you,request_to_you,private_chat_id}} = useSelector(state => state.user)
     const [hydrated,setHydrated] = useState(false)
-    const {handleFriendRequest, handleCancelFriendRequest, handleAcceptFriendRequest, handleDeclineFriendRequest, handleUnfriend,router} = useUserDataSectionHook()
+    const {handleFriendRequest, handleCancelFriendRequest, handleAcceptFriendRequest, handleDeclineFriendRequest, handleUnfriend,router,handleMessage} = useUserDataSectionHook()
 
     useEffect(() => {
         setHydrated(true)
@@ -42,7 +42,7 @@ export default function UserDataSection(){
                         is_friend ?
                             (
                                 <div className='flex flex-col gap-3'>
-                                    <Button variant="contained" color='primary' size="large"  href="#">
+                                    <Button onClick={_ =>handleMessage()} variant="contained" color='primary' size="large">
                                     <span className='px-6 py-1 text-lg'>Message</span>
                                     </Button>
                                     <Button onClick={_=>handleUnfriend()} variant="contained" color='error' size="large">
