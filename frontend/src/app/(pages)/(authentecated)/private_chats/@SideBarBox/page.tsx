@@ -27,6 +27,10 @@ export default function PrivateChatSidebar(){
                             <div className="pl-3">
                                 <h1 className="text-lg font-bold">{item.user.username}</h1>
                             </div>
+                            {
+                                item.unread_messages_count ? <div className="unread-messages-count rounded-full bg-red-700 text-white p-2 ms-auto me-2">{item.unread_messages_count}</div> : null
+                            }
+
                         </div>
                     )}
 

@@ -52,6 +52,25 @@ export const PrivateChatsSlice = createSlice({
             state.private_chat.in_chat = false
             state.errors = action.payload
         },
+
+        allChatsOpen: (state, action: PayloadAction<any>) => {
+            console.log('allChatsOpen')
+        },
+        allChatsMessage: (state, action: PayloadAction<any>) => {
+            const {type , data} = JSON.parse(action.payload)
+            console.log(JSON.parse(action.payload))
+            switch (type) {
+                case 'connected':
+                    state.all_chats = data;
+                    break;
+            }
+        },
+        allChatsClose: (state, action: PayloadAction<any>) => {
+            console.log('allChatsClose')
+        },
+        allChatsError: (state, action: PayloadAction<any>) => {
+            console.log('allChatsError')
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(getAllPrivateChats.fulfilled, (state:PrivateChatsState, action) => {

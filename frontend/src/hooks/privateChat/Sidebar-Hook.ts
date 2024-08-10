@@ -2,6 +2,7 @@ import {useDispatch} from "react-redux";
 import {useEffect, useRef} from "react";
 import {getAllPrivateChats} from "@/lib/slices/privateChatsStore/userActions";
 import {useRouter} from "next/navigation";
+import {websocketConnect} from "@/lib/websocketActions";
 
 
 export default function SidebarHook() {
@@ -9,7 +10,18 @@ export default function SidebarHook() {
     const ref = useRef(null);
     const dispatch = useDispatch()
     useEffect(()=>{
-        dispatch(getAllPrivateChats())
+        // dispatch(getAllPrivateChats())
+
+        dispatch({type: 'private_chats/WEBSOCKET_DISCONNECT',meta: {websocket: true, connectionId: 'all_private_chats'}})
+        dispatch(websocketConnect(`ws://localhost:8000/ws/private_chats`,{
+            connectionId: 'all_private_chats',
+            websocket: true,
+            onOpen: 'private_chats/allChatsOpen',
+            onMessage: 'private_chats/allChatsMessage',
+            onClose: 'private_chats/allChatsClose',
+            onError: 'private_chats/allChatsError',
+        }))
+
     },[])
 
 
