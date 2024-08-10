@@ -4,7 +4,18 @@ from django.contrib.auth.admin import UserAdmin
 # Register your models here.
 
 
-from .models import Account
+from .models import Account, UserStatus
+
+
+class UserStatusAdmin(admin.TabularInline):
+    model = UserStatus
+    readonly_fields = ('user','is_online','last_seen')
+    extra = 1
+    max_num = 1
+
+    def has_add_permission(self, request, obj):
+        return False
+
 
 
 class AccountAdmin(UserAdmin):
@@ -16,6 +27,8 @@ class AccountAdmin(UserAdmin):
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
+
+    inlines = [UserStatusAdmin]
 
 
 admin.site.register(Account, AccountAdmin)
