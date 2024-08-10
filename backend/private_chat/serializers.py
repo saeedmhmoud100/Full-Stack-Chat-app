@@ -5,16 +5,23 @@ from private_chat.models import PrivateChatModel, PrivateChatMessageModel
 
 class PrivateChatSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
-
+    unread_messages_count = serializers.SerializerMethodField()
     class Meta:
         model = PrivateChatModel
         fields = '__all__'
 
     def get_user(self, obj):
-        request_user = self.context['request'].user
-        if obj.user1 == request_user:
-            return SimpleUserDataSerializer(obj.user2,context={'request':self.context['request']}).data
-        return SimpleUserDataSerializer(obj.user1,context={'request':self.context['request']}).data
+        if 'user' in self.context:
+            request_user = self.context['user']
+            return SimpleUserDataSerializer(obj.get_other_user(request_user),context={'user':request_user}).data
+        elif 'request' in self.context:
+            request_user = self.context['request'].user
+            return SimpleUserDataSerializer(obj.get_other_user(request_user),context={'request':self.context['request']}).data
+
+    def get_unread_messages_count(self, obj):
+        if 'request' in self.context:
+            request_user = self.context['request'].user
+            return obj.get_unread_messages_count(request_user)
 
 
 class PrivateChatMessageSerializer(serializers.Serializer):

@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from django.conf import settings
 from django.db import models
 from project.utilities.models import BaseModel
@@ -26,6 +28,7 @@ class PrivateChatModel(BaseModel):
     def user2(self):
         return self.users.last()
 
+
     @classmethod
     def get_chat_between_users(cls, user1, user2):
         return cls.objects.filter(
@@ -40,6 +43,11 @@ class PrivateChatModel(BaseModel):
     def get_other_user(self, user):
         return self.participants.exclude(user=user).first().user
 
+    def make_all_messages_as_read(self, user):
+        PrivateChatMessageReadStatus.make_all_messages_as_read(user, self)
+
+    def get_unread_messages_count(self, user):
+        return PrivateChatMessageReadStatus.get_unread_messages_count(user, self)
 
 class ChatParticipant(BaseModel):
     chat = models.ForeignKey(
@@ -76,6 +84,21 @@ class PrivateChatMessageModel(BaseModel):
         self.chat.save()
 
 
+        # Make the message as read for the user who sent the message
+        self.message_statuses.create(
+            user=self.user,
+            is_read=True,
+            read_at=timezone.now()
+        )
+
+        # Make the message as unread for the other user
+        self.message_statuses.create(
+            user=self.chat.get_other_user(self.user),
+            is_read=False
+        )
+
+
+
 class PrivateChatMessageReadStatus(BaseModel):
     message = models.ForeignKey(PrivateChatMessageModel, on_delete=models.CASCADE, related_name='message_statuses')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_statuses')
@@ -84,3 +107,21 @@ class PrivateChatMessageReadStatus(BaseModel):
 
     def __str__(self):
         return f"{self.user.username} - {'Read' if self.is_read else 'Unread'}"
+
+    @classmethod
+    def make_all_messages_as_read(cls, user, chat):
+        cls.objects.filter(
+            user=user,
+            message__chat=chat
+        ).update(
+            is_read=True,
+            read_at=timezone.now()
+        )
+
+    @classmethod
+    def get_unread_messages_count(cls, user,chat):
+        return cls.objects.filter(
+            message__chat=chat,
+            user=user,
+            is_read=False
+        ).count()

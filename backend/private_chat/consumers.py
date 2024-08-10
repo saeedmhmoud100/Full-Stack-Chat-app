@@ -5,7 +5,7 @@ from channels.generic.websocket import WebsocketConsumer
 
 from accounts.serializers import SimpleUserDataSerializer
 from private_chat.models import PrivateChatModel
-from private_chat.serializers import PrivateChatMessageSerializer
+from private_chat.serializers import PrivateChatMessageSerializer, PrivateChatSerializer
 
 
 class PrivateChatConsumer(WebsocketConsumer):
@@ -16,8 +16,8 @@ class PrivateChatConsumer(WebsocketConsumer):
         self.user = self.scope['user']
         self.user2 = self.room.get_other_user(self.user)
         self.room_group_name = f'private_chat_{room_id}'
-        if self.user.is_anonymous or self.room.get_chat_between_users(self.user,self.user2) is None or not (self.user in self.user2.friend_list.friends.all()):
-            print('not allowed')
+        if self.user.is_anonymous or self.room.get_chat_between_users(self.user, self.user2) is None or not (
+                self.user in self.user2.friend_list.friends.all()):
             self.close()
             return None
 
@@ -27,14 +27,15 @@ class PrivateChatConsumer(WebsocketConsumer):
         )
         self.accept()
 
+        self.room.make_all_messages_as_read(self.user)
+
         self.send(text_data=json.dumps({
-            'type':'connected',
-            "data":{
-                'all_messages': PrivateChatMessageSerializer(self.room.messages.all(),many=True).data,
+            'type': 'connected',
+            "data": {
+                'all_messages': PrivateChatMessageSerializer(self.room.messages.all(), many=True).data,
                 'user_data': SimpleUserDataSerializer(self.user2).data,
             }
         }))
-
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -65,8 +66,37 @@ class PrivateChatConsumer(WebsocketConsumer):
         message = event['message']
         self.send(text_data=json.dumps({
             'type': 'new_message',
-            'data':{
+            'data': {
                 'message': message
             }
         }))
 
+
+class AllPrivateChatsConsumer(WebsocketConsumer):
+    def connect(self):
+        self.user = self.scope['user']
+        if self.user.is_anonymous:
+            self.close()
+            return None
+
+        self.room_group_name = f'all_private_chats_{self.user.id}'
+
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
+        self.accept()
+        private_chats = self.user.private_chats.all().order_by('-last_message_timestamp')
+        serializer = PrivateChatSerializer(private_chats, many=True, context={'user': self.user}).data
+        self.send(text_data=json.dumps({
+            'type': 'connected',
+            "data":  serializer,
+
+        }))
+
+    def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name
+        )
+        self.close()
