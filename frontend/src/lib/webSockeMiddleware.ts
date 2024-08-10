@@ -1,46 +1,46 @@
 import {getAccessToken} from "@/hooks/localStorage";
 
 const websocketMiddleware = ({ dispatch }) => {
-    let socket = null;
+    let socket = {};
     return (next) => (action) => {
         if (action.meta && action.meta.websocket) {
             const { type, payload, meta } = action;
-
+            const connectionId = meta.connectionId || 'default'
             switch (type) {
                 case 'WEBSOCKET_CONNECT':
-                    if (socket !== null) {
-                        socket.close();
+                    if (socket[connectionId]) {
+                        socket[connectionId].close();
                     }
-                    socket = new WebSocket(payload.url + "?token=" + getAccessToken());
+                    socket[connectionId] = new WebSocket(payload.url + "?token=" + getAccessToken());
 
-                    socket.onopen = () => {
-                        dispatch({ type: meta.onOpen });
+                    socket[connectionId].onopen = () => {
+                        dispatch({ type: meta.onOpen , connectionId});
                     };
 
-                    socket.onmessage = (event) => {
-                        dispatch({ type: meta.onMessage, payload: event.data });
+                    socket[connectionId].onmessage = (event) => {
+                        dispatch({ type: meta.onMessage, payload: event.data, connectionId });
                     };
 
-                    socket.onclose = () => {
-                        dispatch({ type: meta.onClose });
+                    socket[connectionId].onclose = () => {
+                        dispatch({ type: meta.onClose, connectionId });
                     };
 
-                    socket.onerror = (error) => {
-                        dispatch({ type: meta.onError, payload: error.message });
+                    socket[connectionId].onerror = (error) => {
+                        dispatch({ type: meta.onError, payload: error.message, connectionId });
                     };
                     break;
 
                 case 'WEBSOCKET_SEND':
-                    if (socket !== null) {
-                        socket.send(JSON.stringify(payload));
+                    if (socket[connectionId]) {
+                        socket[connectionId].send(JSON.stringify(payload));
                     }
                     break;
 
                 case 'WEBSOCKET_DISCONNECT':
-                    if (socket !== null) {
-                        socket.close();
+                    if (socket[connectionId]) {
+                        socket[connectionId].close();
                     }
-                    socket = null;
+                    delete socket[connectionId] ;
                     break;
 
                 default:
