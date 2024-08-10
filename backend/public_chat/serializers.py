@@ -15,4 +15,4 @@ class PublicChatMessagesSerializer(serializers.Serializer):
         model = PublicChatMessageModel
 
     def get_timestamp(self, obj):
-        return naturaltime(obj.timestamp)
+        return str(naturaltime(obj.timestamp))

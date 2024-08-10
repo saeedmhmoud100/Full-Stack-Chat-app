@@ -1,20 +1,18 @@
 from django.conf import settings
 from django.db import models
-from django.core.exceptions import ValidationError
-from django.db.models import Q
+from project.utilities.models import BaseModel
 
 
 # Create your models here.
 
 
-class PrivateChatModel(models.Model):
+class PrivateChatModel(BaseModel):
     users = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         through='ChatParticipant',
         related_name='private_chats'
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
     last_message_timestamp = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
@@ -43,7 +41,7 @@ class PrivateChatModel(models.Model):
         return self.participants.exclude(user=user).first().user
 
 
-class ChatParticipant(models.Model):
+class ChatParticipant(BaseModel):
     chat = models.ForeignKey(
         PrivateChatModel,
         on_delete=models.CASCADE,
@@ -63,7 +61,7 @@ class ChatParticipant(models.Model):
         return f"{self.user.username} in chat {self.chat.id}"
 
 
-class PrivateChatMessageModel(models.Model):
+class PrivateChatMessageModel(BaseModel):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     chat = models.ForeignKey(PrivateChatModel, on_delete=models.CASCADE, related_name="messages")
     message = models.TextField()
@@ -78,7 +76,7 @@ class PrivateChatMessageModel(models.Model):
         self.chat.save()
 
 
-class PrivateChatMessageReadStatus(models.Model):
+class PrivateChatMessageReadStatus(BaseModel):
     message = models.ForeignKey(PrivateChatMessageModel, on_delete=models.CASCADE, related_name='message_statuses')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='message_statuses')
     is_read = models.BooleanField(default=False)

@@ -60,9 +60,6 @@ class PublicChatConsumer(WebsocketConsumer):
         return msg
 
 
-
-
-
     def broadcast_new_message(self, event):
         message_id = event['message_id']
         self.send(text_data=json.dumps({'type': 'new_message', 'data': PublicChatMessagesSerializer(PublicChatMessageModel.objects.get(id=message_id),many=False).data}))
