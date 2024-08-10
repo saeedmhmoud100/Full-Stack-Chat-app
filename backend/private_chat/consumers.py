@@ -14,13 +14,10 @@ class PrivateChatConsumer(WebsocketConsumer):
         room_id = self.scope['url_route']['kwargs']['room_id']
         self.room = PrivateChatModel.objects.get(id=room_id)
         self.user = self.scope['user']
-        if self.user == self.room.user1:
-            self.user2 = self.room.user2
-        else:
-            self.user2 = self.room.user1
-
+        self.user2 = self.room.get_other_user(self.user)
         self.room_group_name = f'private_chat_{room_id}'
-        if self.user.is_anonymous or not (self.room.user1 == self.user or self.room.user2 == self.user) or not (self.user in self.user2.friend_list.friends.all()):
+        if self.user.is_anonymous or self.room.get_chat_between_users(self.user,self.user2) is None or not (self.user in self.user2.friend_list.friends.all()):
+            print('not allowed')
             self.close()
             return None
 

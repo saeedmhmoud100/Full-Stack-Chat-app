@@ -55,7 +55,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_private_chat_id(self, obj):
         if 'request' in self.context:
-            return PrivateChatModel.objects.filter(Q(user1=self.context['request'].user, user2=obj) | Q(user1=obj, user2=self.context['request'].user)).first().id
+            private_chat = PrivateChatModel.get_chat_between_users(self.context['request'].user, obj)
+            if private_chat:
+                return private_chat.id
         return None
 
 

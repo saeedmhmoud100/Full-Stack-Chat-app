@@ -8,18 +8,18 @@ from private_chat.models import PrivateChatModel
 
 
 def create_private_chat_when_be_friends(sender, instance, created, **kwargs):
-    if not instance.is_active:
-        user1 = instance.to_user
-        user2 = instance.from_user
-        if FriendList.objects.get(user=user1).is_mutual_friend(user2):
+    obj = PrivateChatModel.get_chat_between_users(instance.from_user, instance.to_user)
+    if obj is None:
+        obj = PrivateChatModel.objects.create()
+        obj.users.add(instance.from_user, instance.to_user)
 
-            obj = PrivateChatModel.objects.filter(Q(user1=user1, user2=user2) | Q(user1=user2, user2=user1))
-            if not obj.exists():
-                PrivateChatModel.objects.create(user1=user1, user2=user2)
-            else:
-                obj = obj.first()
-                obj.is_active = True
-                obj.save()
+    if instance.from_user.friend_list.is_mutual_friend(instance.to_user):
+        obj.is_active = True
+        obj.save()
+    else:
+        obj.is_active = False
+        obj.save()
+
 
 
 post_save.connect(create_private_chat_when_be_friends, sender=FriendRequest)
@@ -27,13 +27,10 @@ post_save.connect(create_private_chat_when_be_friends, sender=FriendRequest)
 
 def deactivate_private_chat_when_unfriend(sender, instance, removee, **kwargs):
     user1 = instance.user
-    if removee:
-        user2 = removee
-        obj = PrivateChatModel.objects.filter(Q(user1=user1, user2=user2) | Q(user1=user2, user2=user1))
-        if obj.exists():
-            obj = obj.first()
-            obj.is_active = False
-            obj.save()
+    if removee and not user1.friend_list.is_mutual_friend(removee):
+        obj = PrivateChatModel.get_chat_between_users(user1, removee)
+        obj.is_active = False
+        obj.save()
 
 
 post_save.connect(deactivate_private_chat_when_unfriend, sender=FriendList)

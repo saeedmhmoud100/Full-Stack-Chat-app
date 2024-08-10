@@ -28,6 +28,20 @@ class PrivateChatModel(models.Model):
     def user2(self):
         return self.users.last()
 
+    @classmethod
+    def get_chat_between_users(cls, user1, user2):
+        return cls.objects.filter(
+            users=user1
+        ).filter(
+            users=user2
+        ).distinct().first()
+
+    def get_current_user(self, user):
+        return self.participants.filter(user=user).first().user
+
+    def get_other_user(self, user):
+        return self.participants.exclude(user=user).first().user
+
 
 class ChatParticipant(models.Model):
     chat = models.ForeignKey(

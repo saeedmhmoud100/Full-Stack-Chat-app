@@ -1,9 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
-from django.db.models import Q
-
-from private_chat.models import PrivateChatModel
 
 
 def get_profile_image_filepath(self, filename):
