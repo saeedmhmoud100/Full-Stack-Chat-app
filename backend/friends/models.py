@@ -2,6 +2,9 @@ from django.conf import settings
 from django.db import models
 from django.db.models.signals import post_save
 
+from project.utilities.models import BaseModel
+
+
 # Create your models here.
 
 
@@ -34,11 +37,10 @@ class FriendList(models.Model):
         return False
 
 
-class FriendRequest(models.Model):
+class FriendRequest(BaseModel):
     to_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="to_user")
     from_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="from_user")
     timestamp = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(blank=True, null=False, default=True)
 
     def __str__(self):
         return self.from_user.username
