@@ -4,7 +4,6 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 from accounts.serializers import SimpleUserDataSerializer
-from friends.models import FriendList
 from private_chat.models import PrivateChatModel
 from private_chat.serializers import PrivateChatMessageSerializer
 

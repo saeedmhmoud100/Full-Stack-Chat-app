@@ -1,13 +1,4 @@
-import base64
-import re
-import uuid
-
-import six
-from django.conf import settings
-from django.core.files.base import ContentFile
 from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from accounts.models import Account, get_default_profile_image
 from accounts.serializers import SimpleUserDataSerializer
 from private_chat.models import PrivateChatModel, PrivateChatMessageModel
 

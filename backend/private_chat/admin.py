@@ -7,9 +7,9 @@ from .models import PrivateChatModel, PrivateChatMessageModel
 
 
 class PrivateChatModelAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user1', 'user2', 'created_at']
-    list_filter = ['user1', 'user2']
-    search_fields = ['user1', 'user2']
+    list_display = ['id', 'created_at']
+    list_filter = ['users__username']
+    search_fields = ['users__username']
 
 admin.site.register(PrivateChatModel, PrivateChatModelAdmin)
 admin.site.register(PrivateChatMessageModel)

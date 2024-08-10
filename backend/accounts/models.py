@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
 from django.db import models
 from django.db.models import Q
@@ -45,11 +46,6 @@ class Account(AbstractBaseUser):
     profile_image = models.ImageField(max_length=255, upload_to=get_profile_image_filepath, null=True, blank=True,
                                       default=get_default_profile_image)
 
-    is_online = models.BooleanField(default=False)
-    last_seen = models.DateTimeField(null=True, blank=True)
-    # current_chat_room = models.ForeignKey(PrivateChatModel, on_delete=models.SET_NULL, null=True, blank=True,
-    #                                       related_name='active_users')
-
     objects = AccountManager()
 
     USERNAME_FIELD = 'email'
@@ -64,5 +60,12 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    def private_chats(self):
-        return PrivateChatModel.objects.filter(Q(user1=self) | Q(user2=self))
+
+class UserStatus(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status")
+    is_online = models.BooleanField(default=False)
+    last_seen = models.DateTimeField(null=True, blank=True)
+    # current_chat_room = models.ForeignKey('PrivateChatModel', on_delete=models.SET_NULL, null=True, blank=True, related_name='active_users')
+
+    def __str__(self):
+        return f"{self.user.username} - {'Online' if self.is_online else 'Offline'}"
