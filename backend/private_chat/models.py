@@ -16,6 +16,7 @@ class PrivateChatModel(models.Model):
     last_message_timestamp = models.DateTimeField(null=True, blank=True)
     class Meta:
         unique_together = ("user1", "user2")
+        # ordering = ["-last_message_timestamp"]
 
     def __str__(self):
         return f"{self.user1} - {self.user2}"

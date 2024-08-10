@@ -45,6 +45,11 @@ class Account(AbstractBaseUser):
     profile_image = models.ImageField(max_length=255, upload_to=get_profile_image_filepath, null=True, blank=True,
                                       default=get_default_profile_image)
 
+    is_online = models.BooleanField(default=False)
+    last_seen = models.DateTimeField(null=True, blank=True)
+    # current_chat_room = models.ForeignKey(PrivateChatModel, on_delete=models.SET_NULL, null=True, blank=True,
+    #                                       related_name='active_users')
+
     objects = AccountManager()
 
     USERNAME_FIELD = 'email'
