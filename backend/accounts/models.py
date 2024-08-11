@@ -1,5 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.base_user import BaseUserManager, AbstractBaseUser
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 
@@ -57,12 +59,29 @@ class Account(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
+    def set_current_chat_room(self, room):
+        self.status.set_current_chat_room(room)
+
+    def remove_current_chat_room(self):
+        self.status.remove_current_chat_room()
 
 class UserStatus(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status")
     is_online = models.BooleanField(default=False)
     last_seen = models.DateTimeField(null=True, blank=True)
-    # current_chat_room = models.ForeignKey('PrivateChatModel', on_delete=models.SET_NULL, null=True, blank=True, related_name='active_users')
+    content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    current_chat_room = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
         return f"{self.user.username} - {'Online' if self.is_online else 'Offline'}"
+
+    def set_current_chat_room(self, room):
+        self.content_type = ContentType.objects.get_for_model(room)
+        self.object_id = room.id
+        self.save()
+
+    def remove_current_chat_room(self):
+        self.content_type = None
+        self.object_id = None
+        self.save()

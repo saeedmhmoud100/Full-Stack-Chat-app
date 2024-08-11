@@ -9,7 +9,7 @@ from .models import Account, UserStatus
 
 class UserStatusAdmin(admin.TabularInline):
     model = UserStatus
-    readonly_fields = ('user','is_online','last_seen')
+    readonly_fields = ('user','is_online','last_seen','content_type','object_id','current_chat_room')
     extra = 1
     max_num = 1
 

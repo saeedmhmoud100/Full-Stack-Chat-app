@@ -26,6 +26,7 @@ class PrivateChatConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.accept()
+        self.user.set_current_chat_room(self.room)
 
         self.room.make_all_messages_as_read(self.user)
 
@@ -42,6 +43,7 @@ class PrivateChatConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+        self.user.remove_current_chat_room()
         self.close()
 
     def receive(self, text_data):

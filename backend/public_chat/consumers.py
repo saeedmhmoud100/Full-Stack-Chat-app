@@ -27,6 +27,7 @@ class PublicChatConsumer(WebsocketConsumer):
             self.accept()
 
         self.room.connect_user(self.user)
+        self.user.set_current_chat_room(self.room)
 
         async_to_sync(self.channel_layer.group_send)(self.room_group_name, {'type': 'send_users_count'})
 
@@ -37,6 +38,7 @@ class PublicChatConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
 
         self.room.disconnect_user(self.user)
+        self.user.remove_current_chat_room()
         async_to_sync(self.channel_layer.group_send)(self.room_group_name, {"type": "send_users_count"})
         self.close()
 
