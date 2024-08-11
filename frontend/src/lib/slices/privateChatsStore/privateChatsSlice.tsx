@@ -38,6 +38,12 @@ export const PrivateChatsSlice = createSlice({
                 case 'connected':
                     state.private_chat.messages = data.all_messages
                     state.private_chat.user = data.user_data
+                    state.all_chats = state.all_chats.map((chat:any) => {
+                        if(chat.id == state.private_chat.user.private_chat_id){
+                            return {...chat,unread_messages_count:0}
+                        }
+                        return chat
+                    })
                     break;
                 case 'new_message':
                     state.private_chat.messages.push(data.message)
@@ -58,7 +64,6 @@ export const PrivateChatsSlice = createSlice({
         },
         allChatsMessage: (state, action: PayloadAction<any>) => {
             const {type , data} = JSON.parse(action.payload)
-            console.log(JSON.parse(action.payload))
             switch (type) {
                 case 'connected':
                     state.all_chats = data;
