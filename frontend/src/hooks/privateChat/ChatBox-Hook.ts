@@ -29,10 +29,6 @@ export default function ChatBoxHook() {
             onError: 'private_chats/error',
         }))
 
-        setTimeout(()=>{
-            messagesBoxRef.current.scrollTo(0, messagesBoxRef.current.scrollHeight);
-        },500)
-
     }
 
     const handleSendMessage = (e) => {
