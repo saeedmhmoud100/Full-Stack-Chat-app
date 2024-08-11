@@ -1,8 +1,5 @@
 "use client";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useRef, useState} from "react";
-import {websocketConnect} from "@/lib/websocketActions";
-import {useParams} from "next/navigation";
 import ChatBoxHook from "@/hooks/privateChat/ChatBox-Hook";
 
 
@@ -18,8 +15,10 @@ export default function PrivateChatBox(){
             <div className="messages overflow-auto mt-1" style={{height:"100%"}} ref={messagesBoxRef}>
 
                 {
-                    messages?.map((message, index) => <div key={index} className={`message flex  ${message.user_id != id ? "justify-start":"justify-end" }  my-2`}>
-                            <span className={`px-12 py-4 ${message.user_id != id ? "py-4 bg-white rounded-r-full border-s-2" :" bg-green-500 rounded-l-full border-e-2"} `}>
+                    messages?.map((message, index) =>
+                        <div key={index} className={`message flex flex-col ${message.user_id != id ? "items-start":"items-end" }  my-2`}>
+                        <span className='text-xs'>{message.timestamp}</span>
+                        <span className={`px-12 py-4 ${message.user_id != id ? "py-4 bg-white rounded-r-full border-s-2" :" bg-green-500 rounded-l-full border-e-2"} `}>
                                 {message.message}
                             </span>
                     </div>)

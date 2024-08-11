@@ -7,6 +7,7 @@ export interface PrivateChatsState {
         in_chat:boolean,
         user:{},
         messages?:[]
+        is_new_message?:boolean
     },
     errors?: any
 }
@@ -17,7 +18,8 @@ const initialState: PrivateChatsState = {
     private_chat:{
         in_chat:false,
         user:{},
-        messages:[]
+        messages:[],
+        is_new_message:false
     }
 };
 
@@ -41,6 +43,7 @@ export const PrivateChatsSlice = createSlice({
                     break;
                 case 'new_message':
                     state.private_chat.messages.push(data.message)
+                    state.private_chat.is_new_message = !state.private_chat.is_new_message
                     break;
 
             }
@@ -71,7 +74,7 @@ export const PrivateChatsSlice = createSlice({
                         }
                         return chat;
                     })
-                    if (updatedChat){
+                    if (updatedChat && data.unread_messages_count !== 0){
                         state.all_chats = [updatedChat, ...state.all_chats.filter(chat => chat.id !== data.chat_id)];
                     }
                     break;

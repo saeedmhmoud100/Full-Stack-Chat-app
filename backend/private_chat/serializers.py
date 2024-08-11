@@ -1,3 +1,4 @@
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from rest_framework import serializers
 from accounts.serializers import SimpleUserDataSerializer
 from private_chat.models import PrivateChatModel, PrivateChatMessageModel
@@ -26,7 +27,7 @@ class PrivateChatSerializer(serializers.ModelSerializer):
 class PrivateChatMessageSerializer(serializers.Serializer):
     user_id = serializers.SerializerMethodField()
     message = serializers.CharField()
-    timestamp = serializers.DateTimeField()
+    timestamp = serializers.SerializerMethodField()
     class Meta:
         fields = ['message', 'user_id', 'timestamp']
         model = PrivateChatMessageModel
@@ -34,3 +35,6 @@ class PrivateChatMessageSerializer(serializers.Serializer):
     def get_user_id(self, obj):
         if obj:
             return obj.user.id
+
+    def get_timestamp(self, obj):
+        return str(naturaltime(obj.timestamp))

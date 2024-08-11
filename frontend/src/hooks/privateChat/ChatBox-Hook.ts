@@ -1,24 +1,25 @@
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import {useEffect, useRef} from "react";
 import {websocketConnect, websocketSend} from "@/lib/websocketActions";
 
 
 export default function ChatBoxHook() {
-    const toScroll = useSelector(state => state.public_chat.messages)
+    const {is_new_message} = useSelector(state => state.private_chats.private_chat)
     const dispatch = useDispatch()
     const messagesBoxRef = useRef<HTMLDivElement>(null)
     const {id} = useParams()
+    const router = useRouter()
     useEffect(() => {
         messagesBoxRef.current?.scrollTo(0,messagesBoxRef.current.scrollHeight)
-    },[toScroll])
+    },[is_new_message])
 
 
     useEffect(()=>{
         handleInRoom(id)
     },[])
 
-    const handleInRoom = (room_id) => {
+    const handleInRoom =(room_id) => {
         dispatch({type: 'private_chats/WEBSOCKET_DISCONNECT'})
         dispatch(websocketConnect(`ws://localhost:8000/ws/private_chat/${room_id}`,{
             websocket: true,
@@ -27,6 +28,11 @@ export default function ChatBoxHook() {
             onClose: 'private_chats/close',
             onError: 'private_chats/error',
         }))
+
+        setTimeout(()=>{
+            messagesBoxRef.current.scrollTo(0, messagesBoxRef.current.scrollHeight);
+        },500)
+
     }
 
     const handleSendMessage = (e) => {
