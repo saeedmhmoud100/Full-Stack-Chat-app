@@ -95,7 +95,7 @@ class PrivateChatMessageModel(BaseModel):
         other_user = self.chat.get_other_user(self.user)
         self.message_statuses.create(
             user=other_user,
-            is_read=(other_user.get_current_chat_room() == self.chat)
+            is_read=(other_user.get_current_chat_room() is not None and other_user.get_current_chat_room() == self.chat)
         )
 
 

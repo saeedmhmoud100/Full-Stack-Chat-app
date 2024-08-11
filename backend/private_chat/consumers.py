@@ -30,11 +30,23 @@ class PrivateChatConsumer(WebsocketConsumer):
 
         self.room.make_all_messages_as_read(self.user)
 
+        all_chats_group_name = f'private_chats_{self.user.id}'
+        async_to_sync(self.channel_layer.group_send)(
+            all_chats_group_name,
+            {
+                'type': 'update_chat_unread_messages_count',
+                'chat': {
+                    'chat_id': self.room.id,
+                    'unread_messages_count': self.room.get_unread_messages_count(self.user)
+                },
+            }
+        )
+
         self.send(text_data=json.dumps({
             'type': 'connected',
             "data": {
                 'all_messages': PrivateChatMessageSerializer(self.room.messages.all(), many=True).data,
-                'user_data': SimpleUserDataSerializer(self.user2,context={'user':self.user}).data,
+                'user_data': SimpleUserDataSerializer(self.user2, context={'user': self.user}).data,
             }
         }))
 
@@ -64,6 +76,19 @@ class PrivateChatConsumer(WebsocketConsumer):
             }
         )
 
+        friend = self.room.get_other_user(self.user)
+        friend_all_chats_group_name = f'private_chats_{friend.id}'
+        async_to_sync(self.channel_layer.group_send)(
+            friend_all_chats_group_name,
+            {
+                'type': 'update_chat_unread_messages_count',
+                'chat': {
+                    'chat_id': self.room.id,
+                    'unread_messages_count': self.room.get_unread_messages_count(friend)
+                },
+            }
+        )
+
     def broadcast_new_message(self, event):
         message = event['message']
         self.send(text_data=json.dumps({
@@ -81,7 +106,7 @@ class AllPrivateChatsConsumer(WebsocketConsumer):
             self.close()
             return None
 
-        self.room_group_name = f'all_private_chats_{self.user.id}'
+        self.room_group_name = f'private_chats_{self.user.id}'
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
@@ -92,7 +117,7 @@ class AllPrivateChatsConsumer(WebsocketConsumer):
         serializer = PrivateChatSerializer(private_chats, many=True, context={'user': self.user}).data
         self.send(text_data=json.dumps({
             'type': 'connected',
-            "data":  serializer,
+            "data": serializer,
 
         }))
 
@@ -102,3 +127,10 @@ class AllPrivateChatsConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.close()
+
+    def update_chat_unread_messages_count(self, event):
+        chat = event['chat']
+        self.send(text_data=json.dumps({
+            'type': 'update_chat_unread_messages_count',
+            'data': chat
+        }))
