@@ -34,7 +34,7 @@ class PrivateChatConsumer(WebsocketConsumer):
             'type': 'connected',
             "data": {
                 'all_messages': PrivateChatMessageSerializer(self.room.messages.all(), many=True).data,
-                'user_data': SimpleUserDataSerializer(self.user2).data,
+                'user_data': SimpleUserDataSerializer(self.user2,context={'user':self.user}).data,
             }
         }))
 

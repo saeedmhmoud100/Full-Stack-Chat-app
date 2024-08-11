@@ -92,9 +92,10 @@ class PrivateChatMessageModel(BaseModel):
         )
 
         # Make the message as unread for the other user
+        other_user = self.chat.get_other_user(self.user)
         self.message_statuses.create(
-            user=self.chat.get_other_user(self.user),
-            is_read=False
+            user=other_user,
+            is_read=(other_user.get_current_chat_room() == self.chat)
         )
 
 

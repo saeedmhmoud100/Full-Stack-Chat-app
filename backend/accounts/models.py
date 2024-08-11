@@ -65,6 +65,9 @@ class Account(AbstractBaseUser):
     def remove_current_chat_room(self):
         self.status.remove_current_chat_room()
 
+    def get_current_chat_room(self):
+        return self.status.get_current_chat_room()
+
 class UserStatus(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status")
     is_online = models.BooleanField(default=False)
@@ -85,3 +88,8 @@ class UserStatus(models.Model):
         self.content_type = None
         self.object_id = None
         self.save()
+
+    def get_current_chat_room(self):
+        if self.content_type is not None:
+            return self.content_type.get_object_for_this_type(id=self.object_id)
+        return None

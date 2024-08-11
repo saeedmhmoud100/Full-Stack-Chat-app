@@ -19,9 +19,8 @@ class PrivateChatSerializer(serializers.ModelSerializer):
             return SimpleUserDataSerializer(obj.get_other_user(request_user),context={'request':self.context['request']}).data
 
     def get_unread_messages_count(self, obj):
-        if 'request' in self.context:
-            request_user = self.context['request'].user
-            return obj.get_unread_messages_count(request_user)
+        if 'user' in self.context:
+            return obj.get_unread_messages_count(self.context['user'])
 
 
 class PrivateChatMessageSerializer(serializers.Serializer):

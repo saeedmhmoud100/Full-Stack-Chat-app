@@ -172,7 +172,7 @@ class SimpleUserDataSerializer(serializers.ModelSerializer):
         return settings.HOST_URL + get_default_profile_image()
 
     def get_private_chat_id(self, obj):
-        if self.context and self.context['request']:
-            chat = PrivateChatModel.get_chat_between_users(self.context['request'].user, obj)
+        if 'user' in self.context:
+            chat = PrivateChatModel.get_chat_between_users(self.context['user'], obj)
             return chat.id if chat else None
         return None
