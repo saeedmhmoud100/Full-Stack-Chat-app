@@ -15,10 +15,11 @@ class UserSerializer(serializers.ModelSerializer):
     request_from_you = serializers.SerializerMethodField()
     request_to_you = serializers.SerializerMethodField()
     private_chat_id = serializers.SerializerMethodField()
+
     class Meta:
         model = Account
         fields = ['id', 'email', 'username', 'full_name', 'profile_image',
-                  'is_friend', 'is_you', 'request_from_you', 'request_to_you', 'private_chat_id']
+                  'is_friend', 'is_you', 'request_from_you', 'request_to_you', 'private_chat_id','is_online']
         read_only_fields = ['email', 'username']
 
     def get_profile_image(self, obj):

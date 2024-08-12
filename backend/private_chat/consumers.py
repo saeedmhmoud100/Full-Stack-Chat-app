@@ -11,12 +11,15 @@ from private_chat.serializers import PrivateChatMessageSerializer, PrivateChatSe
 class PrivateChatConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope['user']
+        if self.user.is_anonymous:
+            self.close()
+            return None
         room_id = self.scope['url_route']['kwargs']['room_id']
         self.room = PrivateChatModel.objects.get(id=room_id)
         self.user = self.scope['user']
         self.user2 = self.room.get_other_user(self.user)
         self.room_group_name = f'private_chat_{room_id}'
-        if self.user.is_anonymous or self.room.get_chat_between_users(self.user, self.user2) is None or not (
+        if self.room.get_chat_between_users(self.user, self.user2) is None or not (
                 self.user in self.user2.friend_list.friends.all()):
             self.close()
             return None

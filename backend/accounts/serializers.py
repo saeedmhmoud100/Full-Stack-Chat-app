@@ -163,8 +163,10 @@ class SimpleUserDataSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['id', 'email', 'username', 'profile_image', 'private_chat_id']
+        fields = ['id', 'email', 'username', 'profile_image', 'private_chat_id','is_online']
         read_only_fields = ['email', 'username']
+
+
 
     def get_profile_image(self, obj):
         if obj.profile_image:

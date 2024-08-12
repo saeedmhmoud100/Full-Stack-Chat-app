@@ -13,6 +13,7 @@ class AccountConsumer(WebsocketConsumer):
         self.user = self.scope['user']
 
         self.room_group_name = f'account_{self.user.id}'
+
         if self.user.is_anonymous:
             self.close()
             return None
@@ -21,17 +22,10 @@ class AccountConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
+
         self.accept()
 
         self.user.set_is_online(True)
-
-        self.send(text_data=json.dumps({
-            'type': 'connected',
-            "data": {
-                'all_messages': PrivateChatMessageSerializer(self.room.messages.all(), many=True).data,
-                'user_data': SimpleUserDataSerializer(self.user2, context={'user': self.user}).data,
-            }
-        }))
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
@@ -41,12 +35,7 @@ class AccountConsumer(WebsocketConsumer):
         self.user.set_is_online(False)
         self.close()
 
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        Type = text_data_json['type']
 
-        if Type == 'new_message':
-            message = text_data_json['message']
 
 
 

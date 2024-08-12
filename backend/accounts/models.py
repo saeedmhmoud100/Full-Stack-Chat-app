@@ -72,6 +72,10 @@ class Account(AbstractBaseUser):
         self.status.is_online = is_online
         self.status.save()
 
+    @property
+    def is_online(self):
+        return self.status.is_online
+
 class UserStatus(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status")
     is_online = models.BooleanField(default=False)

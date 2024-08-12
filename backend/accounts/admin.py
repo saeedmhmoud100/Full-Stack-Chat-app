@@ -17,18 +17,22 @@ class UserStatusAdmin(admin.TabularInline):
         return False
 
 
-
 class AccountAdmin(UserAdmin):
-    list_display = ('id', 'email', 'username', 'date_joined', 'last_login', 'is_admin', 'is_active')
+    list_display = ('get_is_online','id', 'email', 'username', 'date_joined', 'last_login', 'is_admin', 'is_active')
     search_fields = ('email', 'username')
     list_display_links = ('email', 'id')
-    readonly_fields = ('date_joined', 'last_login')
+    readonly_fields = ('date_joined', 'last_login','get_is_online')
 
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
 
     inlines = [UserStatusAdmin]
+
+    def get_is_online(self, obj):
+        return obj.status.is_online
+    get_is_online.short_description = 'Is Online'
+    get_is_online.admin_order_field = 'status__is_online'
 
 
 admin.site.register(Account, AccountAdmin)
