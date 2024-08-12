@@ -8,7 +8,7 @@ import useUserDataSectionHook from "@/hooks/users/UserDataSection-Hook";
 
 
 export default function UserDataSection(){
-    const {userData:{username,email,profile_image,is_friend,is_you,request_from_you,request_to_you,private_chat_id}} = useSelector(state => state.user)
+    const {userData:{username,email,profile_image,is_friend,is_you,request_from_you,request_to_you,is_online}} = useSelector(state => state.user)
     const [hydrated,setHydrated] = useState(false)
     const {handleFriendRequest, handleCancelFriendRequest, handleAcceptFriendRequest, handleDeclineFriendRequest, handleUnfriend,router,handleMessage} = useUserDataSectionHook()
 
@@ -30,8 +30,8 @@ export default function UserDataSection(){
     return (
             <div className="flex flex-col md:flex-row items-center md:items-start">
                 <div className="profile_image md:p-20 sm:pt-20 sm:pb-4">
-                    <div className="image rounded-full overflow-hidden relative">
-                        <img src={profile_image} alt="profile image" style={{width: "300px"}}/>
+                    <div className={`inline  ${is_online ? 'img-online-on' : 'img-online-off'} img-online-profile image rounded-full relative`}>
+                        <img src={profile_image} alt="profile image" style={{width: "300px"}} className={'rounded-full'}/>
                     </div>
                 </div>
                 <div className="profile_data w-full ms-4 md:pt-20 text-6xl sm:text-center md:text-start">

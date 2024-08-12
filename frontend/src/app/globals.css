@@ -52,3 +52,32 @@
         position: fixed;
     }
 }
+
+[class*="img-online-"]{
+  position: relative;
+}
+
+.img-online-on::after{
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  right: 2px;
+  bottom: 2px;
+  border: 6px solid green;
+}
+.img-online-off::after{
+  content: '';
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  right: 2px;
+  bottom: 2px;
+  border: 6px solid gray;
+}
+
+.img-online-profile::after{
+  right: 21px;
+  bottom: 21px;
+  border-width: 8px;
+}

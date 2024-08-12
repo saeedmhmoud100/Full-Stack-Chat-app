@@ -33,7 +33,9 @@ export default function FriendRequestsSection(){
                     friend_requests.map(friend =>
                         <div key={friend.from_user?.id} className='flex w-full h-24 px-4 gap-3 items-center hover:bg-gray-300 cursor-pointer transition delay-100 rounded-md'>
                             <Link href={`/users/${friend.from_user?.id}/`} key={friend.from_user?.id} className="w-full flex gap-3 my-3 items-center ">
-                                <img src={friend.from_user?.profile_image} style={{height:"60px",width:"60px"}}  className='rounded-3xl'/>
+                                <div  style={{height: "60px", width: "60px"}} className={`inline  ${friend.from_user.is_online ? 'img-online-on' : 'img-online-off'}`}>
+                                    <img src={friend.from_user.profile_image} style={{height: "60px", width: "60px"}} className={'rounded-3xl'}/>
+                                </div>
                                 <h4>{friend.from_user?.username}</h4>
                             </Link>
                             <div className="flex gap-2">

@@ -4,6 +4,7 @@ import {getUserToken} from "@/hooks/localStorage";
 import {performLogout, setLoggedInState} from "@/lib/slices/accountActions/accountSlice";
 import {getLoggedUserData, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
 import {ErrorNotifications, InfoNotification} from "@/hooks/Notification";
+import {websocketConnect} from "@/lib/websocketActions";
 
 
 export default function NavBarHook () {
@@ -17,6 +18,24 @@ export default function NavBarHook () {
             dispatch(setLoggedInState(token))
         }
     }, []);
+
+    useEffect(() => {
+        if(isLogged){
+            dispatch(websocketConnect(
+                `ws://localhost:8000/ws/account`,
+                {
+                    websocket: true,
+                    onOpen: 'account/open',
+                    onMessage: 'account/message',
+                    onClose: 'account/close',
+                    onError: 'account/error',
+                    onSend: 'account/send',
+                }
+            ))
+        }
+
+    },[isLogged])
+
 
     useEffect(() => {
         if(isLogged && refresh_token){

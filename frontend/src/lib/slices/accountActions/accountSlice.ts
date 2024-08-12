@@ -101,7 +101,20 @@ export const AccountSlice = createSlice({
         resetChangeImageState: (state) => {
             state.changeImageLoading = false;
             state.changeImageSuccess = false;
-        }
+        },
+
+
+        open: (state) => {
+            state.userData.is_online = true;
+        },
+        close: (state) => {
+            state.userData.is_online = false;
+        },
+
+
+
+
+
     },
     extraReducers: (builder) => {
         builder

@@ -25,8 +25,9 @@ export default function GetAllFriendsSection() {
                              className='w-full  px-4 flex items-center hover:bg-gray-300 cursor-pointer transition delay-100 rounded-md'>
                             <Link href={`/users/${friend.id}/`}
                                   className="w-full h-20 flex gap-3 my-3 items-center rounded-e-none px-3">
-                                <img src={friend.profile_image} style={{height: "60px", width: "60px"}}
-                                     className='rounded-3xl'/>
+                               <div  style={{height: "60px", width: "60px"}} className={`inline  ${friend.is_online ? 'img-online-on' : 'img-online-off'}`}>
+                                   <img src={friend.profile_image} style={{height: "60px", width: "60px"}} className={'rounded-3xl'}/>
+                               </div>
                                 <h4>{friend.username}</h4>
                             </Link>
                             <Link href={`/private_chats/${friend.private_chat_id}`}>

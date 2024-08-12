@@ -10,7 +10,6 @@ export default function SearchPage() {
     const {usersSearch} = useSelector(state => state.user)
 
 
-
     return (
         <div className="user-data w-full bg-white p-4 my-4 rounded-xl shadow flex flex-wrap">
             <h2 className="text-4xl text-start font-bold border-b-gray-500 w-full"> Users </h2>
@@ -20,7 +19,9 @@ export default function SearchPage() {
                     return (
                         <div key={user.id} className='md:w-[49%] w-full h-24 px-4 flex items-center hover:bg-gray-300 cursor-pointer transition delay-100 rounded-md'>
                             <Link href={`/users/${user.id}`} className="w-full h-24 flex gap-3 my-3 items-center ">
-                                <img src={user.profile_image} style={{height:"60px",width:"60px"}}  className='rounded-3xl'/>
+                                <div  style={{height: "60px", width: "60px"}} className={`inline  ${user.is_online ? 'img-online-on' : 'img-online-off'}`}>
+                                    <img src={user.profile_image} style={{height: "60px", width: "60px"}} className={'rounded-3xl'}/>
+                                </div>
                                 <h4>{user.username}</h4>
                             </Link>
                             <div className='border border-gray-400 px-4 py-2 rounded-md'>

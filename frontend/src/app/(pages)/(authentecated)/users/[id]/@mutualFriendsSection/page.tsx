@@ -19,7 +19,7 @@ export default function MutualFriendsSection(){
     return (
         <>
             <h2 className="text-4xl w-full text-start font-bold border-b-gray-500"> Mutual Friends ({mutual_friends.length || 0})</h2>
-            <div className='friends-list bg-white p-4 flex  flex-row flex-wrap h-[355px] overflow-y-auto'>
+            <div className='friends-list bg-white p-4 flex flex-col md:flex-row flex-wrap h-[355px] overflow-y-auto'>
 
                 {
                     mutual_friends?.length === 0 ? <h3>No mutual friends</h3> :
@@ -28,7 +28,9 @@ export default function MutualFriendsSection(){
 
                         <div key={friend.id} className='flex w-full md:w-[49%] h-24 px-4 gap-3 items-center hover:bg-gray-300 cursor-pointer transition delay-100 rounded-md'>
                             <Link href={`/users/${friend.id}/`} className="w-full flex gap-3 my-3 items-center ">
-                                <img src={friend.profile_image} style={{height:"60px",width:"60px"}}  className='rounded-3xl'/>
+                                <div  style={{height: "60px", width: "60px"}} className={`inline  ${friend.is_online ? 'img-online-on' : 'img-online-off'}`}>
+                                    <img src={friend.profile_image} style={{height: "60px", width: "60px"}} className={'rounded-3xl'}/>
+                                </div>
                                 <h4>{friend.username}</h4>
                             </Link>
                         </div>

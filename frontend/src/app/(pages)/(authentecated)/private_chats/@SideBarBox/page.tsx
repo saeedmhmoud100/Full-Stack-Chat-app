@@ -23,7 +23,9 @@ export default function PrivateChatSidebar(){
                 <div className="w-full overflow-y-auto px-3" style={{height: "100%"}} >
                     {all_chats.map(item =>
                         <div onClick={_=>handleClick(item.id)} key={item.id} className={` flex justify-start items-center w-full cursor-pointer my-4 hover:bg-gray-500 ${id==item.id && 'bg-gray-500'} transition rounded-xl rounded-s-full p-2`}>
-                            <img className="w-20 h-20 rounded-full" src={item.user.profile_image } />
+                            <div  className={`inline w-20 h-20 ${item.user.is_online ? 'img-online-on' : 'img-online-off'}`}>
+                                <img src={item.user.profile_image} className={'w-20 h-20 rounded-full'}/>
+                            </div>
                             <div className="pl-3">
                                 <h1 className="text-lg font-bold">{item.user.username}</h1>
                             </div>
