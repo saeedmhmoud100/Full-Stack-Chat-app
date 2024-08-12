@@ -33,6 +33,7 @@ const websocketMiddleware = ({ dispatch }) => {
                 case 'WEBSOCKET_SEND':
                     if (socket[connectionId]) {
                         socket[connectionId].send(JSON.stringify(payload));
+                        dispatch({ type: meta.onSend, connectionId, payload });
                     }
                     break;
 

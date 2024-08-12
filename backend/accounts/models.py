@@ -68,6 +68,10 @@ class Account(AbstractBaseUser):
     def get_current_chat_room(self):
         return self.status.get_current_chat_room()
 
+    def set_is_online(self, is_online):
+        self.status.is_online = is_online
+        self.status.save()
+
 class UserStatus(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status")
     is_online = models.BooleanField(default=False)

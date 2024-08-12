@@ -1,5 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {getAllPrivateChats} from "@/lib/slices/privateChatsStore/userActions";
+import {getAllPrivateChats} from "@/lib/slices/privateChatsStore/privateChatsActions";
 // Define a type for the slice state
 export interface PrivateChatsState {
     all_chats:[],
@@ -45,9 +45,15 @@ export const PrivateChatsSlice = createSlice({
                 case 'new_message':
                     state.private_chat.messages.push(data.message)
                     state.private_chat.is_new_message = !state.private_chat.is_new_message
+                    let lastChat = state.all_chats.find(chat => chat.id == state.private_chat.user.private_chat_id)
+                    if (lastChat){
+                        state.all_chats = [lastChat, ...state.all_chats.filter(chat => chat.id !== state.private_chat.user.private_chat_id)];
+                    }
                     break;
-
             }
+        },
+        send: (state, action: PayloadAction<any>) => {
+            const {type} = action.payload
         },
         close: (state, action: PayloadAction<any>) => {
             state.private_chat.in_chat = false

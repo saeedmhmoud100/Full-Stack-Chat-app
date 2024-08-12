@@ -27,12 +27,13 @@ export default function ChatBoxHook() {
             onMessage: 'private_chats/message',
             onClose: 'private_chats/close',
             onError: 'private_chats/error',
+            onSend: 'private_chats/send',
         }))
 
     }
 
     const handleSendMessage = (e) => {
-e.preventDefault()
+        e.preventDefault()
         const message = e.target.elements.message.value
         const data = {
             message,

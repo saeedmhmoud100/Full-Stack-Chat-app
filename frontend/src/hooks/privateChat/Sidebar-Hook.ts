@@ -1,6 +1,6 @@
 import {useDispatch} from "react-redux";
 import {useEffect, useRef} from "react";
-import {getAllPrivateChats} from "@/lib/slices/privateChatsStore/userActions";
+import {getAllPrivateChats} from "@/lib/slices/privateChatsStore/privateChatsActions";
 import {useRouter} from "next/navigation";
 import {websocketConnect} from "@/lib/websocketActions";
 

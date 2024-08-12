@@ -20,7 +20,7 @@ class GetUserDataView(RetrieveAPIView):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context.update({"request": self.request})
+        context.update({"user": self.request.user})
         return context
 
 
@@ -37,7 +37,7 @@ class SearchUserView(ListAPIView):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context.update({"request": self.request})
+        context.update({"user": self.request.user})
         return context
 
 
@@ -104,7 +104,7 @@ def get_user_friends(request):
         return Response(data={"friends": "[]"},
                         status=status.HTTP_400_BAD_REQUEST)
     friends = request.user.friend_list.friends.all()
-    return Response(data={"friends": SimpleUserDataSerializer(friends, many=True,context={'request':request}).data},
+    return Response(data={"friends": SimpleUserDataSerializer(friends, many=True,context={'user':request.user}).data},
                     status=status.HTTP_200_OK)
 
 @api_view(["GET"])
