@@ -70,6 +70,29 @@ class PrivateChatConsumer(WebsocketConsumer):
         if Type == 'new_message':
             message = text_data_json['message']
             self.create_new_message(message)
+        if Type == 'typing_status':
+            is_typing = text_data_json['is_typing']
+            if self.user.get_current_chat_room() == self.room:
+                async_to_sync(self.channel_layer.group_send)(
+                    f'private_chat_{self.room.id}',
+                    {
+                        'type': 'typing_status',
+                        'user_id': self.user.id,
+                        'is_typing': is_typing,
+                    }
+                )
+    def typing_status(self, event):
+        print('sdf')
+        user_id = event['user_id']
+        is_typing = event['is_typing']
+        self.send(text_data=json.dumps({
+            'type': 'typing_status',
+            'data': {
+                'user_id': user_id,
+                'is_typing': is_typing,
+                'private_chat_id': self.room.id
+            }
+        }))
 
     def create_new_message(self, message):
         new_message = self.room.messages.create(user=self.user, message=message)

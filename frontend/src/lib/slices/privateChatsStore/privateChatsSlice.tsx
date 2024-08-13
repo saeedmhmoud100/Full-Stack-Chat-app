@@ -55,6 +55,10 @@ export const PrivateChatsSlice = createSlice({
                         state.private_chat.user.is_online = data.is_online
                     }
                     break;
+                case 'typing_status':
+                    if(state.private_chat.user.id == data.user_id && state.private_chat.user.private_chat_id == data.private_chat_id){
+                        state.private_chat.user.is_typing = data.is_typing
+                    }
             }
         },
         send: (state, action: PayloadAction<any>) => {
