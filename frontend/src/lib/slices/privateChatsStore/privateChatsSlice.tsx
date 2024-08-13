@@ -50,6 +50,11 @@ export const PrivateChatsSlice = createSlice({
                         state.all_chats = [lastChat, ...state.all_chats.filter(chat => chat.id !== state.private_chat.user.private_chat_id)];
                     }
                     break;
+                case 'online_status':
+                    if(state.private_chat.user.id == data.user_id){
+                        state.private_chat.user.is_online = data.is_online
+                    }
+                    break;
             }
         },
         send: (state, action: PayloadAction<any>) => {
@@ -83,6 +88,23 @@ export const PrivateChatsSlice = createSlice({
                     })
                     if (updatedChat && data.unread_messages_count !== 0){
                         state.all_chats = [updatedChat, ...state.all_chats.filter(chat => chat.id !== data.chat_id)];
+                    }
+                    break;
+                case 'online_status':
+                    if(data?.user_id){
+
+                        // update all chats user online status
+                        state.all_chats = state.all_chats.map((chat:any) => {
+                            if(chat.user.id == data.user_id){
+                                return {...chat, user:{...chat.user, is_online:data.is_online}};
+                            }
+                            return chat;
+                        })
+
+                        // update private chat room user online status
+                        if(state.private_chat.user.id == data.user_id){
+                            state.private_chat.user.is_online = data.is_online
+                        }
                     }
                     break;
 

@@ -20,7 +20,6 @@ export default function ChatBoxHook() {
     },[])
 
     const handleInRoom =(room_id) => {
-        dispatch({type: 'private_chats/WEBSOCKET_DISCONNECT'})
         dispatch(websocketConnect(`ws://localhost:8000/ws/private_chat/${room_id}`,{
             websocket: true,
             onOpen: 'private_chats/open',
@@ -28,8 +27,11 @@ export default function ChatBoxHook() {
             onClose: 'private_chats/close',
             onError: 'private_chats/error',
             onSend: 'private_chats/send',
-        }))
+            connectionId: `private_chat_${room_id}`
+        })
 
+
+        )
     }
 
     const handleSendMessage = (e) => {

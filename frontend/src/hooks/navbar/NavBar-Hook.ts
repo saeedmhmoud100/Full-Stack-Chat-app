@@ -4,7 +4,7 @@ import {getUserToken} from "@/hooks/localStorage";
 import {performLogout, setLoggedInState} from "@/lib/slices/accountActions/accountSlice";
 import {getLoggedUserData, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
 import {ErrorNotifications, InfoNotification} from "@/hooks/Notification";
-import {websocketConnect} from "@/lib/websocketActions";
+import {websocketConnect, websocketSend} from "@/lib/websocketActions";
 
 
 export default function NavBarHook () {
@@ -32,6 +32,8 @@ export default function NavBarHook () {
                     onSend: 'account/send',
                 }
             ))
+        }else{
+            dispatch({type: 'account/WEBSOCKET_DISCONNECT'})
         }
 
     },[isLogged])
@@ -44,6 +46,7 @@ export default function NavBarHook () {
             let interval = setInterval(() => {
                 dispatch(performUpdateToken({refresh:refresh_token}))
             }, timeToRefresh)
+            dispatch(websocketSend({'type':'make_online'},{websocket:true, onSend: 'account/send'}) )
             return () => clearInterval(interval);
         }
     }, [isLogged,access_token,refresh_token]);

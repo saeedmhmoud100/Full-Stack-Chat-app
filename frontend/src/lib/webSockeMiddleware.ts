@@ -31,7 +31,7 @@ const websocketMiddleware = ({ dispatch }) => {
                     break;
 
                 case 'WEBSOCKET_SEND':
-                    if (socket[connectionId]) {
+                    if (socket[connectionId] && socket[connectionId].readyState === WebSocket.OPEN) {
                         socket[connectionId].send(JSON.stringify(payload));
                         dispatch({ type: meta.onSend, connectionId, payload });
                     }
