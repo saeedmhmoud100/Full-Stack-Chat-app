@@ -60,6 +60,15 @@ class AccountConsumer(WebsocketConsumer):
                 }
             )
 
+            async_to_sync(self.channel_layer.group_send)(
+                f'friends_online_status_{friend.id}',
+                {
+                    'type': 'online_status',
+                    'user_id': self.user.id,
+                    'is_online': is_online
+                }
+            )
+
     def online_status(self, event):
         user_id = event['user_id']
         is_online = event['is_online']
