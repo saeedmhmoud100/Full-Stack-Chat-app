@@ -76,6 +76,9 @@ class Account(AbstractBaseUser):
     def is_online(self):
         return self.status.is_online
 
+    def get_friends(self):
+        return self.friend_list.friends.all()
+
 class UserStatus(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status")
     is_online = models.BooleanField(default=False)

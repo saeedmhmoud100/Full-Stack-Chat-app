@@ -15,10 +15,12 @@ class PrivateChatConsumer(WebsocketConsumer):
             self.close()
             return None
         room_id = self.scope['url_route']['kwargs']['room_id']
+
         self.room = PrivateChatModel.objects.get(id=room_id)
         self.user = self.scope['user']
         self.user2 = self.room.get_other_user(self.user)
         self.room_group_name = f'private_chat_{room_id}'
+
         if self.room.get_chat_between_users(self.user, self.user2) is None or not (
                 self.user in self.user2.friend_list.friends.all()):
             self.close()
@@ -136,4 +138,15 @@ class AllPrivateChatsConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({
             'type': 'update_chat_unread_messages_count',
             'data': chat
+        }))
+
+    def online_status(self, event):
+        user_id = event['user_id']
+        is_online = event['is_online']
+        self.send(text_data=json.dumps({
+            'type': 'online_status',
+            'data': {
+                'user_id': user_id,
+                'is_online': is_online
+            }
         }))
