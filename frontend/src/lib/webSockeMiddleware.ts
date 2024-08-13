@@ -13,21 +13,22 @@ const websocketMiddleware = ({ dispatch }) => {
                     }
                     socket[connectionId] = new WebSocket(payload.url + "?token=" + getAccessToken());
 
-                    socket[connectionId].onopen = () => {
-                        dispatch({ type: meta.onOpen , connectionId});
-                    };
-
-                    socket[connectionId].onmessage = (event) => {
-                        dispatch({ type: meta.onMessage, payload: event.data, connectionId });
-                    };
-
-                    socket[connectionId].onclose = () => {
-                        dispatch({ type: meta.onClose, connectionId });
-                    };
-
-                    socket[connectionId].onerror = (error) => {
-                        dispatch({ type: meta.onError, payload: error.message, connectionId });
-                    };
+                    if(meta.onOpen)
+                        socket[connectionId].onopen = () => {
+                            dispatch({ type: meta.onOpen , connectionId});
+                        };
+                    if(meta.onMessage)
+                        socket[connectionId].onmessage = (event) => {
+                            dispatch({ type: meta.onMessage, payload: event.data, connectionId });
+                        };
+                    if(meta.onClose)
+                        socket[connectionId].onclose = () => {
+                            dispatch({ type: meta.onClose, connectionId });
+                        };
+                    if(meta.onError)
+                        socket[connectionId].onerror = (error) => {
+                            dispatch({ type: meta.onError, payload: error.message, connectionId });
+                        };
                     break;
 
                 case 'WEBSOCKET_SEND':

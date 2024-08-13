@@ -5,6 +5,7 @@ import Link from "next/link";
 import {useEffect} from "react";
 import {getUserFriends} from "@/lib/slices/usersStore/userActions";
 import {Button} from "@mui/material";
+import {websocketConnect} from "@/lib/websocketActions";
 
 
 export default function GetAllFriendsSection() {
@@ -13,6 +14,14 @@ export default function GetAllFriendsSection() {
     useEffect(() => {
         dispatch(getUserFriends())
     }, [dispatch, friends_change])
+
+    useEffect(() =>{
+        dispatch(websocketConnect(`ws://localhost:8000/ws/friend`,{
+            connectionId: 'friends_status',
+            websocket: true,
+            onMessage: 'user/friends_status_change',
+        }))
+    },[])
 
     return (
         <div className='friends-list bg-white p-4  h-[355px] overflow-y-auto'>
