@@ -64,7 +64,11 @@
   border-radius: 50%;
   right: 2px;
   bottom: 2px;
-  border: 6px solid green;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border: 2px solid white;
+  box-sizing: content-box;
 }
 .img-online-off::after{
   content: '';
@@ -73,11 +77,17 @@
   border-radius: 50%;
   right: 2px;
   bottom: 2px;
-  border: 6px solid gray;
+  width: 10px;
+  height: 10px;
+  background-color: gray;
+  border: 2px solid white;
+  box-sizing: content-box;
 }
 
 .img-online-profile::after{
   right: 21px;
   bottom: 21px;
-  border-width: 8px;
+  border-width: 3px;
+  width: 14px;
+  height: 14px;
 }
