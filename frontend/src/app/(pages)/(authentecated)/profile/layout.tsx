@@ -6,7 +6,8 @@ export default function Profile({children,userDataSection,
                                     changePasswordSection,
                                     getAllFriendsSection,
                                     friendRequestsSection,
-                                    friendRequestsYouSentSection}){
+                                    friendRequestsYouSentSection,
+                                    groupsSection}){
 
     return (
         <div className="w-full h-full mt-4 flex flex-wrap gap-3">
@@ -25,6 +26,9 @@ export default function Profile({children,userDataSection,
             </div>
             <div className="change-password md:w-[49%] w-full rounded-xl overflow-hidden">
             {friendRequestsYouSentSection}
+            </div>
+            <div className="change-password md:w-[49%] w-full rounded-xl overflow-hidden">
+            {groupsSection}
             </div>
         </div>
 
