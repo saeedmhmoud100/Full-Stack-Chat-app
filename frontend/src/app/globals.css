@@ -17,7 +17,7 @@
   position: relative;
 }
 .sidebar.show{
-  min-width: 300px;
+  min-width: max-content;
 
 }
 

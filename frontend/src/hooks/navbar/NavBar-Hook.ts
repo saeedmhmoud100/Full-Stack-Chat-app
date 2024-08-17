@@ -21,6 +21,7 @@ export default function NavBarHook () {
 
     useEffect(() => {
         if(isLogged){
+            dispatch(getLoggedUserData())
             dispatch(websocketConnect(
                 `ws://localhost:8000/ws/account`,
                 {
@@ -41,7 +42,6 @@ export default function NavBarHook () {
 
     useEffect(() => {
         if(isLogged && refresh_token){
-            dispatch(getLoggedUserData())
             const timeToRefresh = 1000 * 60 * 4;
             let interval = setInterval(() => {
                 dispatch(performUpdateToken({refresh:refresh_token}))
@@ -49,7 +49,7 @@ export default function NavBarHook () {
             dispatch(websocketSend({'type':'make_online'},{websocket:true, onSend: 'account/send'}) )
             return () => clearInterval(interval);
         }
-    }, [isLogged,access_token,refresh_token]);
+    }, [access_token,refresh_token]);
 
     useEffect(() => {
         if(isErrored){
