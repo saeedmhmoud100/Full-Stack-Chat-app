@@ -15,17 +15,19 @@ class GroupModel(BaseModel):
     last_message_timestamp = models.DateTimeField(null=True, blank=True)
 
 
-
-
-
-
     def __str__(self):
         return self.name
 
     def get_group_messages(self):
         return self.group_messages.all().order_by("timestamp")
 
+    def add_users(self, users):
+        self.users.add(*users)
+        self.save()
 
+    def add_user(self, user):
+        self.users.add(user)
+        self.save()
 class GroupMessage(BaseModel):
     group = models.ForeignKey(GroupModel, on_delete=models.CASCADE, related_name="group_messages")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="group_messages")
