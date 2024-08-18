@@ -24,6 +24,7 @@ urlpatterns = [
     path("api/accounts/", include("accounts.urls")),
     path("api/friends/", include("friends.urls")),
     path("api/private_chats/", include("private_chat.urls")),
+    path("api/groups/", include("groups.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
