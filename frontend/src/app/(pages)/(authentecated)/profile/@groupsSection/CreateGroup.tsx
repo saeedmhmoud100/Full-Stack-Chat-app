@@ -1,39 +1,11 @@
 import {useDispatch, useSelector} from "react-redux";
-import {ErrorNotifications, SuccessNotification} from "@/hooks/Notification";
-import {createGroup} from "@/lib/slices/groupsStore/groupsActions";
 import LoadingButton from "@mui/lab/LoadingButton";
-import {useEffect} from "react";
-import {setCreateSuccess} from "@/lib/slices/groupsStore/groupsSlice";
+import CreateGroupHook from "@/hooks/groups/CreateGroup-Hook";
 
 
 export default function CreateGroup({performClose}){
     const {friends} = useSelector(state => state.user)
-    const dispatch = useDispatch()
-    const {create_loading,create_success} = useSelector(state => state.groups)
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        const form = new FormData(e.target)
-        const users = form.getAll('users')
-        const data ={
-            name:form.get('name'),
-            description:form.get('description'),
-            users
-        }
-        if(!data.name){
-            ErrorNotifications("Group name is required")
-        }
-
-        dispatch(createGroup(data))
-    }
-
-    useEffect(() => {
-        console.log(create_success)
-        if(create_success){
-            dispatch(setCreateSuccess(false))
-            SuccessNotification("Group created successfully")
-            performClose()
-        }
-    },[create_success])
+    const {create_loading,handleSubmit} = CreateGroupHook({performClose})
 
 
     return (
