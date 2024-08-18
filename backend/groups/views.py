@@ -26,4 +26,4 @@ def create_group(request):
         user = User.objects.get(id=userId)
         group.add_user(user)
 
-    return Response({"group": GroupSerializer(group,many=False)},status=status.HTTP_201_CREATED)
+    return Response({"group_data": GroupSerializer(group,many=False).data},status=status.HTTP_201_CREATED)
