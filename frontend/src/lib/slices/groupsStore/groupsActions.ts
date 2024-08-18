@@ -12,3 +12,13 @@ export const createGroup = createAsyncThunk('groups/createGroup',
             return rejectWithValue(await response.json());
         }
 });
+
+export const getUserGroups = createAsyncThunk('groups/getUserGroups',
+    async (credentials: {  }, { rejectWithValue }) => {
+        const response = await Get(`/api/groups/get_user_groups`)
+        if(response.ok){
+            return await response.json();
+        }else {
+            return rejectWithValue(await response.json());
+        }
+});
