@@ -1,8 +1,7 @@
-from django.contrib.humanize.templatetags.humanize import naturaltime
 from rest_framework import serializers
 
 from accounts.serializers import SimpleUserDataSerializer
-from public_chat.models import PublicChatMessageModel
+from django.conf import settings
 
 
 class GroupSerializer(serializers.Serializer):
@@ -11,3 +10,8 @@ class GroupSerializer(serializers.Serializer):
     description = serializers.CharField()
     admin = SimpleUserDataSerializer()
     users = SimpleUserDataSerializer(many=True)
+    image = serializers.SerializerMethodField()
+
+
+    def get_image(self, obj):
+        return settings.HOST_URL + obj.image.url

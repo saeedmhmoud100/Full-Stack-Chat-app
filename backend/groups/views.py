@@ -11,6 +11,15 @@ from groups.serializers import GroupSerializer
 
 User = get_user_model()
 
+
+
+
+
+@api_view(['GET'])
+def get_user_groups(request):
+    groups = request.user.groups.all().order_by("-created_at")
+    return Response({"groups": GroupSerializer(groups, many=True).data}, status=status.HTTP_200_OK)
+
 @api_view(['POST'])
 def create_group(request):
     data = request.data

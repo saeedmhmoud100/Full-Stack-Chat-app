@@ -4,5 +4,13 @@ from django.contrib import admin
 
 from groups.models import GroupModel, GroupMessage
 
-admin.site.register(GroupModel)
+
+class GroupAdmin(admin.ModelAdmin):
+    list_display = ("name", "description", "admin", "image", "last_message_timestamp",'created_at','updated_at')
+    search_fields = ("name",)
+    list_filter = ("admin",)
+    readonly_fields = ('created_at','updated_at','admin')
+
+
+admin.site.register(GroupModel, GroupAdmin)
 admin.site.register(GroupMessage)
