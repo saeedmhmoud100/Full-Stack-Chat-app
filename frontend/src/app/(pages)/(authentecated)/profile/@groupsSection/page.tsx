@@ -87,7 +87,7 @@ export default function GroupsSection() {
         </div>
 
         <Modal open={createGroup} onClose={_=> setCreateGroup(false)} title={'Create new group'}>
-            <CreateGroup/>
+            <CreateGroup performClose={_=> setCreateGroup(false)}/>
         </Modal>
     </div>
 }
