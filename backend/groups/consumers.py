@@ -2,10 +2,10 @@ import json
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
-from groups.serializers import GroupSerializer
+from groups.serializers import GroupSerializer, GroupMessageSerializer
 
 
-class AllGroupsConsumer(WebsocketConsumer):
+class GroupsConsumer(WebsocketConsumer):
     def connect(self):
         self.user = self.scope['user']
         if self.user.is_anonymous:
@@ -34,3 +34,31 @@ class AllGroupsConsumer(WebsocketConsumer):
             self.channel_name
         )
         self.close()
+
+
+    def receive(self, text_data):
+        data = json.loads(text_data)
+        Type = data.get('type')
+        if Type == 'new_message':
+            group_id = data.get('group_id')
+            message = data.get('message')
+            group = self.user.groups.get(id=group_id)
+            msg = group.add_message(self.user, message)
+
+            users = group.users.all()
+            for user in users:
+                async_to_sync(self.channel_layer.group_send)(
+                    f'groups_{user.id}',
+                    {
+                        'type': 'new_message',
+                        'data': GroupMessageSerializer(msg).data
+                    }
+                )
+
+
+    def new_message(self, event):
+        message = event['data']
+        self.send(text_data=json.dumps({
+            'type': 'new_message',
+            'data': message
+        }))
