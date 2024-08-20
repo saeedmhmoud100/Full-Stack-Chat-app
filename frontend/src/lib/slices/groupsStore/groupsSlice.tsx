@@ -28,12 +28,22 @@ export const GroupsSlice = createSlice({
         setCreateSuccess: (state:GroupsState, action: PayloadAction<boolean>) => {
             state.create_success = action.payload;
         },
+        setCurrentGroupId: (state:GroupsState, action: PayloadAction<number>) => {
+            state.current_group_id = action.payload;
+        },
 
         message: (state:GroupsState, action: PayloadAction<any>) => {
             const {type, data} = JSON.parse(action.payload);
             switch (type) {
                 case 'all_groups':
                     state.all_groups = data;
+                    break;
+                case 'new_message':
+                    const group = state.all_groups.find(group => group.id == data.group_id);
+                    if (group) {
+                        group.messages.push(data);
+                        state.all_groups = [group,...state.all_groups.filter(group => group.id !== data.group_id)]
+                    }
                     break;
             }
         }
@@ -63,6 +73,6 @@ export const GroupsSlice = createSlice({
 
 
 });
-export const {setCreateSuccess} = GroupsSlice.actions;
+export const {setCreateSuccess,setCurrentGroupId} = GroupsSlice.actions;
 
 export default GroupsSlice.reducer;
