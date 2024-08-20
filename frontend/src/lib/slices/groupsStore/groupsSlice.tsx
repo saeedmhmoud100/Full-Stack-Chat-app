@@ -25,6 +25,16 @@ export const GroupsSlice = createSlice({
     reducers: {
         setCreateSuccess: (state:GroupsState, action: PayloadAction<boolean>) => {
             state.create_success = action.payload;
+        },
+
+
+        allGroupsMessage: (state:GroupsState, action: PayloadAction<any>) => {
+            const {type, data} = JSON.parse(action.payload);
+            switch (type) {
+                case 'all_groups':
+                    state.all_groups = data;
+                    break;
+            }
         }
     },
     extraReducers: (builder) => {
