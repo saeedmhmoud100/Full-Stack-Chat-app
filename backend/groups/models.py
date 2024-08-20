@@ -57,3 +57,28 @@ class GroupMessage(BaseModel):
 
     def __str__(self):
         return self.message
+
+    def get_status(self, user):
+        return self.status.get(user=user)
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        super().save(force_insert, force_update, using, update_fields)
+        users = self.group.users.all()
+        for user in users:
+            status = GroupMessageStatus.objects.create(message=self, user=user)
+            if user == self.user:
+                status.read = True
+                status.read_at = self.timestamp
+            status.save()
+
+
+class GroupMessageStatus(BaseModel):
+    message = models.ForeignKey(GroupMessage, on_delete=models.CASCADE, related_name="status")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="group_message_status")
+    read = models.BooleanField(default=False)
+    read_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.message}"

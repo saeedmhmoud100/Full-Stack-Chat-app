@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from groups.models import GroupModel, GroupMessage
+from groups.models import GroupModel, GroupMessage, GroupMessageStatus
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -13,4 +13,20 @@ class GroupAdmin(admin.ModelAdmin):
 
 
 admin.site.register(GroupModel, GroupAdmin)
-admin.site.register(GroupMessage)
+
+
+class GroupMessageStatusInline(admin.TabularInline):
+    model = GroupMessageStatus
+    extra = 0
+
+    readonly_fields = ['user', 'read', 'read_at']
+
+class GroupMessageAdmin(admin.ModelAdmin):
+    list_display = ("group", "user", "message", "timestamp",'created_at','updated_at')
+    search_fields = ("group",)
+    list_filter = ("user",)
+    readonly_fields = ('created_at','updated_at')
+
+    inlines = [GroupMessageStatusInline]
+
+admin.site.register(GroupMessage, GroupMessageAdmin)
