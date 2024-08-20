@@ -1,4 +1,4 @@
-import GroupoChatBox from "./page";
+import GroupChatBox from "./page";
 
 
-export default GroupoChatBox
+export default GroupChatBox

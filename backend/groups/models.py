@@ -27,7 +27,7 @@ class GroupModel(BaseModel):
         return self.name
 
     def get_group_messages(self):
-        return self.group_messages.all().order_by("last_message_timestamp")
+        return self.group_messages.all().order_by("-id")
 
     def add_users(self, users):
         self.users.add(*users)

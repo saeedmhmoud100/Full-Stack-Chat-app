@@ -6,14 +6,16 @@ export interface GroupsState {
     all_groups?: any,
     create_loading:boolean,
     create_success?: boolean,
-    errors?: any
+    errors?: any,
+    current_group_id?: number | null
 }
 
 // Define the initial state using that type
 const initialState: GroupsState = {
     create_loading:false,
     create_success: false,
-    all_groups: []
+    all_groups: [],
+    current_group_id: null
 };
 
 
@@ -27,8 +29,7 @@ export const GroupsSlice = createSlice({
             state.create_success = action.payload;
         },
 
-
-        allGroupsMessage: (state:GroupsState, action: PayloadAction<any>) => {
+        message: (state:GroupsState, action: PayloadAction<any>) => {
             const {type, data} = JSON.parse(action.payload);
             switch (type) {
                 case 'all_groups':

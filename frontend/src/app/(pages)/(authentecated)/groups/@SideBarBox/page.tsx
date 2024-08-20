@@ -1,7 +1,7 @@
 "use client";
 import {useDispatch, useSelector} from "react-redux";
 import SidebarHook from "@/hooks/privateChat/Sidebar-Hook";
-import {useParams} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 import {useEffect, useRef} from "react";
 import {websocketConnect} from "@/lib/websocketActions";
 
@@ -11,15 +11,15 @@ export default function GroupsSidebar() {
     const dispatch = useDispatch()
     const {id} = useParams()
     const ref = useRef(null);
-
+    const router = useRouter()
     useEffect(() => {
         dispatch(websocketConnect(`ws://localhost:8000/ws/groups`, {
             connectionId: 'all_groups',
             websocket: true,
-            onOpen: 'groups/allGroupsOpen',
-            onMessage: 'groups/allGroupsMessage',
-            onClose: 'groups/allGroupsClose',
-            onError: 'groups/allGroupsError',
+            onOpen: 'groups/open',
+            onMessage: 'groups/message',
+            onClose: 'groups/close',
+            onError: 'groups/error',
         }))
     }, [])
 
@@ -30,6 +30,11 @@ export default function GroupsSidebar() {
         inp.toggle('border-l-2')
         ref.current?.classList.toggle("show");
     }
+
+    const handleClick = (id: number) => {
+        router.push(`/groups/${id}`)
+    }
+
     return (
         <div className="relative px-2">
 
@@ -43,7 +48,7 @@ export default function GroupsSidebar() {
                 <div className="w-full px-3" style={{height: "100%"}}>
                     {
                         all_groups?.map((item: any, index: number) => (
-                            <div onClick={_ => "handleClick(item.id)"} key={item.id}
+                            <div onClick={_=>handleClick(item.id)} key={item.id}
                                  className={` flex justify-start items-center w-full cursor-pointer my-4 hover:bg-gray-500 ${id == item.id && 'bg-gray-500'} transition rounded-xl rounded-s-full p-2`}>
                                 <div className={`inline w-20 h-20`}>
                                     <img src={item.image} className={'w-20 h-20 rounded-full'}/>
