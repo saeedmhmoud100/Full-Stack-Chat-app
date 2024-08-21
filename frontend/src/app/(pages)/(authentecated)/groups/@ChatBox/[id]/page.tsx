@@ -15,13 +15,16 @@ export default function GroupChatBox(){
     const dispatch = useDispatch();
     useEffect(()=>{
         if(all_groups.length){
-                setGroup(all_groups.find(item => item.id == id))
                 dispatch(setCurrentGroupId(id))
                 dispatch(websocketSend({type:'make_all_message_is_read',data:{group_id:id}},{websocket:true, onSend: 'groups/send',connectionId:`all_groups`}))
                 dispatch(websocketSend({type:'current_user_group',data:{group_id:id}},{websocket:true, onSend: 'groups/send',connectionId:`all_groups`}))
         }
     },[id])
 
+
+    useEffect(()=>{
+        setGroup(all_groups.find(item => item.id == id))
+    },[all_groups])
 
 
     const handleSubmit = (e) => {

@@ -60,6 +60,7 @@ class GroupsConsumer(WebsocketConsumer):
                         'data': GroupMessageSerializer(msg).data
                     }
                 )
+
                 if user.get_current_chat_room() != group:
                     async_to_sync(self.channel_layer.group_send)(
                         f'groups_{user.id}',
