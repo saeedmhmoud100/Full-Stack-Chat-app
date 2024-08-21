@@ -46,8 +46,8 @@ class GroupModel(BaseModel):
         self.last_message_timestamp = self.group_messages.last().timestamp
         self.save()
         return msg
-
-
+    def get_unread_messages_count(self, user):
+        return self.group_messages.filter(status__user=user, status__read=False).count()
 
 class GroupMessage(BaseModel):
     group = models.ForeignKey(GroupModel, on_delete=models.CASCADE, related_name="group_messages")

@@ -45,9 +45,23 @@ export const GroupsSlice = createSlice({
                         state.all_groups = [group,...state.all_groups.filter(group => group.id !== data.group_id)]
                     }
                     break;
+                case 'unread_messages_count':
+                    state.all_groups = state.all_groups.map(group => {
+                        return group.id  == data.group_id ? {...group,unread_messages_count: data.count} : group
+                    })
+                    break;
             }
-        }
-    },
+        },
+        send: (state:GroupsState, action: PayloadAction<any>) => {
+            const {type, data} = action.payload;
+            switch (type) {
+                case 'make_all_message_is_read':
+                    state.all_groups = state.all_groups.map(group => {
+                        return group.id  == data.group_id ? {...group,unread_messages_count: 0} : group
+                    })
+                    break;
+            }
+        },
     extraReducers: (builder) => {
 
         builder
@@ -72,7 +86,7 @@ export const GroupsSlice = createSlice({
     }
 
 
-});
+}});
 export const {setCreateSuccess,setCurrentGroupId} = GroupsSlice.actions;
 
 export default GroupsSlice.reducer;

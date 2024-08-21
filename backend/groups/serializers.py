@@ -26,9 +26,12 @@ class GroupSerializer(serializers.Serializer):
     users = SimpleUserDataSerializer(many=True)
     image = serializers.SerializerMethodField()
     messages = serializers.SerializerMethodField()
-
+    unread_messages_count = serializers.SerializerMethodField()
     def get_image(self, obj):
         return settings.HOST_URL + obj.image.url
 
     def get_messages(self, obj):
         return GroupMessageSerializer(obj.get_group_messages(), many=True).data
+
+    def get_unread_messages_count(self, obj):
+        return obj.get_unread_messages_count(self.context['user'])
