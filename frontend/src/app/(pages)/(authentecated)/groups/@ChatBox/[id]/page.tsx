@@ -14,7 +14,7 @@ export default function GroupChatBox(){
     const [group,setGroup] = useState({});
     const dispatch = useDispatch();
     useEffect(()=>{
-        if(all_groups.length){
+        if(id){
                 dispatch(setCurrentGroupId(id))
                 dispatch(websocketSend({type:'make_all_message_is_read',data:{group_id:id}},{websocket:true, onSend: 'groups/send',connectionId:`all_groups`}))
                 dispatch(websocketSend({type:'current_user_group',data:{group_id:id}},{websocket:true, onSend: 'groups/send',connectionId:`all_groups`}))

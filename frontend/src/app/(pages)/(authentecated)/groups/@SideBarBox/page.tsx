@@ -12,16 +12,6 @@ export default function GroupsSidebar() {
     const {id} = useParams()
     const ref = useRef(null);
     const router = useRouter()
-    useEffect(() => {
-        dispatch(websocketConnect(`ws://localhost:8000/ws/groups`, {
-            connectionId: 'all_groups',
-            websocket: true,
-            onOpen: 'groups/open',
-            onMessage: 'groups/message',
-            onClose: 'groups/close',
-            onError: 'groups/error',
-        }))
-    }, [])
 
     const handleShowSidebar = () => {
         const inp = ((ref.current as HTMLDivElement).parentElement?.firstElementChild.firstElementChild.firstElementChild.classList)

@@ -1,21 +1,15 @@
 'use client'
 import Link from "next/link";
 import {Button} from "@mui/material";
-import defImg from '../../../../../assets/images/group_image.png'
 import Modal from "@/app/_components/modal";
 import CreateGroup from "@/app/(pages)/(authentecated)/profile/@groupsSection/CreateGroup";
-import {useEffect, useState} from "react";
-import {getUserGroups} from "@/lib/slices/groupsStore/groupsActions";
+import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
 export default function GroupsSection() {
     const [createGroup,setCreateGroup] = useState(false)
-    const dispatch = useDispatch()
     const {all_groups} = useSelector((state:any)=> state.groups)
 
-    useEffect(()=>{
-        dispatch(getUserGroups())
-    },[])
 
     return <div className='bg-white p-4  h-[355px] overflow-y-auto'>
         <h2 className="text-4xl text-center font-bold border-b-gray-500"> Groups </h2>

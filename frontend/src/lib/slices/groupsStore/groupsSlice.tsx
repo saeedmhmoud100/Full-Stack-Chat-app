@@ -65,11 +65,6 @@ export const GroupsSlice = createSlice({
     extraReducers: (builder) => {
 
         builder
-            .addCase(getUserGroups.fulfilled, (state:GroupsState, action) => {
-                state.all_groups = action.payload.groups;
-
-            })
-
 
             .addCase(createGroup.fulfilled, (state:GroupsState, action) => {
                 state.create_loading = false;

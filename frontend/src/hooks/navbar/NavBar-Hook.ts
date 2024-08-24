@@ -33,7 +33,23 @@ export default function NavBarHook () {
                     onSend: 'account/send',
                 }
             ))
+
+            dispatch(websocketConnect(`ws://localhost:8000/ws/groups`, {
+                connectionId: 'all_groups',
+                websocket: true,
+                onOpen: 'groups/open',
+                onMessage: 'groups/message',
+                onClose: 'groups/close',
+                onError: 'groups/error',
+            }))
+
+
         }else{
+            dispatch({type: 'account/WEBSOCKET_DISCONNECT'})
+            dispatch({type: 'groups/WEBSOCKET_DISCONNECT', payload: {connectionId: 'all_groups'}})
+        }
+
+        return () => {
             dispatch({type: 'account/WEBSOCKET_DISCONNECT'})
         }
 
