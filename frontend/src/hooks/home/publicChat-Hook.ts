@@ -8,23 +8,24 @@ export default function PublicChatHook() {
 
     const toScroll = useSelector(state => state.public_chat.messages)
     const messagesBoxRef = useRef<HTMLDivElement>(null)
+    const {isLogged} = useSelector(state => state.account)
 
     useEffect(() => {
-        if(!localStorage.getItem("user_id")){
-            localStorage.setItem("user_id", Math.random().toString(36).substring(7));
+        if(isLogged){
+            dispatch(websocketConnect(`ws://localhost:8000/ws/public_chat`,{
+                websocket: true,
+                onOpen: 'public_chat/open',
+                onMessage: 'public_chat/message',
+                onClose: 'public_chat/close',
+                onError: 'public_chat/error',
+            }))
+        }else{
+            dispatch(websocketDisconnect('public_chat/close'))
         }
-        dispatch(websocketConnect(`ws://localhost:8000/ws/public_chat`,{
-            websocket: true,
-            onOpen: 'public_chat/open',
-            onMessage: 'public_chat/message',
-            onClose: 'public_chat/close',
-            onError: 'public_chat/error',
-        }))
         return () => {
             dispatch(websocketDisconnect({ onClose: 'public_chat/close' }));
         };
-
-    }, []);
+    },[isLogged])
 
 
     useEffect(() => {
