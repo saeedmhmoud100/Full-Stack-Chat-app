@@ -4,6 +4,8 @@ from rest_framework import serializers
 from accounts.serializers import SimpleUserDataSerializer
 from django.conf import settings
 
+from groups.models import GroupModel
+
 
 class GroupMessageSerializer(serializers.Serializer):
     id = serializers.IntegerField()
@@ -35,3 +37,14 @@ class GroupSerializer(serializers.Serializer):
 
     def get_unread_messages_count(self, obj):
         return obj.get_unread_messages_count(self.context['user'])
+
+
+class GroupCreateSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    description = serializers.CharField()
+    image = serializers.ImageField(required=False)
+    users = serializers.ListField(child=serializers.IntegerField(), required=False)
+    admin = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    class Meta:
+        model = GroupModel
+        fields = ['name', 'description', 'image', 'users', 'admin']

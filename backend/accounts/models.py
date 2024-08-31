@@ -91,10 +91,9 @@ class UserStatus(models.Model):
         return f"{self.user.username} - {'Online' if self.is_online else 'Offline'}"
 
     def set_current_chat_room(self, room):
-        if room:
-            self.content_type = ContentType.objects.get_for_model(room)
-            self.object_id = room.id
-            self.save()
+        self.content_type = ContentType.objects.get_for_model(room)
+        self.object_id = room.id
+        self.save()
 
     def remove_current_chat_room(self):
         self.content_type = None

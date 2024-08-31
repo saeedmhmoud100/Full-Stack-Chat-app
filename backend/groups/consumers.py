@@ -35,7 +35,7 @@ class GroupsConsumer(WebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-        self.user.set_current_chat_room(None)
+        self.user.remove_current_chat_room()
         self.close()
 
 
