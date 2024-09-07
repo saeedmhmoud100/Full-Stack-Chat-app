@@ -12,6 +12,8 @@ export default function CreateGroup({performClose}){
         <form className="mt-4" onSubmit={handleSubmit}>
             <input type="text" placeholder="Group Name" name='name' className="w-full p-2 border-2 border-gray-300 rounded-md"/>
             <textarea placeholder="Group Description" name='description' className="w-full p-2 border-2 border-gray-300 rounded-md my-2"/>
+            <label htmlFor="group_image">group_image</label>
+            <input type='file' id='group_image' name='image' />
           <h3 className='my-3 w-max border-b-2 border-black'>Add to group:</h3>
             <div className="h-[300px] border border-gray-500 overflow-y-auto mb-3">
                 <div className='items'>

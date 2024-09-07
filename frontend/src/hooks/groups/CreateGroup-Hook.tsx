@@ -11,18 +11,23 @@ export default function CreateGroupHook({performClose}){
     const dispatch = useDispatch()
     const handleSubmit = (e) => {
         e.preventDefault()
-        const form = new FormData(e.target)
-        const users = form.getAll('users')
-        const data ={
-            name:form.get('name'),
-            description:form.get('description'),
-            users
-        }
-        if(!data.name){
-            ErrorNotifications("Group name is required")
-        }
+        const formData = new FormData()
+        const users = Array.from(e.target.users).filter(item => item.checked).map(item => item.value)
+        const name = e.target.name.value.trim()
+        const description = e.target.description.value
+        const image = e.target.image.files[0]
+        formData.append('name', name)
+        formData.append('description', description)
+        if(image) formData.append('image', image)
+        users.forEach(user => {
+            formData.append('users', user)
+        })
 
-        dispatch(createGroup(data))
+        if (!name) {
+            ErrorNotifications("Group name is required")
+        } else {
+            dispatch(createGroup(formData))
+        }
     }
 
     useEffect(() => {
