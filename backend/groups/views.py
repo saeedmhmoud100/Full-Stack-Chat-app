@@ -30,7 +30,6 @@ class CreateGroupView(CreateModelMixin, GenericAPIView):
         group = serializer.save(admin=self.request.user)
         group.users.add(self.request.user)
         users = self.request.data.get("users", [])
-        print(self.request.data)
         for userId in users:
             user = User.objects.get(id=userId)
             group.users.add(user)

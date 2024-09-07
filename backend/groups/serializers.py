@@ -41,7 +41,7 @@ class GroupSerializer(serializers.Serializer):
 
 class GroupCreateSerializer(serializers.ModelSerializer):
     name = serializers.CharField()
-    description = serializers.CharField()
+    description = serializers.CharField(required=False)
     image = serializers.ImageField(required=False)
     users = serializers.ListField(child=serializers.IntegerField(), required=False)
     admin = serializers.HiddenField(default=serializers.CurrentUserDefault())

@@ -21,7 +21,7 @@ class GroupModel(BaseModel):
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="groups")
     admin = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="admin_groups")
     image = models.ImageField(upload_to=group_image_path, null=True, blank=True, default=get_default_group_image_paht)
-    last_message_timestamp = models.DateTimeField(null=True, blank=True)
+    last_message_timestamp = models.DateTimeField(null=True, blank=True,auto_now_add=True)
 
     def __str__(self):
         return self.name
