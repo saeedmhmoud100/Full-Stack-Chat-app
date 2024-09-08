@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from rest_framework import status
@@ -43,6 +45,14 @@ class CreateGroupView(CreateModelMixin, GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         group = self.create(request, *args, **kwargs)
+        if(group):
+            layer = get_channel_layer()
+            for user in group.users.all().exclude(id=group.admin.id):
+                async_to_sync(layer.group_send)(f'groups_{user.id}', {
+                    'type': 'new_group',
+                    'data': GroupSerializer(group, many=False, context={'user': user}).data
+                })
+
         return Response({"group_data": GroupSerializer(group, many=False, context={'user': request.user}).data},
                         status=status.HTTP_201_CREATED)
 

@@ -95,3 +95,10 @@ class GroupsConsumer(WebsocketConsumer):
             'type': 'unread_messages_count',
             'data': data
         }))
+
+    def new_group(self, event):
+        group = event['data']
+        self.send(text_data=json.dumps({
+            'type': 'new_group',
+            'data': group
+        }))
