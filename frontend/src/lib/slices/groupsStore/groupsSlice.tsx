@@ -50,6 +50,9 @@ export const GroupsSlice = createSlice({
                         return group.id == data.group_id ? {...group, unread_messages_count: data.count} : group
                     })
                     break;
+                case 'new_group':
+                    console.log(data)
+                    state.all_groups = [data, ...state.all_groups]
             }
         },
         send: (state: GroupsState, action: PayloadAction<any>) => {

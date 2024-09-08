@@ -51,7 +51,6 @@ export const UserSlice = createSlice({
         },
         friends_status_change: (state, action: PayloadAction<{user_id:number,is_online:boolean}>) => {
             const {type,data} = JSON.parse(action.payload);
-            console.log(action.payload,'action.payload')
             if(type == 'online_status') {
                 state.friends = state.friends.map((friend:any) => {
                     if (friend.id == data.user_id) {
