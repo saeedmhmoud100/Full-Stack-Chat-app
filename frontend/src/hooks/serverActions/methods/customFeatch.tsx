@@ -8,13 +8,14 @@ export default async function customFetch(url: string, method: string, data: any
     const headerData = {
         method: method,
         headers: {
+            "Content-Type":"application/json"
         },
     }
 
     if (token) {
         headerData.headers['Authorization'] = `Bearer ${token}`
     }else{
-        headerData.headers['Content-Type'] = 'application/json'
+        // headerData.headers['Content-Type'] = 'application/json'
     }
     if (method !== 'GET' && method !== 'HEAD') {
         headerData['body'] = formData ? data : JSON.stringify(data)

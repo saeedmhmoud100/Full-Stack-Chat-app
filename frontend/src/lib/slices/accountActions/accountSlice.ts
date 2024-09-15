@@ -131,8 +131,6 @@ export const AccountSlice = createSlice({
             .addCase(performLogin.pending, (state:AccountState, action) => {
                 state.loading = true;
                 state.isLogged = false;
-                state.refresh_token = '';
-                state.access_token = '';
                 state.isErrored = false;
                 state.performAuth = false;
             })
@@ -158,7 +156,6 @@ export const AccountSlice = createSlice({
                     state.userData!.username = jwtDecode(action.payload.access)['name']
             })
             .addCase(performUpdateToken.rejected, (state:AccountState, action) => {
-                console.log(action)
                 state.isLogged = false;
                 state.loading = false;
                 state.refresh_token = '';

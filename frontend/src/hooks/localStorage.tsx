@@ -26,6 +26,14 @@ export function setAccessToken(token: string) {
     setUserToken(userToken);
 }
 
+export function setRefreshToken(token: string) {
+    const userToken = getUserToken();
+    if(!userToken) return;
+    userToken.refresh = token;
+    setUserToken(userToken);
+
+}
+
 export function removeUserToken() {
     localStorage.removeItem('token');
 }
