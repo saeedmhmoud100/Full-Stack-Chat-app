@@ -22,6 +22,12 @@ class FriendList(models.Model):
     def add_friend(self, account):
         if not account in self.friends.all():
             self.friends.add(account)
+            noty = self.notifications.create(
+                sender=self.user,
+                receiver=account,
+                notification_type='friend_with',
+                text_preview=f'now you are friends with {account.username}'
+            )
 
     def remove_friend(self, account):
         if account in self.friends.all():

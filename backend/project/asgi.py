@@ -17,6 +17,7 @@ from django.urls import path, re_path
 from accounts.consumers import AccountConsumer
 from friends.consumers import FriendConsumer
 from groups.consumers import GroupsConsumer
+from notifications.consumers import NotificationConsumer
 from private_chat.consumers import PrivateChatConsumer, AllPrivateChatsConsumer
 from project.middleware import JWTAuthMiddleware
 from public_chat.consumers import PublicChatConsumer
@@ -38,6 +39,7 @@ application = ProtocolTypeRouter({
                     path('ws/private_chats', AllPrivateChatsConsumer.as_asgi()),
                     re_path(r'^ws/private_chat/(?P<room_id>\w+)$', PrivateChatConsumer.as_asgi()),
                     path('ws/groups', GroupsConsumer.as_asgi()),
+                    path('ws/notifications', NotificationConsumer.as_asgi()),
                 ])
             )
         )

@@ -79,8 +79,8 @@ class Account(AbstractBaseUser):
     def get_friends(self):
         return self.friend_list.friends.all()
 
-    def get_unseen_notifications(self):
-        return self.notifications_received.filter(is_seen=False)
+    def get_notifications(self):
+        return self.notifications_received.order_by('is_seen', '-timestamp')
 
 class UserStatus(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status")
