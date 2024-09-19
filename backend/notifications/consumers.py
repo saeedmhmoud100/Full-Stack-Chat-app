@@ -43,10 +43,19 @@ class NotificationConsumer(WebsocketConsumer):
         )
         self.close()
 
-
+    def receive(self, text_data):
+        data = json.loads(text_data)
+        if data['type'] == 'make_seen':
+            self.user.get_notifications().update(is_seen=True)
+            # self.send(text_data=json.dumps({
+            #     'type': 'all_notifications',
+            #     'data': {
+            #         'all_notifications': NotificationSerializer(self.user.get_notifications(), many=True).data,
+            #         'unseen_notifications_count': 0
+            #     }
+            # }))
 
     def new_notification(self, event):
-        print('new_notification', event)
         notification = event['notification']
         self.send(text_data=json.dumps({
             'type': 'new_notification',
@@ -59,4 +68,3 @@ class NotificationConsumer(WebsocketConsumer):
             'type': 'delete_notification',
             'data': notification_id
         }))
-

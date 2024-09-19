@@ -108,7 +108,8 @@ def decline_friend_request(request, id):
             sender=to_user,
             receiver=friend_request.from_user,
             notification_type='friend_request',
-            text_preview=f'{to_user.username} sent you a friend request'
+            text_preview=f'{to_user.username} sent you a friend request',
+            is_seen=False
         ).delete()
     return Response(data={},  status=status.HTTP_200_OK)
 
@@ -120,7 +121,8 @@ def unfriend(request, id):
     from_user.friend_list.unfriend(to_user)
     Notification.objects.filter(
         Q(sender=from_user, receiver=to_user) |
-        Q(sender=to_user, receiver=from_user)
+        Q(sender=to_user, receiver=from_user),
+        is_seen=False
     ).delete()
     return Response(data={},  status=status.HTTP_200_OK)
 
