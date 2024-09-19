@@ -24,3 +24,5 @@ class Notification(BaseModel):
 
     def get_content_object_type(self):
         return str(self.content_object.get_cname)
+
+
