@@ -97,8 +97,5 @@ export default function NavBarHook () {
         }
     }, [errors]);
 
-    const handleIconClick = (e) => {
-        e.target.nextElementSibling.classList.toggle('hidden')
-    }
-    return {isLogged,userData,handleIconClick};
+    return {isLogged,userData};
 }

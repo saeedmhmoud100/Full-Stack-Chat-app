@@ -10,7 +10,7 @@ import defaulImage from '@/assets/images/default-profile-image.png'
 import {useSelector} from "react-redux";
 export default function Navbar() {
 
-    const {isLogged, userData, handleIconClick} = NavBarHook()
+    const {isLogged, userData} = NavBarHook()
     const {all_notifications,unseen_notifications_count} = useSelector((state) => state.notifications);
 
 
@@ -31,8 +31,8 @@ export default function Navbar() {
 
                             <div className=' w-max flex items-center'>
                                 <div className="nav_icon_container relative mx-4" style={{width:'20px'}}>
-                                    <img onClick={handleIconClick} className='object-cover nav_icon cursor-pointer rounded-full' src={bellIcon.src} style={{width:'40px'}} />
-                                    <div  className='nav_notifications absolute text-gray-950 hidden'>
+                                    <img id='nav_icons_1' className='nav_icons_1 object-cover nav_icon cursor-pointer rounded-full' src={bellIcon.src} style={{width:'40px'}} />
+                                    <div  className='nav_icons_1 nav_notifications absolute text-gray-950 hidden'>
                                         {
                                             all_notifications.map((notification,index) => {
                                                 return (
@@ -57,8 +57,8 @@ export default function Navbar() {
 
 
                                 <div className="nav_icon_container relative" style={{width:'40px'}}>
-                                    <img onClick={handleIconClick} className='object-cover nav_icon cursor-pointer rounded-full' src={userData.profile_image} style={{width:'40px'}} />
-                                    <div  className='nav_links absolute text-gray-950 hidden'>
+                                    <img id={'nav_icons_2'} className='nav_icons_2 object-cover nav_icon cursor-pointer rounded-full' src={userData.profile_image} style={{width:'40px'}} />
+                                    <div  className='nav_icons_2 nav_links absolute text-gray-950 hidden nav_icons_2'>
                                         <Link href={'/profile'}><div className="px-4">Profile</div></Link>
                                         <Link href={'/private_chats'}><div className="px-4">Private Chats</div></Link>
                                         <Link href={'/groups'}><div className="px-4">Groups</div></Link>
