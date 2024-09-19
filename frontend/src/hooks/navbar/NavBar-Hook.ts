@@ -9,7 +9,6 @@ import {websocketConnect, websocketSend} from "@/lib/websocketActions";
 
 export default function NavBarHook () {
     const {isLogged,userData, refresh_token, isErrored, access_token, errors} = useSelector((state) => state.account);
-    const {all_notifications} = useSelector((state) => state.notifications);
     const dispatch = useDispatch();
 
 
@@ -101,5 +100,5 @@ export default function NavBarHook () {
     const handleIconClick = (e) => {
         e.target.nextElementSibling.classList.toggle('hidden')
     }
-    return {isLogged,userData,handleIconClick,all_notifications};
+    return {isLogged,userData,handleIconClick};
 }

@@ -7,9 +7,11 @@ import NavbarSearch from "@/app/_components/Navbar/Navbar-Search";
 import './Navbar.css'
 import bellIcon from '@/assets/icons/bell-regular.svg'
 import defaulImage from '@/assets/images/default-profile-image.png'
+import {useSelector} from "react-redux";
 export default function Navbar() {
 
-    const {isLogged, userData, handleIconClick,all_notifications} = NavBarHook()
+    const {isLogged, userData, handleIconClick} = NavBarHook()
+    const {all_notifications,unseen_notifications_count} = useSelector((state) => state.notifications);
 
 
 
@@ -46,7 +48,7 @@ export default function Navbar() {
                                         }
 
                                     </div>
-                                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex justify-center items-center">1</div>
+                                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex justify-center items-center">{unseen_notifications_count}</div>
                                 </div>
 
 
