@@ -26,6 +26,10 @@ export const NotificationsSlice = createSlice({
                     state.all_notifications = data.all_notifications;
                     state.unseen_notifications_count = data.unseen_notifications_count;
                     break;
+                case "new_notification":
+                    state.all_notifications.unshift(data);
+                    state.unseen_notifications_count += 1;
+                    break;
             }
         },
 

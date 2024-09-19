@@ -26,9 +26,9 @@ export default function RootLayout({
         for (let i = 1; i <= icons_count; i++) {
             const nav_icons = document.getElementById(`nav_icons_${i}`)
             if(e.target===nav_icons) {
-                nav_icons.nextElementSibling.classList.toggle('hidden')
+                nav_icons?.nextElementSibling.classList.toggle('hidden')
             }else if(!e.target.classList.contains('nav_icons_'+i) ) {  // &&  !e.target.closest(`.nav_icons_${i}`) to check if the target is not the icon or its children
-                nav_icons.nextElementSibling?.classList.add('hidden')
+                nav_icons?.nextElementSibling?.classList.add('hidden')
             }
         }
     }
