@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from friends.models import FriendRequest
 from friends.serializers import UserSerializer, FriendRequestSerializer, FriendRequestYouSentSerializer
 from accounts.serializers import SimpleUserDataSerializer
+from notifications.models import Notification
 
 
 # Create your views here.
@@ -52,6 +53,14 @@ def send_friend_request(request, id):
     if not created:
         friend_request.is_active = True
         friend_request.save()
+
+        friend_request.notifications.create(
+            sender=from_user,
+            receiver=to_user,
+            notification_type='friend_request',
+            text_preview=f'{from_user.username} sent you a friend request'
+        )
+
     return Response(data={},  status=status.HTTP_200_OK)
 
 
@@ -62,6 +71,13 @@ def cancel_friend_request(request, id):
     if friend_request:
         friend_request.cancel()
 
+        friend_request.notifications.filter(
+            sender=request.user,
+            receiver=to_user,
+            notification_type='friend_request',
+            text_preview=f'{request.user.username} sent you a friend request'
+        ).delete()
+
     return Response(data={},  status=status.HTTP_200_OK)
 
 
@@ -71,6 +87,13 @@ def accept_friend_request(request, id):
     friend_request = FriendRequest.objects.get(to_user=to_user, from_user_id=id, is_active=True)
     if friend_request:
         friend_request.accept()
+
+        friend_request.notifications.create(
+            sender=to_user,
+            receiver=friend_request.from_user,
+            notification_type='friend_request_accepted',
+            text_preview=f'{to_user.username} accepted your friend request'
+        )
     return Response(data={},  status=status.HTTP_200_OK)
 
 
@@ -80,6 +103,13 @@ def decline_friend_request(request, id):
     friend_request = FriendRequest.objects.get(to_user=to_user, from_user_id=id, is_active=True)
     if friend_request:
         friend_request.decline()
+
+        friend_request.notifications.filter(
+            sender=to_user,
+            receiver=friend_request.from_user,
+            notification_type='friend_request',
+            text_preview=f'{to_user.username} sent you a friend request'
+        ).delete()
     return Response(data={},  status=status.HTTP_200_OK)
 
 
@@ -88,6 +118,10 @@ def unfriend(request, id):
     to_user = get_user_model().objects.get(id=id)
     from_user = request.user
     from_user.friend_list.unfriend(to_user)
+    Notification.objects.filter(
+        Q(sender=from_user, receiver=to_user) |
+        Q(sender=to_user, receiver=from_user)
+    ).delete()
     return Response(data={},  status=status.HTTP_200_OK)
 
 
