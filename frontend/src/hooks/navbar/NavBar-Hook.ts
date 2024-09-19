@@ -5,6 +5,7 @@ import {performLogout, setLoggedInState} from "@/lib/slices/accountActions/accou
 import {getLoggedUserData, performUpdateToken} from "@/lib/slices/accountActions/accountActions";
 import {ErrorNotifications, InfoNotification} from "@/hooks/Notification";
 import {websocketConnect, websocketSend} from "@/lib/websocketActions";
+import {makeNotificationSeen} from "@/lib/slices/notificationsStore/notificationSlice";
 
 
 export default function NavBarHook () {
@@ -97,5 +98,17 @@ export default function NavBarHook () {
         }
     }, [errors]);
 
-    return {isLogged,userData};
+
+
+    const handleMakeNotificationsSeen = (e) => {
+        if(e.target.nextElementSibling.classList.contains('hidden')){
+            dispatch(websocketSend({'type':'make_seen'},{websocket:true, onSend: 'notifications/send',connectionId: 'notifications',}) )
+        }
+    }
+
+    const handleMakeSeen= id=>{
+        dispatch(makeNotificationSeen(id))
+    }
+
+    return {isLogged,userData,handleMakeNotificationsSeen,handleMakeSeen};
 }

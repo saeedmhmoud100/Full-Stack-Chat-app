@@ -36,15 +36,21 @@ export const NotificationsSlice = createSlice({
                     break;
             }
         },
+        makeNotificationSeen: (state,action) => {
+            state.all_notifications = state.all_notifications.map((notification) => {
+                if(notification.id === action.payload){
+                    if (state.unseen_notifications_count > 0 && !notification.is_seen)
+                       state.unseen_notifications_count -= 1;
+                    notification.is_seen = true;
+                }
+                return notification;
+            })
+
+        }
 
     },
-    extraReducers: (builder) => {
-
-
-    }
-
 
 });
-export const {} = NotificationsSlice.actions;
+export const {makeNotificationSeen} = NotificationsSlice.actions;
 
 export default NotificationsSlice.reducer;
