@@ -9,7 +9,7 @@ import bellIcon from '@/assets/icons/bell-regular.svg'
 import defaulImage from '@/assets/images/default-profile-image.png'
 export default function Navbar() {
 
-    const {isLogged, userData, handleIconClick} = NavBarHook()
+    const {isLogged, userData, handleIconClick,all_notifications} = NavBarHook()
 
 
 
@@ -31,22 +31,20 @@ export default function Navbar() {
                                 <div className="nav_icon_container relative mx-4" style={{width:'20px'}}>
                                     <img onClick={handleIconClick} className='object-cover nav_icon cursor-pointer rounded-full' src={bellIcon.src} style={{width:'40px'}} />
                                     <div  className='nav_notifications absolute text-gray-950 hidden'>
-                                        <Link href={'/users/1'} className='flex gap-2'>
-                                            <img src={defaulImage.src} className='w-8 h-8 rounded-full' />
-                                            <div className="px-4 notification-item">Notification 1</div>
-                                        </Link>
-                                        <Link href={'/users/1'} className='flex gap-2'>
-                                            <img src={defaulImage.src} className='w-8 h-8 rounded-full' />
-                                            <div className="px-4 notification-item">Notification 1</div>
-                                        </Link>
-                                        <Link href={'/users/1'} className='flex gap-2'>
-                                            <img src={defaulImage.src} className='w-8 h-8 rounded-full' />
-                                            <div className="px-4 notification-item">Notification 1</div>
-                                        </Link>
-                                        <Link href={'/users/1'} className='flex gap-2'>
-                                            <img src={defaulImage.src} className='w-8 h-8 rounded-full' />
-                                            <div className="px-4 notification-item">Notification 1</div>
-                                        </Link>
+                                        {
+                                            all_notifications.map((notification,index) => {
+                                                return (
+                                                    <Link key={notification.id} href={`/users/${notification.sender.id}`} className='flex flex-col gap-2'>
+                                                        <div className="flex gap-2 text-xs items-center">
+                                                            <img src={notification.sender.profile_image} className='w-8 h-8 rounded-full' />
+                                                            <div className="px-4 notification-item">{notification.text_preview}</div>
+                                                        </div>
+                                                        <div className="time text-xs">{notification.timestamp}</div>
+                                                    </Link>
+                                                )
+                                            })
+                                        }
+
                                     </div>
                                     <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex justify-center items-center">1</div>
                                 </div>
