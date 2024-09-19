@@ -14,12 +14,12 @@ const useUserDataSectionHook = (props) => {
     const {id} = useParams()
     const router = useRouter()
     const {friend_requests_change,userData:{private_chat_id}} = useSelector((state) => state.user)
-
+    const {all_notifications} = useSelector((state) => state.notifications)
 
     useEffect(() => {
         if(id)
             dispatch(performGetUserData({userId:id}))
-    },[friend_requests_change])
+    },[friend_requests_change,all_notifications])
 
     const handleFriendRequest = () => {
         dispatch(sendFriendRequest({id:id}))

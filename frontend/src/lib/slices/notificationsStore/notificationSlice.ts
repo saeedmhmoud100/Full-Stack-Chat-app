@@ -30,6 +30,10 @@ export const NotificationsSlice = createSlice({
                     state.all_notifications.unshift(data);
                     state.unseen_notifications_count += 1;
                     break;
+                case "delete_notification":
+                    state.all_notifications = state.all_notifications.filter((notification) => notification.id !== data);
+                    state.unseen_notifications_count -= 1;
+                    break;
             }
         },
 
