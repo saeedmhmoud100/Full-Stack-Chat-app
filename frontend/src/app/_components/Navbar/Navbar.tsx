@@ -5,7 +5,8 @@ import NavBarHook from "@/hooks/navbar/NavBar-Hook";
 import * as React from "react";
 import NavbarSearch from "@/app/_components/Navbar/Navbar-Search";
 import './Navbar.css'
-import {useEffect, useRef} from "react";
+import bellIcon from '@/assets/icons/bell-regular.svg'
+import defaulImage from '@/assets/images/default-profile-image.png'
 export default function Navbar() {
 
     const {isLogged, userData, handleIconClick} = NavBarHook()
@@ -27,6 +28,34 @@ export default function Navbar() {
                             </div>
 
                             <div className=' w-max flex items-center'>
+                                <div className="nav_icon_container relative mx-4" style={{width:'20px'}}>
+                                    <img onClick={handleIconClick} className='object-cover nav_icon cursor-pointer rounded-full' src={bellIcon.src} style={{width:'40px'}} />
+                                    <div  className='nav_notifications absolute text-gray-950 hidden'>
+                                        <Link href={'/users/1'} className='flex gap-2'>
+                                            <img src={defaulImage.src} className='w-8 h-8 rounded-full' />
+                                            <div className="px-4 notification-item">Notification 1</div>
+                                        </Link>
+                                        <Link href={'/users/1'} className='flex gap-2'>
+                                            <img src={defaulImage.src} className='w-8 h-8 rounded-full' />
+                                            <div className="px-4 notification-item">Notification 1</div>
+                                        </Link>
+                                        <Link href={'/users/1'} className='flex gap-2'>
+                                            <img src={defaulImage.src} className='w-8 h-8 rounded-full' />
+                                            <div className="px-4 notification-item">Notification 1</div>
+                                        </Link>
+                                        <Link href={'/users/1'} className='flex gap-2'>
+                                            <img src={defaulImage.src} className='w-8 h-8 rounded-full' />
+                                            <div className="px-4 notification-item">Notification 1</div>
+                                        </Link>
+                                    </div>
+                                    <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex justify-center items-center">1</div>
+                                </div>
+
+
+
+
+
+
                                 <div className="nav_icon_container relative" style={{width:'40px'}}>
                                     <img onClick={handleIconClick} className='object-cover nav_icon cursor-pointer rounded-full' src={userData.profile_image} style={{width:'40px'}} />
                                     <div  className='nav_links absolute text-gray-950 hidden'>
@@ -36,6 +65,7 @@ export default function Navbar() {
                                         <Link href={'/logout'}><div className="px-4">logout</div></Link>
                                     </div>
                                 </div>
+
 
                             </div>
 
