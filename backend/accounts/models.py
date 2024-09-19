@@ -82,6 +82,8 @@ class Account(AbstractBaseUser):
     def get_notifications(self):
         return self.notifications_received.order_by('is_seen', '-timestamp')
 
+    def get_unseen_notifications_count(self):
+        return self.notifications_received.filter(is_seen=False).count()
 class UserStatus(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="status")
     is_online = models.BooleanField(default=False)

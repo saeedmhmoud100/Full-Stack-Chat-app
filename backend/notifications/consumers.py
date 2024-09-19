@@ -24,11 +24,15 @@ class NotificationConsumer(WebsocketConsumer):
         )
 
         self.accept()
-
+        serializer = NotificationSerializer(self.user.get_notifications(), many=True).data
+        data = {
+            'all_notifications': serializer,
+            'unseen_notifications_count': self.user.get_unseen_notifications_count()
+        }
         self.send(text_data=json.dumps((
             {
                 'type': 'all_notifications',
-                'data': NotificationSerializer(self.user.get_notifications(), many=True).data
+                'data': data
             }
         )))
 
