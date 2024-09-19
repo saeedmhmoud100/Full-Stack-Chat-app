@@ -5,6 +5,7 @@ import websocketMiddleware from "@/lib/webSockeMiddleware";
 import {publicChatSlice} from "@/lib/slices/publicChatStore/publicChatSlice";
 import {PrivateChatsSlice} from "@/lib/slices/privateChatsStore/privateChatsSlice";
 import {GroupsSlice} from "@/lib/slices/groupsStore/groupsSlice";
+import {NotificationsSlice} from "@/lib/slices/notificationsStore/notificationSlice";
 
 export const makeStore = () => {
     return configureStore({
@@ -14,6 +15,7 @@ export const makeStore = () => {
             'user': UserSlice.reducer,
             'private_chats': PrivateChatsSlice.reducer,
             'groups': GroupsSlice.reducer,
+            'notifications': NotificationsSlice.reducer,
         },
         middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(websocketMiddleware),
         devTools: true,
