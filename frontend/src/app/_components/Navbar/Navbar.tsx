@@ -32,7 +32,7 @@ export default function Navbar() {
                             <div className=' w-max flex items-center'>
                                 <div className="nav_icon_container relative mx-4" style={{width:'20px'}}>
                                     <img onClick={handleMakeNotificationsSeen} id='nav_icons_1' className='nav_icons_1 object-cover nav_icon cursor-pointer rounded-full' src={bellIcon.src} style={{width:'40px'}} />
-                                    <div  className='nav_icons_1 nav_notifications absolute text-gray-950 hidden'>
+                                    <div  className='nav_icons_1 nav_notifications absolute text-gray-950 hidden' style={{maxHeight:'400px',overflowY:"auto"}}>
                                         {
                                             all_notifications.map((notification,index) => {
                                                 return (

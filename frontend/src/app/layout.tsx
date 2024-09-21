@@ -37,7 +37,7 @@ export default function RootLayout({
               <html lang="en">
               <body onClick={e=>showNavIcons(e,2)} className={inter.className + " bg-gray-300"} style={{height:"100vh",width:"100%",maxHeight:"100vh"} }>
               <Navbar />
-              <Container>
+              <Container className='pb-4'>
                 {children}
               </Container>
 
