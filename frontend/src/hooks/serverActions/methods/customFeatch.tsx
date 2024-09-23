@@ -2,6 +2,7 @@ import {getAccessToken} from "@/hooks/localStorage";
 
 
 export const backendUrl = 'https://chat-app-backend-one-lime.vercel.app'
+export const backendUrlSocket = 'ws://chat-app-backend-one-lime.vercel.app'
 
 export default async function customFetch(url: string, method: string, data: any={},formData=false) {
     const token = getAccessToken();

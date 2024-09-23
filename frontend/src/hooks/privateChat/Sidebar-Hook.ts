@@ -3,6 +3,7 @@ import {useEffect, useRef} from "react";
 import {getAllPrivateChats} from "@/lib/slices/privateChatsStore/privateChatsActions";
 import {useRouter} from "next/navigation";
 import {websocketConnect} from "@/lib/websocketActions";
+import {backendUrlSocket} from "@/hooks/serverActions/methods/customFeatch";
 
 
 export default function SidebarHook() {
@@ -13,7 +14,7 @@ export default function SidebarHook() {
         // dispatch(getAllPrivateChats())
 
         dispatch({type: 'private_chats/WEBSOCKET_DISCONNECT',meta: {websocket: true, connectionId: 'all_private_chats'}})
-        dispatch(websocketConnect(`ws://localhost:8000/ws/private_chats`,{
+        dispatch(websocketConnect(backendUrlSocket +`/ws/private_chats`,{
             connectionId: 'all_private_chats',
             websocket: true,
             onOpen: 'private_chats/allChatsOpen',

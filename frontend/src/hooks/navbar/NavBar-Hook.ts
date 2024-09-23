@@ -6,6 +6,7 @@ import {getLoggedUserData, performUpdateToken} from "@/lib/slices/accountActions
 import {ErrorNotifications, InfoNotification} from "@/hooks/Notification";
 import {websocketConnect, websocketSend} from "@/lib/websocketActions";
 import {makeNotificationSeen} from "@/lib/slices/notificationsStore/notificationSlice";
+import {backendUrlSocket} from "@/hooks/serverActions/methods/customFeatch";
 
 
 export default function NavBarHook () {
@@ -24,7 +25,7 @@ export default function NavBarHook () {
         if(isLogged){
             dispatch(getLoggedUserData())
             dispatch(websocketConnect(
-                `ws://localhost:8000/ws/account`,
+                backendUrlSocket +`/ws/account`,
                 {
                     websocket: true,
                     onOpen: 'account/open',
@@ -35,7 +36,7 @@ export default function NavBarHook () {
                 }
             ))
 
-            dispatch(websocketConnect(`ws://localhost:8000/ws/groups`, {
+            dispatch(websocketConnect(backendUrlSocket +`/ws/groups`, {
                 connectionId: 'all_groups',
                 websocket: true,
                 onOpen: 'groups/open',
@@ -44,7 +45,7 @@ export default function NavBarHook () {
                 onError: 'groups/error',
             }))
 
-            dispatch((websocketConnect(`ws://localhost:8000/ws/notifications`, {
+            dispatch((websocketConnect(backendUrlSocket +`/notifications`, {
                 connectionId: 'notifications',
                 websocket: true,
                 onOpen: 'notifications/open',

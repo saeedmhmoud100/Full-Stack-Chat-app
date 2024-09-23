@@ -1,6 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {FormEvent, useEffect, useRef} from "react";
 import {websocketConnect, websocketDisconnect, websocketSend} from "@/lib/websocketActions";
+import {backendUrlSocket} from "@/hooks/serverActions/methods/customFeatch";
 
 
 export default function PublicChatHook() {
@@ -12,7 +13,7 @@ export default function PublicChatHook() {
 
     useEffect(() => {
         if(isLogged){
-            dispatch(websocketConnect(`ws://localhost:8000/ws/public_chat`,{
+            dispatch(websocketConnect(backendUrlSocket +`/ws/public_chat`,{
                 websocket: true,
                 onOpen: 'public_chat/open',
                 onMessage: 'public_chat/message',

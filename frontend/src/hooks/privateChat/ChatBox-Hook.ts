@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useParams, useRouter} from "next/navigation";
 import {useEffect, useRef, useState} from "react";
 import {websocketConnect, websocketSend} from "@/lib/websocketActions";
+import {backendUrlSocket} from "@/hooks/serverActions/methods/customFeatch";
 
 
 export default function ChatBoxHook() {
@@ -39,7 +40,7 @@ export default function ChatBoxHook() {
     }
 
     const handleInRoom =(room_id) => {
-        dispatch(websocketConnect(`ws://localhost:8000/ws/private_chat/${room_id}`,{
+        dispatch(websocketConnect(backendUrlSocket +`/ws/private_chat/${room_id}`,{
             websocket: true,
             onOpen: 'private_chats/open',
             onMessage: 'private_chats/message',

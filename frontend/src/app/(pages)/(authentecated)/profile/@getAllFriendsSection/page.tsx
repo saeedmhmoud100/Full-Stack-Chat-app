@@ -6,6 +6,7 @@ import {useEffect} from "react";
 import {getUserFriends} from "@/lib/slices/usersStore/userActions";
 import {Button} from "@mui/material";
 import {websocketConnect} from "@/lib/websocketActions";
+import {backendUrlSocket} from "@/hooks/serverActions/methods/customFeatch";
 
 
 export default function GetAllFriendsSection() {
@@ -16,7 +17,7 @@ export default function GetAllFriendsSection() {
     }, [dispatch, friends_change])
 
     useEffect(() =>{
-        dispatch(websocketConnect(`ws://localhost:8000/ws/friend`,{
+        dispatch(websocketConnect(backendUrlSocket +`/ws/friend`,{
             connectionId: 'friends_status',
             websocket: true,
             onMessage: 'user/friends_status_change',
