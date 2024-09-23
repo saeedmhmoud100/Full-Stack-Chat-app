@@ -1,3 +1,6 @@
+from django.contrib.auth import get_user_model
+from django.core.management import call_command
+from django.http import HttpResponse
 from django.shortcuts import render
 from rest_framework.generics import CreateAPIView, UpdateAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -50,3 +53,23 @@ class AccountChangePasswordView(UpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+
+
+
+def run_migrate(request):
+    call_command('migrate')
+    return HttpResponse("Migrations applied.")
+
+def create_superuser(request):
+    User = get_user_model()
+    # Check if superuser already exists
+    if not User.objects.filter(is_superuser=True).exists():
+        call_command('createsuperuser', '--noinput', '--username', 'admin', '--email', 'admin@gmail.com')
+        user = User.objects.get(username='admin')
+        user.set_password('admin123')  # Set password programmatically
+        user.save()
+        return HttpResponse("Superuser created successfully.")
+    else:
+        return HttpResponse("Superuser already exists.")
