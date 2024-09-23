@@ -225,4 +225,4 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-HOST_URL = "http://localhost:8000/"
+HOST_URL = "https://chat-app-backend-one-lime.vercel.app/"
