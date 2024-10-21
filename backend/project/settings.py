@@ -101,12 +101,14 @@ load_dotenv()
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        'NAME': os.environ.get('POSTGRES_DATABASE'),
-        'USER': os.environ.get('POSTGRES_USER'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': os.environ.get('POSTGRES_HOST'),
-        'PORT': os.environ.get('5432'),
+        # "ENGINE": "django.db.backends.postgresql",
+        # 'NAME': os.environ.get('POSTGRES_DATABASE'),
+        # 'USER': os.environ.get('POSTGRES_USER'),
+        # 'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        # 'HOST': os.environ.get('POSTGRES_HOST'),
+        # 'PORT': os.environ.get('5432'),
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "tmp/db.sqlite3",
     }
 }
 
@@ -166,10 +168,11 @@ ASGI_APPLICATION = "project.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
+        # "BACKEND": "channels_redis.core.RedisChannelLayer",
+        # "CONFIG": {
+        #     "hosts": [("127.0.0.1", 6379)],
+        # },
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
     },
 }
 
